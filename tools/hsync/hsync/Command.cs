@@ -172,23 +172,35 @@ namespace hsync
                 download_data("https://github.com/project-violet/database/releases/download/rd2020.06.07/ex-hentai-archive.json", "ex-hentai-archive.json");
 
 
-            //var sync = new Syncronizer();
-            //sync.SyncHitomi();
-            //sync.SyncExHentai();
+            var sync = new Syncronizer();
+            sync.SyncHitomi();
+            sync.SyncExHentai();
 
             var dbc = new DataBaseCreator();
             dbc.Integrate();
             dbc.ExtractRawDatabase("rawdata");
             Console.WriteLine("Complete all!");
-            dbc.ExtractRawDatabase("rawdata-chinese", "chinese");
+            dbc.ExtractRawDatabase("rawdata-chinese", false, "chinese");
             Console.WriteLine("Complete chinese!");
-            dbc.ExtractRawDatabase("rawdata-english", "english");
+            dbc.ExtractRawDatabase("rawdata-english", false, "english");
             Console.WriteLine("Complete english!");
-            dbc.ExtractRawDatabase("rawdata-japanese", "japanese");
+            dbc.ExtractRawDatabase("rawdata-japanese", false, "japanese");
             Console.WriteLine("Complete japanese!");
-            dbc.ExtractRawDatabase("rawdata-korean", "korean");
+            dbc.ExtractRawDatabase("rawdata-korean", false, "korean");
             Console.WriteLine("Complete korean!");
 
+            dbc.FilterOnlyNewed(sync);
+            var dt = DateTime.Now.ToString("yyyy-MM-dd hh-mm");
+            dbc.ExtractRawDatabase($"chunk/{dt}/rawdata", true);
+            Console.WriteLine("Complete all!");
+            dbc.ExtractRawDatabase($"chunk/{dt}/rawdata-chinese", true, "chinese");
+            Console.WriteLine("Complete chinese!");
+            dbc.ExtractRawDatabase($"chunk/{dt}/rawdata-english", true, "english");
+            Console.WriteLine("Complete english!");
+            dbc.ExtractRawDatabase($"chunk/{dt}/rawdata-japanese", true, "japanese");
+            Console.WriteLine("Complete japanese!");
+            dbc.ExtractRawDatabase($"chunk/{dt}/rawdata-korean", true, "korean");
+            Console.WriteLine("Complete korean!");
 
 #if false
 

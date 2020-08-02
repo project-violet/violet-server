@@ -83,6 +83,23 @@ namespace hsync
             articles.Sort((x, y) => x.CompareTo(y));
         }
 
+        /// <summary>
+        /// Leave only new works.
+        /// </summary>
+        /// <param name="syncronizer"></param>
+        public void FilterOnlyNewed(Syncronizer syncronizer)
+        {
+            var hitomi_ids = new HashSet<int>();
+            syncronizer.newedDataHitomi.ForEach(x => hitomi_ids.Add(x));
+            var eh_ids = new HashSet<int>();
+            syncronizer.newedDataEH.ForEach(x => eh_ids.Add(x));
+
+            HitomiData.Instance.metadata_collection.RemoveAll(x => !hitomi_ids.Contains(x.ID));
+            ehentaiArticles.RemoveAll(x => !eh_ids.Contains(int.Parse(x.URL.Split('/')[4])));
+
+            // You donot have to remove ehIndex's items.
+        }
+
         Dictionary<int, int> onHitomi;
         Dictionary<int, int> onEH;
         List<int> articles;
@@ -92,7 +109,7 @@ namespace hsync
         /// </summary>
         /// <param name="filename"></param>
         /// <param name="language"></param>
-        public void ExtractRawDatabase(string filename = "rawdata", string language = null)
+        public void ExtractRawDatabase(string filename = "rawdata", bool skip_indexing = false, string language = null)
         {
             Directory.CreateDirectory(filename);
             if (File.Exists(filename + "/data.db"))
@@ -222,7 +239,7 @@ namespace hsync
                                 tt = "loli";
                             else if (tt == "shotacon")
                                 tt = "shota";
-                            tags.Add("female:" + tag);
+                            tags.Add("female:" + tt);
                         }
                     }
                     if (male != null)
@@ -234,7 +251,7 @@ namespace hsync
                                 tt = "loli";
                             else if (tt == "shotacon")
                                 tt = "shota";
-                            tags.Add("male:" + tag);
+                            tags.Add("male:" + tt);
                         }
                     }
                     if (misc != null)
@@ -246,7 +263,7 @@ namespace hsync
                                 tt = "loli";
                             else if (tt == "shotacon")
                                 tt = "shota";
-                            tags.Add(tag);
+                            tags.Add(tt);
                         }
                     }
 
@@ -275,6 +292,7 @@ namespace hsync
             db.InsertAll(datas);
             db.Close();
 
+            if (skip_indexing) return;
 
             Action<Dictionary<string, int>, string> insert = (map, qr) =>
             {
@@ -344,26 +362,6 @@ namespace hsync
                     {
                         if (artist == "")
                             continue;
-                        if (!result_uploader.ContainsKey(artist))
-                            result_uploader.Add(artist, new Dictionary<int, int>());
-                        foreach (var tag in article.Tags.Split('|'))
-                        {
-                            if (tag == "")
-                                continue;
-                            if (!ff.ContainsKey(tag))
-                                ff.Add(tag, ff.Count);
-                            if (!result_uploader[artist].ContainsKey(ff[tag]))
-                                result_uploader[artist].Add(ff[tag], 0);
-                            result_uploader[artist][ff[tag]] += 1;
-                        }
-                    }
-                }
-                if (article.Uploader != null)
-                {
-                    foreach (var artist in article.Uploader.Split('|'))
-                    {
-                        if (artist == "")
-                            continue;
                         if (!result_group.ContainsKey(artist))
                             result_group.Add(artist, new Dictionary<int, int>());
                         foreach (var tag in article.Tags.Split('|'))
@@ -375,6 +373,26 @@ namespace hsync
                             if (!result_group[artist].ContainsKey(ff[tag]))
                                 result_group[artist].Add(ff[tag], 0);
                             result_group[artist][ff[tag]] += 1;
+                        }
+                    }
+                }
+                if (article.Uploader != null)
+                {
+                    foreach (var artist in article.Uploader.Split('|'))
+                    {
+                        if (artist == "")
+                            continue;
+                        if (!result_uploader.ContainsKey(artist))
+                            result_uploader.Add(artist, new Dictionary<int, int>());
+                        foreach (var tag in article.Tags.Split('|'))
+                        {
+                            if (tag == "")
+                                continue;
+                            if (!ff.ContainsKey(tag))
+                                ff.Add(tag, ff.Count);
+                            if (!result_uploader[artist].ContainsKey(ff[tag]))
+                                result_uploader[artist].Add(ff[tag], 0);
+                            result_uploader[artist][ff[tag]] += 1;
                         }
                     }
                 }
