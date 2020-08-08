@@ -190,6 +190,7 @@ namespace hsync
             Console.WriteLine("Complete korean!");
 
             dbc.FilterOnlyNewed(sync);
+            dbc.Integrate();
             var dt = DateTime.Now.ToString("yyyy-MM-dd hh-mm");
             dbc.ExtractRawDatabase($"chunk/{dt}/rawdata", true);
             Console.WriteLine("Complete all!");
