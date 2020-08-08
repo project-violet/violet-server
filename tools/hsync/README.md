@@ -45,3 +45,28 @@ Usage: ./hsync [OPTIONS...]
 ```
 
 Very fast metadata synchronizer!
+
+## How to use?
+
+```
+1. Set your own hitomi.la crawling range
+https://github.com/project-violet/violet-server/blob/master/tools/hsync/hsync/Syncronizer.cs#L32
+This use exhentai-based ID.
+The default of 6,000 means to crawl 157,000 to 163,000 based on 160,000.
+
+2. Set exhentai.org search range
+https://github.com/project-violet/violet-server/blob/master/tools/hsync/hsync/Syncronizer.cs#L175
+This use exhentai search result page number.
+You need to set up how many pages you want to browse. The default is 150 pages.
+
+3. Build
+I recommend the debug build, but if you want to release, 
+check the batch files in https://github.com/project-violet/violet-server/tree/master/tools/hsync/hsyncc folder.
+
+4. Download base database
+Download base database from https://github.com/project-violet/violet-server/releases
+
+5. Run ./hsync.exe
+
+6. Wait for complete
+```
