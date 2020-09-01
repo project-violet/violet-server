@@ -92,23 +92,15 @@ namespace hsync
             Console.WriteLine("Complete");
 
             Console.Write("Check redirect gallery html... ");
-            var last_change = true;
-            while (last_change)
+            for (int i = 0; i < htmls2.Count; i++)
             {
-                last_change = false;
-                for (int i = 0; i < htmls2.Count; i++)
+                if (htmls2[i] == null)
+                    continue;
+                var node = htmls2[i].ToHtmlNode();
+                var title = node.SelectSingleNode("//title");
+                if (title != null && title.InnerText == "Redirect")
                 {
-                    if (htmls2[i] == null)
-                        continue;
-                    var node = htmls2[i].ToHtmlNode();
-                    var title = node.SelectSingleNode("//title");
-                    if (title != null && title.InnerText == "Redirect")
-                    {
-                        htmls2[i] = NetTools.DownloadString(
-                            node.SelectSingleNode("//a")
-                            .GetAttributeValue("href", ""));
-                        last_change = true;
-                    }
+                    htmls2.RemoveAt(i--);
                 }
             }
             Console.WriteLine("Complete");
