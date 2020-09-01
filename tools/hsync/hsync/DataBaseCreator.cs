@@ -267,25 +267,25 @@ namespace hsync
                         }
                     }
 
-                    result = new HitomiColumnModel
-                    {
-                        Id = id,
-                        Artists = (aritst != null && aritst.Count > 0 && aritst[0] != "" ? "|" + string.Join("|", aritst) + "|" : "|N/A|"),
-                        Characters = (character != null && character.Count > 0 && character[0] != "" ? "|" + string.Join("|", character) + "|" : null),
-                        Groups = (group != null && group.Count > 0 && group[0] != "" ? "|" + string.Join("|", group) + "|" : null),
-                        Series = (parody != null && parody.Count > 0 && parody[0] != "" ? "|" + string.Join("|", parody) + "|" : null),
-                        Title = ed.Title,
-                        Tags = (tags.Count > 0 ? "|" + string.Join("|", tags) + "|" : null),
-                        Type = ed.Type,
-                        Language = lang,
-                        ExistOnHitomi = 0,
-                        Uploader = ed.Uploader,
-                        Published = DateTime.Parse(ed.Published),
-                        EHash = ed.URL.Split('/')[5],
-                        Files = ed.Files.Split(' ')[0].ToInt(),
-                        Class = ed.Title.StartsWith("(") ? ed.Title.Split("(")[1].Split(")")[0] : null,
-                        Thumbnail = ed.Thumbnail,
-                    };
+                    //result = new HitomiColumnModel
+                    //{
+                    //    Id = id,
+                    //    Artists = (aritst != null && aritst.Count > 0 && aritst[0] != "" ? "|" + string.Join("|", aritst) + "|" : "|N/A|"),
+                    //    Characters = (character != null && character.Count > 0 && character[0] != "" ? "|" + string.Join("|", character) + "|" : null),
+                    //    Groups = (group != null && group.Count > 0 && group[0] != "" ? "|" + string.Join("|", group) + "|" : null),
+                    //    Series = (parody != null && parody.Count > 0 && parody[0] != "" ? "|" + string.Join("|", parody) + "|" : null),
+                    //    Title = ed.Title,
+                    //    Tags = (tags.Count > 0 ? "|" + string.Join("|", tags) + "|" : null),
+                    //    Type = ed.Type,
+                    //    Language = lang,
+                    //    ExistOnHitomi = 0,
+                    //    Uploader = ed.Uploader,
+                    //    Published = DateTime.Parse(ed.Published),
+                    //    EHash = ed.URL.Split('/')[5],
+                    //    Files = ed.Files.Split(' ')[0].ToInt(),
+                    //    Class = ed.Title.StartsWith("(") ? ed.Title.Split("(")[1].Split(")")[0] : null,
+                    //    Thumbnail = ed.Thumbnail,
+                    //};
                 }
                 return result;
             });
@@ -324,6 +324,7 @@ namespace hsync
 
             foreach (var article in datas)
             {
+                if (article == null) continue;
                 insert(index.tags, article.Tags);
                 insert(index.artists, article.Artists);
                 insert(index.groups, article.Groups);

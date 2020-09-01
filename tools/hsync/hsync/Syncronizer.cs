@@ -29,7 +29,7 @@ namespace hsync
         {
             HitomiData.Instance.Load();
             latestId = HitomiData.Instance.metadata_collection.First().ID;
-            hitomiSyncRange = 6000;
+            hitomiSyncRange = 10000;
             newedDataHitomi = new List<int>();
             newedDataEH = new List<int>();
         }
@@ -172,7 +172,7 @@ namespace hsync
                         result.AddRange(exh);
                         if (exh.Count != 25)
                             Logs.Instance.PushWarning("[Miss] " + url);
-                        if (i > 150 && exh.Min(x => x.URL.Split('/')[4].ToInt()) < latestId)
+                        if (i > 300 && exh.Min(x => x.URL.Split('/')[4].ToInt()) < latestId)
                             break;
                         Logs.Instance.Push("Parse exh page - " + i);
                     }

@@ -189,19 +189,19 @@ namespace hsync
             dbc.ExtractRawDatabase("rawdata-korean", false, "korean");
             Console.WriteLine("Complete korean!");
 
-            dbc.FilterOnlyNewed(sync);
-            dbc.Integrate();
-            var dt = DateTime.Now.ToString("yyyy-MM-dd hh-mm");
-            dbc.ExtractRawDatabase($"chunk/{dt}/rawdata", true);
-            Console.WriteLine("Complete all!");
-            dbc.ExtractRawDatabase($"chunk/{dt}/rawdata-chinese", true, "chinese");
-            Console.WriteLine("Complete chinese!");
-            dbc.ExtractRawDatabase($"chunk/{dt}/rawdata-english", true, "english");
-            Console.WriteLine("Complete english!");
-            dbc.ExtractRawDatabase($"chunk/{dt}/rawdata-japanese", true, "japanese");
-            Console.WriteLine("Complete japanese!");
-            dbc.ExtractRawDatabase($"chunk/{dt}/rawdata-korean", true, "korean");
-            Console.WriteLine("Complete korean!");
+            //dbc.FilterOnlyNewed(sync);
+            //dbc.Integrate();
+            //var dt = DateTime.Now.ToString("yyyy-MM-dd hh-mm");
+            //dbc.ExtractRawDatabase($"chunk/{dt}/rawdata", true);
+            //Console.WriteLine("Complete all!");
+            //dbc.ExtractRawDatabase($"chunk/{dt}/rawdata-chinese", true, "chinese");
+            //Console.WriteLine("Complete chinese!");
+            //dbc.ExtractRawDatabase($"chunk/{dt}/rawdata-english", true, "english");
+            //Console.WriteLine("Complete english!");
+            //dbc.ExtractRawDatabase($"chunk/{dt}/rawdata-japanese", true, "japanese");
+            //Console.WriteLine("Complete japanese!");
+            //dbc.ExtractRawDatabase($"chunk/{dt}/rawdata-korean", true, "korean");
+            //Console.WriteLine("Complete korean!");
         }
 
         static void download_data(string url, string filename)
