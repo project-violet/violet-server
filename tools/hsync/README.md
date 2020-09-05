@@ -48,6 +48,8 @@ Very fast metadata synchronizer!
 
 ## How to use?
 
+At least 8 GB of memory is required.
+
 ```
 1. Set your own hitomi.la crawling range
 https://github.com/project-violet/violet-server/blob/master/tools/hsync/hsync/Syncronizer.cs#L32
