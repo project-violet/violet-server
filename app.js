@@ -15,12 +15,11 @@ const r_api = require('./routes/api');
 
 const app = express();
 
-app.use('/api', r_api);
+app.use('/', r_api);
 
 // Since it is filtered by nginx, the routing below should not be valid.
 app.use(function (req, res, next) {
   res.status(404);
-  
   res.type('txt').send('Not found');
 });
 

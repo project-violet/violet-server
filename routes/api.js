@@ -4,6 +4,8 @@
 var express = require('express');
 var router = express.Router();
 
+var r_auth = require('../auth/auth');
+
 router.get('/', empty);
 function empty(req, res, next) {
   res.type('json').send({'msg':'hello violet api server!'});
@@ -11,7 +13,7 @@ function empty(req, res, next) {
 
 router.get('/authtest', auth);
 function auth(req, res, next) {
-
+  res.type('json').send({'msg':'msg'});
 }
 
 router.use(function (req, res, next) {
