@@ -4,8 +4,19 @@
 var express = require('express');
 var router = express.Router();
 
-router.get('/api', api);
-function api(req, res, next) {
+router.get('/', empty);
+function empty(req, res, next) {
+  res.type('json').send({'msg':'hello violet api server!'});
 }
+
+router.get('/authtest', auth);
+function auth(req, res, next) {
+
+}
+
+router.use(function (req, res, next) {
+  res.status(501);
+  res.type('json').send({'msg':'wrong request?'});
+});
 
 module.exports = router;
