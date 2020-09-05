@@ -1,0 +1,19 @@
+{
+  "name": "violet",
+  "version": "1.0.0",
+  "description": "This project is a server of project violet written in `nodejs`.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/project-violet/violet-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/project-violet/violet-server/issues"
+  },
+  "homepage": "https://github.com/project-violet/violet-server#readme"
+}
