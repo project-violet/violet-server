@@ -23,6 +23,7 @@
     "express-blacklist": "^1.0.3",
     "express-defend": "^1.0.9",
     "express-rate-limit": "^5.1.3",
-    "http-errors": "^1.8.0"
+    "http-errors": "^1.8.0",
+    "mysql": "^2.18.1"
   }
 }
