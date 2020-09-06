@@ -477,3 +477,5 @@ dist
 .pnp.*
 
 blacklist.txt
+
+log/*
