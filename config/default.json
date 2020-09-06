@@ -1,6 +1,6 @@
 {
   "auth": {
-    "salt": "salf"
+    "salt": "salt"
   },
   "db": {
     "host": "localhost",
