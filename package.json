@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/project-violet/violet-server#readme",
   "dependencies": {
+    "config": "^3.3.1",
     "crypto": "^1.0.1",
     "express": "^4.17.1",
     "express-blacklist": "^1.0.3",

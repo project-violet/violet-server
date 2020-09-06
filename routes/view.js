@@ -1,7 +1,10 @@
 // This source code is a part of Project Violet.
 // Copyright (C) 2020. violet-team. Licensed under the Apache-2.0 License.
 
+const config = require('config');
+
 var r_auth = require('../auth/auth');
+var r_database = require('../api/database');
 
 // This function is triggered when the user reads a specific article.
 module.exports = async function view(req, res, next) {

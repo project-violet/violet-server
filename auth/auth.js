@@ -1,9 +1,10 @@
 // This source code is a part of Project Violet.
 // Copyright (C) 2020. violet-team. Licensed under the Apache-2.0 License.
 
-var crypto = require('crypto');
+const crypto = require('crypto');
+const config = require('config');
 
-const testSalt = 'salt';
+const testSalt = config.get('auth.salt') || 'salt';
 
 let authTest = function (token, valid) {
   let mac = crypto.createHash('sha512');
