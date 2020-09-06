@@ -43,10 +43,10 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-app.use("/read", r_read);
+app.post("/read", r_read);
 app.use("/top", r_top);
-app.use("/view", r_view);
-app.use("/write", r_write);
+app.post("/view", r_view);
+app.post("/write", r_write);
 app.use("/", r_index);
 
 // Since it is filtered by nginx, the routing below should not be valid.
