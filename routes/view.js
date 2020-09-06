@@ -3,24 +3,22 @@
 
 var r_auth = require('../auth/auth');
 
+// This function is triggered when the user reads a specific article.
 module.exports = async function view(req, res, next) {
   if (!r_auth.auth(req)) {
-    res.status(403);
-    res.type('json').send({'msg':'forbidden'});
+    res.status(403).type('json').send({'msg':'forbidden'});
     return; 
   }
 
   if (req.body['no'] == null) {
-    res.status(400);
-    res.type('json').send({'msg':'bad request'});
+    res.status(400).type('json').send({'msg':'bad request'});
     return;
   }
 
   var no = parseInt(req.body['no']);
 
   if (isNaN(no)) {
-    res.status(400);
-    res.type('json').send({'msg':'bad request'});
+    res.status(400).type('json').send({'msg':'bad request'});
     return;
   }
 };

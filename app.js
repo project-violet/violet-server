@@ -15,8 +15,10 @@ const blacklist = require("express-blacklist");
 const rateLimit = require("express-rate-limit");
 
 const r_index = require("./routes/index");
+const r_read = require("./routes/read");
 const r_top = require("./routes/top");
 const r_view = require("./routes/view");
+const r_write = require("./routes/write");
 
 const app = express();
 
@@ -41,8 +43,10 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
+app.use("/read", r_read);
 app.use("/top", r_top);
 app.use("/view", r_view);
+app.use("/write", r_write);
 app.use("/", r_index);
 
 // Since it is filtered by nginx, the routing below should not be valid.
