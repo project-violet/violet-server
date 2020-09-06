@@ -2,12 +2,12 @@
 // Copyright (C) 2020. violet-team. Licensed under the Apache-2.0 License.
 
 const { createLogger, format, transports } = require('winston');
-const { combine, timestamp, label, printf } = format;
+const { combine, timestamp, printf, json, splat, prettyPrint } = format;
 
 require("winston-daily-rotate-file");
 
 const myFormat = printf(({ level, message, label, timestamp }) => {
-  return `${timestamp} [${level}] ${message}`;
+  return `${timestamp} - ${level}: ${JSON.stringify(message, null, 2)}`;
 });
 
 var transport = new transports.DailyRotateFile({
@@ -18,7 +18,10 @@ var transport = new transports.DailyRotateFile({
 var logger = createLogger({
   format: combine(
     timestamp(),
-    myFormat
+    json(),
+    splat(),
+    prettyPrint(),
+    myFormat,
   ),
   transports: [transport],
 });
