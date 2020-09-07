@@ -39,9 +39,7 @@ module.exports = async function view(req, res, next) {
   ) {
     if (error != null) {
       logger.error('viewdb', error);
-      res.status(500).type("json").send({ msg: "internal server error" });
-    } else {
-      res.status(200).type("json").send({ msg: "success" });
     }
   });
+  res.status(200).type("json").send({ msg: "success" });
 };

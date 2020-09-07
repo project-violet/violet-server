@@ -479,3 +479,5 @@ dist
 blacklist.txt
 
 log/*
+config/production.json
+export.cmd
