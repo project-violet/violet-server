@@ -25,7 +25,7 @@ let auth = function (req) {
 
   var serverTimestamp = new Date().getTime();
 
-  if (!(serverTimestamp - clientTimestamp > 0 && serverTimestamp - clientTimestamp < 2000))
+  if (Math.abs(serverTimestamp - clientTimestamp) > 2000)
     return false;
 
   return authTest(token, valid);
