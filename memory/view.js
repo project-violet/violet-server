@@ -54,7 +54,7 @@ class Ranking {
       this.rank[index].v += 1;
       if (index != 0 && this.rank[index - 1].v < this.rank[index].v) {
         // Change one by one to keep the sequence of the existing array
-        for (; index >= 0; index--) {
+        for (; index > 0; index--) {
           if (this.rank[index - 1].v > this.rank[index].v) break;
 
           var tk = this.rank[index - 1].k;
@@ -121,7 +121,11 @@ var CURRENT_TIMESTAMP = { toSqlString: function() { return 'CURRENT_TIMESTAMP()'
 
 module.exports = {
   append: function (no) {
-    append(no);
+    try {
+      append(no);
+    } catch (e) {
+      console.log(e);
+    }
 
     var pool = a_database();
     pool.query(
