@@ -60,7 +60,7 @@ class Ranking {
         for (; index >= 0; index--) {
           if (this.rank[index - 1].v > this.rank[index].v)
             break;
-            
+
           var tk = this.rank[index - 1].k;
           var tv = this.rank[index - 1].v;
           this.rank[index - 1].k = this.rank[index].k;
@@ -74,23 +74,42 @@ class Ranking {
       }
     }
   }
+  query(offset, count) {
+    if (offset + count - 1 > this.rank.length) {
+      return this.rank.slice(offset);
+    }
+    return this.rank.slice(offset, offset + count);
+  }
 }
 
 var daily = new Ranking(1);
 var week = new Ranking(7);
 var month = new Ranking(31);
-var alltime = new Ranking(365*4);
+var alltime = new Ranking(365*999);
 
 function sync() {
-  tdaily = new Ranking(1);
-  tweek = new Ranking(7);
-  tmonth = new Ranking(31);
-  talltime = new Ranking(365*4);
+  var pool = a_database();
+  var qr = pool.query("SELECT * FROM viewtotal", function (
+    error,
+    results,
+    fields
+  ) {
+    if (error != null) {
+      logger.error('viewdb', error);
+    } else {
+      data = results;
 
-  daily = tdaily;
-  week = tweek;
-  month = tmonth;
-  alltime = talltime;
+      tdaily = new Ranking(1);
+      tweek = new Ranking(7);
+      tmonth = new Ranking(31);
+      talltime = new Ranking(365*999);
+
+      daily = tdaily;
+      week = tweek;
+      month = tmonth;
+      alltime = talltime;
+    }
+  });
 }
 
 function append(no) {
@@ -102,7 +121,7 @@ function append(no) {
 
 module.exports = {
   append: function (no) {
-
+    append(no);
 
     var pool = a_database();
     pool.query(
@@ -119,7 +138,16 @@ module.exports = {
     );
   },
 
-  query: function (offset, count) {
-
+  query: function (offset, count, type) {
+    switch (type) {
+      case 'daily':
+        return daily.query(offset, count);
+      case 'week':
+        return week.query(offset, count);
+      case 'month':
+        return month.query(offset, count);
+      case 'alltime':
+        return alltime.query(offset, count);
+    }
   }
 };
