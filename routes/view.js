@@ -1,13 +1,8 @@
 // This source code is a part of Project Violet.
 // Copyright (C) 2020. violet-team. Licensed under the Apache-2.0 License.
 
-const config = require("config");
-
 var r_auth = require("../auth/auth");
-var r_database = require("../api/database");
-const logger = require("../etc/logger");
-
-var CURRENT_TIMESTAMP = { toSqlString: function() { return 'CURRENT_TIMESTAMP()'; } };
+var m_view = require("../memory/view");
 
 // This function is triggered when the user reads a specific article.
 module.exports = async function view(req, res, next) {
@@ -28,18 +23,6 @@ module.exports = async function view(req, res, next) {
     return;
   }
 
-  var pool = r_database();
-  pool.query("INSERT INTO viewtotal SET ?", {
-    'ArticleId': no,
-    'TimeStamp': CURRENT_TIMESTAMP,
-  }, function (
-    error,
-    results,
-    fields
-  ) {
-    if (error != null) {
-      logger.error('viewdb', error);
-    }
-  });
+  m_view.append(no);
   res.status(200).type("json").send({ msg: "success" });
 };

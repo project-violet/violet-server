@@ -5,7 +5,6 @@ const a_database = require("../api/database");
 const a_syncdatabase = require("../api/syncdatabase");
 
 const logger = require("../etc/logger");
-const { all } = require("../app");
 
 var data = [];
 
@@ -25,21 +24,19 @@ class Ranking {
     var now = new Date();
     for (var i = 0; i < data.length; i++) {
       var diff = now - new Date(data[i].TimeStamp);
-      if (diff > days * 1000 * 60 * 60 * 24 || diff < 0)
-        continue;
+      if (diff > days * 1000 * 60 * 60 * 24 || diff < 0) continue;
       if (rankmap[data[i].ArticleId] == undefined)
         rankmap[data[i].ArticleId] = 1;
-      else
-        rankmap[data[i].ArticleId] += 1;
+      else rankmap[data[i].ArticleId] += 1;
     }
 
     this.rank = [];
     this.rankindex = {};
 
     if (rankmap.length == 0) return;
-    
+
     for (const [k, v] of Object.entries(rankmap)) {
-      this.rank.push({k:k, v:v});
+      this.rank.push({ k: parseInt(k), v: v });
     }
 
     this.rank.sort((a, b) => b.v - a.v);
@@ -50,7 +47,7 @@ class Ranking {
   }
   append(no) {
     if (this.rankindex[no] == undefined) {
-      this.rank.push({k:no, v:1});
+      this.rank.push({ k: no, v: 1 });
       this.rankindex[no] = this.rank.length - 1;
     } else {
       var index = this.rankindex[no];
@@ -58,8 +55,7 @@ class Ranking {
       if (index != 0 && this.rank[index - 1].v < this.rank[index].v) {
         // Change one by one to keep the sequence of the existing array
         for (; index >= 0; index--) {
-          if (this.rank[index - 1].v > this.rank[index].v)
-            break;
+          if (this.rank[index - 1].v > this.rank[index].v) break;
 
           var tk = this.rank[index - 1].k;
           var tv = this.rank[index - 1].v;
@@ -85,7 +81,7 @@ class Ranking {
 var daily = new Ranking(1);
 var week = new Ranking(7);
 var month = new Ranking(31);
-var alltime = new Ranking(365*999);
+var alltime = new Ranking(365 * 999);
 
 function sync() {
   var pool = a_database();
@@ -95,14 +91,14 @@ function sync() {
     fields
   ) {
     if (error != null) {
-      logger.error('viewdb', error);
+      logger.error("viewdb", error);
     } else {
       data = results;
 
       tdaily = new Ranking(1);
       tweek = new Ranking(7);
       tmonth = new Ranking(31);
-      talltime = new Ranking(365*999);
+      talltime = new Ranking(365 * 999);
 
       daily = tdaily;
       week = tweek;
@@ -112,12 +108,16 @@ function sync() {
   });
 }
 
+setInterval(sync, 1000 * 60 * 60);
+
 function append(no) {
   daily.append(no);
   week.append(no);
   month.append(no);
   alltime.append(no);
 }
+
+var CURRENT_TIMESTAMP = { toSqlString: function() { return 'CURRENT_TIMESTAMP()'; } };
 
 module.exports = {
   append: function (no) {
@@ -140,14 +140,15 @@ module.exports = {
 
   query: function (offset, count, type) {
     switch (type) {
-      case 'daily':
-        return daily.query(offset, count);
-      case 'week':
-        return week.query(offset, count);
-      case 'month':
-        return month.query(offset, count);
-      case 'alltime':
-        return alltime.query(offset, count);
+      case "daily":
+        return daily.query(offset, count).map((e) => [e.k, e.v]);
+      case "week":
+        return week.query(offset, count).map((e) => [e.k, e.v]);
+      case "month":
+        return month.query(offset, count).map((e) => [e.k, e.v]);
+      case "alltime":
+        return alltime.query(offset, count).map((e) => [e.k, e.v]);
     }
-  }
+    return null;
+  },
 };
