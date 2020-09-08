@@ -55,6 +55,7 @@ class Ranking {
       if (index != 0 && this.rank[index - 1].v < this.rank[index].v) {
         // Change one by one to keep the sequence of the existing array
         for (; index > 0; index--) {
+          // Most recently updated item is brought to the top.
           if (this.rank[index - 1].v > this.rank[index].v) break;
 
           var tk = this.rank[index - 1].k;
