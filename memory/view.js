@@ -52,7 +52,8 @@ class Ranking {
     } else {
       var index = this.rankindex[no];
       this.rank[index].v += 1;
-      if (index != 0 && this.rank[index - 1].v < this.rank[index].v) {
+      console.log('%d, %d, %d', no, this.rank[index].k, this.rank[index].v);
+      if (index != 0 && this.rank[index - 1].v <= this.rank[index].v) {
         // Change one by one to keep the sequence of the existing array
         for (; index > 0; index--) {
           // Most recently updated item is brought to the top.
@@ -65,8 +66,8 @@ class Ranking {
           this.rank[index].k = tk;
           this.rank[index].v = tv;
 
-          this.rankindex[this.rank[index - 1].k] = index;
-          this.rankindex[this.rank[index].k] = index - 1;
+          this.rankindex[this.rank[index - 1].k] = index - 1;
+          this.rankindex[this.rank[index].k] = index;
         }
       }
     }
