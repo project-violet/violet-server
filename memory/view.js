@@ -92,7 +92,8 @@ function sync() {
     fields
   ) {
     if (error != null) {
-      logger.error("viewdb", error);
+      logger.error("view-sync");
+      logger.error(error);
     } else {
       data = results;
 
@@ -123,10 +124,11 @@ var CURRENT_TIMESTAMP = { toSqlString: function() { return 'CURRENT_TIMESTAMP()'
 module.exports = {
   append: function (no) {
     try {
-      logger.info('view-append', no);
+      logger.info('view-append %d', no);
       append(no);
     } catch (e) {
-      logger.error('view-append', e);
+      logger.error('view-append');
+      logger.error(e);
       console.log(e);
     }
 
