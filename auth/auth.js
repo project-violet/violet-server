@@ -32,7 +32,7 @@ let auth = function (req) {
 
   var serverTimestamp = new Date().getTime();
 
-  if (Math.abs(serverTimestamp - clientTimestamp) > 2000) {
+  if (Math.abs(serverTimestamp - clientTimestamp) > 3000) {
     logger.info('auth: timestamp error, st=%d, ct=%d', serverTimestamp, clientTimestamp); 
     return false;
   }
