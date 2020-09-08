@@ -20,6 +20,7 @@ CREATE TABLE `article` (
 	`Author` INT(11) NULL DEFAULT NULL,
 	`Title` CHAR(50) NULL DEFAULT '' COLLATE 'utf8_general_ci',
 	`Body` VARCHAR(5000) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
+	`Etc` VARCHAR(5000) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
 	PRIMARY KEY (`Id`) USING BTREE
 )
 COLLATE='utf8_general_ci'
