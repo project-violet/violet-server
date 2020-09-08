@@ -123,8 +123,10 @@ var CURRENT_TIMESTAMP = { toSqlString: function() { return 'CURRENT_TIMESTAMP()'
 module.exports = {
   append: function (no) {
     try {
+      logger.info('view-append', no);
       append(no);
     } catch (e) {
+      logger.error('view-append', e);
       console.log(e);
     }
 
