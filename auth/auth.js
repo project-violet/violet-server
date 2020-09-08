@@ -3,6 +3,7 @@
 
 const crypto = require('crypto');
 const config = require('config');
+const logger = require('../etc/logger');
 
 const testSalt = config.get('auth.salt') || 'salt';
 
@@ -17,16 +18,24 @@ let authTest = function (token, valid) {
 let auth = function (req) {
   var token = req.headers['v-token'];
   var valid = req.headers['v-valid'];
-  if (token == null || valid == null) return false;
+  if (token == null || valid == null) {
+    logger.info('auth: token or valid is null');
+    return false;
+  }
   
   var clientTimestamp = parseInt(token);
 
-  if (isNaN(clientTimestamp)) return false;
+  if (isNaN(clientTimestamp)) {
+    logger.info('auth: token is not int'); 
+    return false;
+  }
 
   var serverTimestamp = new Date().getTime();
 
-  if (Math.abs(serverTimestamp - clientTimestamp) > 2000)
+  if (Math.abs(serverTimestamp - clientTimestamp) > 2000) {
+    logger.info('auth: timestamp error, st=%d, ct=%d', serverTimestamp, clientTimestamp); 
     return false;
+  }
 
   return authTest(token, valid);
 }
