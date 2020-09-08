@@ -5,6 +5,8 @@ var express = require("express");
 var router = express.Router();
 
 var r_auth = require('../auth/auth');
+const a_database = require("../api/database");
+const a_redis = require('../api/redis');
 
 // Read a post on the main board.
 router.get("/main", main);

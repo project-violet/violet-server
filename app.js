@@ -24,6 +24,12 @@ const r_write = require("./routes/write");
 
 const app = express();
 
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+const swaggerDocument = YAML.load('./swagger.yaml');
+ 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 app.use(express.json());
 
 // Ban ip address

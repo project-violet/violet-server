@@ -27,8 +27,11 @@
     "http-errors": "^1.8.0",
     "ioredis": "^4.17.3",
     "mysql": "^2.18.1",
+    "swagger-jsdoc": "^4.0.0",
+    "swagger-ui-express": "^4.1.4",
     "sync-mysql": "^3.0.1",
     "winston": "^3.3.3",
-    "winston-daily-rotate-file": "^4.5.0"
+    "winston-daily-rotate-file": "^4.5.0",
+    "yamljs": "^0.3.0"
   }
 }
