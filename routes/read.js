@@ -46,6 +46,23 @@ function _lookupArticle(res, no) {
   });
 }
 
+function _lookupComment(res, no) {
+  const pool = a_database();
+  const qr = pool.query("SELECT * FROM comment WHERE ArticleId=" + no, function (
+    error,
+    results,
+    fields
+  ) {
+    if (error != null) {
+      logger.error("read-comment");
+      logger.error(error);
+      res.status(500).type("json").send({ msg: "internal server error" });
+    } else {
+      res.status(200).type("json").send({ msg: "success", result: results });
+    }
+  });
+}
+
 // Read a post on the main board.
 router.get("/main", main);
 function main(req, res, next) {
@@ -71,7 +88,15 @@ function main(req, res, next) {
   }
 
   res.status(400).type("html").send(p.p400);
-  return;
+}
+
+router.get("/article", article);
+function article(req, res, next) {
+  if (!r_auth.auth(req)) {
+    res.status(403).type("html").send(p.p403);
+    return;
+  }
+
 }
 
 router.get("/comment", comment);
@@ -88,20 +113,7 @@ function comment(req, res, next) {
     return;
   }
 
-  const pool = a_database();
-  const qr = pool.query("SELECT * FROM comment WHERE ArticleId=" + no, function (
-    error,
-    results,
-    fields
-  ) {
-    if (error != null) {
-      logger.error("read-comment");
-      logger.error(error);
-      res.status(500).type("json").send({ msg: "internal server error" });
-    } else {
-      res.status(200).type("json").send({ msg: "success", result: results });
-    }
-  });
+  _lookupComment(res, no);
 }
 
 module.exports = router;
