@@ -55,6 +55,7 @@ app.use(limiter);
 app.use("/read", r_read);
 app.use("/top", r_top);
 app.post("/view", r_view);
+app.get("/view", function (req, res, next) { res.status(405).type("html").send(p.p405); });
 app.use("/write", r_write);
 app.get('/', function (req, res) {
   res.redirect('/api-docs');

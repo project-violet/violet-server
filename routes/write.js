@@ -69,6 +69,7 @@ function main(req, res, next) {
 
   res.status(200).type("json").send({ msg: "success" });
 }
+router.get("/main", function (req, res, next) { res.status(405).type("html").send(p.p405); });
 
 router.post("/comment", comment);
 function comment(req, res, next) {
@@ -115,5 +116,6 @@ function comment(req, res, next) {
 
   res.status(200).type("json").send({ msg: "success" });
 }
+router.get("/comment", function (req, res, next) { res.status(405).type("html").send(p.p405); });
 
 module.exports = router;

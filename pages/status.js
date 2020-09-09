@@ -6,7 +6,7 @@ const page400 = `
 <head><title>400 Bad Request</title></head>
 <body bgcolor="white">
 <center><h1>400 Bad Request</h1></center>
-<center><img src="https://koromo.xyz/api-400.png"></center>
+<center><img src="https://koromo.xyz/api-400.png" height="600"></center>
 <hr><center>Violet API Server</center>
 </body>
 </html>
@@ -34,8 +34,20 @@ const page404 = `
 </html>
 `;
 
+const page405 = `
+<html>
+<head><title>405 Method Not Allowed</title></head>
+<body bgcolor="white">
+<center><h1>405 Method Not Allowed</h1></center>
+<center><img src="https://koromo.xyz/api-405.png" height="600"></center>
+<hr><center>Violet API Server</center>
+</body>
+</html>
+`;
+
 module.exports = {
   p400: page400,
   p403: page403,
-  p404: page404
+  p404: page404,
+  p405: page405
 };
