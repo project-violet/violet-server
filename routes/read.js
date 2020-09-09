@@ -23,7 +23,7 @@ function main(req, res, next) {
   var no = req.query.no;
 
   if ((page == null) == (no == null)) {
-    res.status(400).type("json").send({ msg: "bad request" });
+    res.status(400).type("html").send(p.p400);
     return;
   }
 
@@ -66,7 +66,7 @@ function main(req, res, next) {
     return; 
   }
 
-  res.status(400).type("json").send({ msg: "bad request" });
+  res.status(400).type("html").send(p.p400);
   return;
 }
 
@@ -80,7 +80,7 @@ function comment(req, res, next) {
   var no = req.query.no;
 
   if (no == null || isNaN(no) || no < 0) {
-    res.status(400).type("json").send({ msg: "bad request" });
+    res.status(400).type("html").send(p.p400);
     return;
   }
 
