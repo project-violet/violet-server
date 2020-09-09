@@ -16,7 +16,7 @@ const page404 = `
 <html>
 <head><title>404 Not Found</title></head>
 <body bgcolor="white">
-<center><h1>404 Forbidden</h1></center>
+<center><h1>404 Found</h1></center>
 <center><img src="https://koromo.xyz/api-404.png"></center>
 <hr><center>Violet API Server</center>
 </body>
