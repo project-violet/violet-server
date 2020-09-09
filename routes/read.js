@@ -7,6 +7,7 @@ var router = express.Router();
 var r_auth = require("../auth/auth");
 const a_database = require("../api/database");
 const a_redis = require("../api/redis");
+var p = require("../pages/status");
 
 const logger = require("../etc/logger");
 
@@ -14,7 +15,7 @@ const logger = require("../etc/logger");
 router.get("/main", main);
 function main(req, res, next) {
   if (!r_auth.auth(req)) {
-    res.status(403).type("json").send({ msg: "forbidden" });
+    res.status(403).type("html").send(p.p403);
     return;
   }
 
@@ -72,7 +73,7 @@ function main(req, res, next) {
 router.get("/comment", comment);
 function comment(req, res, next) {
   if (!r_auth.auth(req)) {
-    res.status(403).type("json").send({ msg: "forbidden" });
+    res.status(403).type("html").send(p.p403);
     return;
   }
 

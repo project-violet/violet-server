@@ -21,6 +21,7 @@ const r_read = require("./routes/read");
 const r_top = require("./routes/top");
 const r_view = require("./routes/view");
 const r_write = require("./routes/write");
+var p = require("./pages/status");
 
 const app = express();
 
@@ -61,8 +62,7 @@ app.get('/', function (req, res) {
 
 // Since it is filtered by nginx, the routing below should not be valid.
 app.use(function (req, res, next) {
-  res.status(404);
-  res.type("txt").send("Not found");
+  res.status(404).type("html").send(p.p404);
 });
 
 module.exports = app;
