@@ -6,7 +6,6 @@ var router = express.Router();
 
 var r_auth = require("../auth/auth");
 const a_database = require("../api/database");
-const a_redis = require('../api/redis');
 
 const logger = require("../etc/logger");
 
@@ -18,7 +17,7 @@ var CURRENT_TIMESTAMP = {
 
 // Write a post on the main board.
 router.post("/main", main);
-async function main(req, res, next) {
+function main(req, res, next) {
   if (!r_auth.auth(req)) {
     res.status(403).type("json").send({ msg: "forbidden" });
     return;
@@ -29,16 +28,18 @@ async function main(req, res, next) {
   var body = req.body["body"];
   var etc = req.body["etc"];
 
+  console.log(req.body);
+
   if (
     author == null ||
     title == null ||
     body == null ||
     etc == null ||
     !(
-      type(author) === "string" &&
-      type(title) === "string" &&
-      type(body) === "string" &&
-      type(etc) === "string"
+      typeof(author) === "string" &&
+      typeof(title) === "string" &&
+      typeof(body) === "string" &&
+      typeof(etc) === "string"
     ) ||
     author.length > 45 ||
     title.length > 45 ||
@@ -70,7 +71,7 @@ async function main(req, res, next) {
 }
 
 router.post("/comment", comment);
-async function comment(req, res, next) {
+function comment(req, res, next) {
   if (!r_auth.auth(req)) {
     res.status(403).type("json").send({ msg: "forbidden" });
     return;
@@ -85,9 +86,9 @@ async function comment(req, res, next) {
     articleid == null ||
     body == null ||
     !(
-      type(author) === "string" &&
+      typeof(author) === "string" &&
       !isNaN(articleid) &&
-      type(body) === "string"
+      typeof(body) === "string"
     ) ||
     author.length > 45 ||
     body.length > 500

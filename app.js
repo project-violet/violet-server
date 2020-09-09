@@ -51,10 +51,10 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-app.post("/read", r_read);
+app.use("/read", r_read);
 app.use("/top", r_top);
 app.post("/view", r_view);
-app.post("/write", r_write);
+app.use("/write", r_write);
 app.get('/', function (req, res) {
   res.redirect('/api-docs');
 });
