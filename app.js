@@ -55,7 +55,9 @@ app.post("/read", r_read);
 app.use("/top", r_top);
 app.post("/view", r_view);
 app.post("/write", r_write);
-app.use("/", r_index);
+app.get('/', function (req, res) {
+  res.redirect('/api-docs');
+});
 
 // Since it is filtered by nginx, the routing below should not be valid.
 app.use(function (req, res, next) {
