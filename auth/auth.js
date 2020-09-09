@@ -16,21 +16,21 @@ let authTest = function (token, valid) {
 }
 
 let auth = function (req) {
-  var token = req.headers['v-token'];
-  var valid = req.headers['v-valid'];
+  const token = req.headers['v-token'];
+  const valid = req.headers['v-valid'];
   if (token == null || valid == null) {
     logger.info('auth: token or valid is null');
     return false;
   }
   
-  var clientTimestamp = parseInt(token);
+  const clientTimestamp = parseInt(token);
 
   if (isNaN(clientTimestamp)) {
     logger.info('auth: token is not int'); 
     return false;
   }
 
-  var serverTimestamp = new Date().getTime();
+  const serverTimestamp = new Date().getTime();
 
   if (Math.abs(serverTimestamp - clientTimestamp) > 10000) {
     logger.info('auth: timestamp error, st=%d, ct=%d', serverTimestamp, clientTimestamp); 

@@ -12,8 +12,8 @@ const p = require("../pages/status");
 const logger = require("../etc/logger");
 
 function _lookupPage(res, page) {
-  var pool = a_database();
-  var qr = pool.query(
+  const pool = a_database();
+  const qr = pool.query(
     "SELECT Id, TimeStamp, Author, Comments, Title FROM " +
       "article ORDER BY Id DESC LIMIT 25 OFFSET " +
       page * 25,
@@ -30,8 +30,8 @@ function _lookupPage(res, page) {
 }
 
 function _lookupArticle(res, no) {
-  var pool = a_database();
-  var qr = pool.query("SELECT Body, Etc FROM article WHERE Id=" + no, function (
+  const pool = a_database();
+  const qr = pool.query("SELECT Body, Etc FROM article WHERE Id=" + no, function (
     error,
     results,
     fields
@@ -54,8 +54,8 @@ function main(req, res, next) {
     return;
   }
 
-  var page = req.query.p;
-  var no = req.query.no;
+  const page = req.query.p;
+  const no = req.query.no;
 
   if ((page == null) == (no == null)) {
     res.status(400).type("html").send(p.p400);
@@ -81,15 +81,15 @@ function comment(req, res, next) {
     return;
   }
 
-  var no = req.query.no;
+  const no = req.query.no;
 
   if (no == null || isNaN(no) || no < 0) {
     res.status(400).type("html").send(p.p400);
     return;
   }
 
-  var pool = a_database();
-  var qr = pool.query("SELECT * FROM comment WHERE ArticleId=" + no, function (
+  const pool = a_database();
+  const qr = pool.query("SELECT * FROM comment WHERE ArticleId=" + no, function (
     error,
     results,
     fields

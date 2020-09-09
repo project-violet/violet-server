@@ -1,8 +1,8 @@
 // This source code is a part of Project Violet.
 // Copyright (C) 2020. violet-team. Licensed under the Apache-2.0 License.
 
-var r_auth = require("../auth/auth");
-var m_view = require("../memory/view");
+const r_auth = require("../auth/auth");
+const m_view = require("../memory/view");
 
 // This function is triggered when the user reads a specific article.
 module.exports = async function view(req, res, next) {
@@ -16,7 +16,7 @@ module.exports = async function view(req, res, next) {
     return;
   }
 
-  var no = parseInt(req.body["no"]);
+  const no = parseInt(req.body["no"]);
 
   if (isNaN(no)) {
     res.status(400).type("json").send({ msg: "bad request" });

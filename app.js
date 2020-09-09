@@ -21,7 +21,7 @@ const r_read = require("./routes/read");
 const r_top = require("./routes/top");
 const r_view = require("./routes/view");
 const r_write = require("./routes/write");
-var p = require("./pages/status");
+const p = require("./pages/status");
 
 const app = express();
 

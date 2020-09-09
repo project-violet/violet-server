@@ -11,7 +11,7 @@ const p = require("../pages/status");
 
 const logger = require("../etc/logger");
 
-var CURRENT_TIMESTAMP = {
+const CURRENT_TIMESTAMP = {
   toSqlString: function () {
     return "CURRENT_TIMESTAMP()";
   },
@@ -31,7 +31,7 @@ const commentSchema = Joi.object({
 });
 
 function _insertArticle(body) {
-  var pool = a_database();
+  const pool = a_database();
   pool.query(
     "INSERT INTO article SET ?",
     {
@@ -47,7 +47,7 @@ function _insertArticle(body) {
 }
 
 function _insertComment(body) {
-  var pool = a_database();
+  const pool = a_database();
   pool.query(
     "INSERT INTO comment SET ?",
     {

@@ -10,7 +10,7 @@ const user = config.get("db.user");
 const password = config.get("db.password");
 const database = config.get("db.database");
 
-var pool = mysql.createPool({
+const pool = mysql.createPool({
   connectionLimit: 10,
   host: host,
   port: port,
