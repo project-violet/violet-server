@@ -6,6 +6,7 @@ var router = express.Router();
 
 var r_auth = require("../auth/auth");
 const a_database = require("../api/database");
+var p = require("../pages/status");
 
 const logger = require("../etc/logger");
 
