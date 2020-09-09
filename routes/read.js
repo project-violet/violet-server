@@ -1,13 +1,13 @@
 // This source code is a part of Project Violet.
 // Copyright (C) 2020. violet-team. Licensed under the Apache-2.0 License.
 
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
 
-var r_auth = require("../auth/auth");
+const r_auth = require("../auth/auth");
 const a_database = require("../api/database");
 const a_redis = require("../api/redis");
-var p = require("../pages/status");
+const p = require("../pages/status");
 
 const logger = require("../etc/logger");
 
