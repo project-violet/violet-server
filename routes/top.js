@@ -15,7 +15,7 @@ module.exports = async function top(req, res, next) {
     return;
   }
 
-  const result = m_view.query(offset, count, type);
+  const result = await m_view.query(offset, count, type);
   if (result == null)
     res.status(400).type("html").send(p.p400);
   else {

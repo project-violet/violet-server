@@ -149,16 +149,22 @@ module.exports = {
   },
 
   query: function (offset, count, type) {
-    switch (type) {
-      case "daily":
-        return daily.query(offset, count).map((e) => [e.k, e.v]);
-      case "week":
-        return week.query(offset, count).map((e) => [e.k, e.v]);
-      case "month":
-        return month.query(offset, count).map((e) => [e.k, e.v]);
-      case "alltime":
-        return alltime.query(offset, count).map((e) => [e.k, e.v]);
-    }
-    return null;
+     return new Promise(function(resolve, reject) {
+      switch (type) {
+        case "daily":
+          resolve(daily.query(offset, count).map((e) => [e.k, e.v]));
+          break;
+        case "week":
+          resolve(week.query(offset, count).map((e) => [e.k, e.v]));
+          break;
+        case "month":
+          resolve(month.query(offset, count).map((e) => [e.k, e.v]));
+          break;
+        case "alltime":
+          resolve(alltime.query(offset, count).map((e) => [e.k, e.v]));
+          break;
+      }
+      resolve(null);
+    });
   },
 };

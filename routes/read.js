@@ -11,15 +11,32 @@ const p = require("../pages/status");
 
 const logger = require("../etc/logger");
 
-function _lookupPage(res, page) {
+function _lookupBoard(res) {
+  const pool = a_database();
+  const qr = pool.query("SELECT * FROM board", function (
+    error,
+    results,
+    fields
+  ) {
+    if (error != null) {
+      logger.error("read-board");
+      logger.error(error);
+      res.status(500).type("json").send({ msg: "internal server error" });
+    } else {
+      res.status(200).type("json").send({ msg: "success", result: results });
+    }
+  });
+}
+
+function _lookupPage(res, page, board) {
   const pool = a_database();
   const qr = pool.query(
     "SELECT Id, TimeStamp, Author, Comments, Title FROM " +
-      "article ORDER BY Id DESC LIMIT 25 OFFSET " +
+      "article WHERE Board=" + board + "ORDER BY Id DESC LIMIT 25 OFFSET " +
       page * 25,
     function (error, results, fields) {
       if (error != null) {
-        logger.error("read-body");
+        logger.error("read-page");
         logger.error(error);
         res.status(500).type("json").send({ msg: "internal server error" });
       } else {
@@ -37,7 +54,7 @@ function _lookupArticle(res, no) {
     fields
   ) {
     if (error != null) {
-      logger.error("view-sync");
+      logger.error("read-article");
       logger.error(error);
       res.status(500).type("json").send({ msg: "internal server error" });
     } else {
@@ -63,40 +80,52 @@ function _lookupComment(res, no) {
   });
 }
 
-// Read a post on the main board.
-router.get("/main", main);
-function main(req, res, next) {
+// Lists all board list
+router.get("/board", board);
+function board(req, res, next) {
   if (!r_auth.auth(req)) {
     res.status(403).type("html").send(p.p403);
     return;
   }
 
-  const page = req.query.p;
-  const no = req.query.no;
+  _lookupBoard(res);
+}
 
-  if ((page == null) == (no == null)) {
+// Read a post on the main board.
+router.get("/page", page);
+function page(req, res, next) {
+  if (!r_auth.auth(req)) {
+    res.status(403).type("html").send(p.p403);
+    return;
+  }
+
+  const board = req.query.board;
+  const page = req.query.p;
+
+  if ((board == null) == (page == null) || isNaN(page) || isNaN(board)) {
     res.status(400).type("html").send(p.p400);
     return;
   }
 
-  if (page != null && !isNaN(page) && page >= 0) {
-    _lookupPage(res, page);
-    return;
-  } else if (no != null && !isNaN(no) && no >= 0) {
-    _lookupArticle(res, no);
-    return;
-  }
-
-  res.status(400).type("html").send(p.p400);
+  _lookupPage(res, page, board);
 }
 
+// Read specific article
 router.get("/article", article);
 function article(req, res, next) {
   if (!r_auth.auth(req)) {
     res.status(403).type("html").send(p.p403);
     return;
   }
+  
+  const no = req.query.no;
 
+  if (no == null || isNaN(no) || no < 0) {
+    res.status(400).type("html").send(p.p400);
+    return;
+  }
+
+  _lookupArticle(res, no);
 }
 
 router.get("/comment", comment);
