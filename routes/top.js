@@ -18,6 +18,10 @@ module.exports = async function top(req, res, next) {
   const result = m_view.query(offset, count, type);
   if (result == null)
     res.status(400).type("html").send(p.p400);
-  else 
+  else {
+    // In Flutter, only up to 999 items can be displayed.
+    if (result.length == 1000)
+      result.pop();
     res.type('json').send({'msg':'success', 'result': result});
+  }
 }; 
