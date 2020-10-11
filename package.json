@@ -27,6 +27,7 @@
     "http-errors": "^1.8.0",
     "ioredis": "^4.17.3",
     "joi": "^17.2.1",
+    "multer": "^1.4.2",
     "mysql": "^2.18.1",
     "swagger-jsdoc": "^4.0.0",
     "swagger-ui-express": "^4.1.4",
