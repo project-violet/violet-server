@@ -57,3 +57,27 @@ COLLATE='utf8_general_ci'
 ENGINE=InnoDB
 ;
 
+CREATE TABLE `bookmark` (
+	`Bid` INT(11) NOT NULL AUTO_INCREMENT,
+	`Id` INT(11) NOT NULL DEFAULT '0',
+	`Filename` VARCHAR(150) NOT NULL COLLATE 'utf8_general_ci',
+	`TimeStamp` TIMESTAMP NULL DEFAULT NULL,
+	`Size` DOUBLE NOT NULL DEFAULT '0',
+	PRIMARY KEY (`Bid`) USING BTREE,
+	INDEX `Id` (`Id`) USING BTREE,
+	CONSTRAINT `Id` FOREIGN KEY (`Id`) REFERENCES `violet`.`user` (`Pid`) ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;
+
+CREATE TABLE `user` (
+	`Pid` INT(11) NOT NULL AUTO_INCREMENT,
+	`Id` VARCHAR(50) NOT NULL COLLATE 'utf8_general_ci',
+	`Password` VARCHAR(150) NOT NULL COLLATE 'utf8_general_ci',
+	PRIMARY KEY (`Pid`) USING BTREE,
+	FULLTEXT INDEX `Id` (`Id`)
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;
