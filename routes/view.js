@@ -23,6 +23,6 @@ module.exports = async function view(req, res, next) {
     return;
   }
 
-  m_view.append(no);
+  m_view.append(no, req.body["user"]);
   res.status(200).type("json").send({ msg: "success" });
 };

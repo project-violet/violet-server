@@ -123,9 +123,9 @@ function append(no) {
 var CURRENT_TIMESTAMP = { toSqlString: function() { return 'CURRENT_TIMESTAMP()'; } };
 
 module.exports = {
-  append: function (no) {
+  append: function (no, userid) {
     try {
-      logger.info('view-append %d', no);
+      logger.info('view-append %d %s', no, userid);
       append(no);
     } catch (e) {
       logger.error('view-append');
@@ -139,6 +139,7 @@ module.exports = {
       {
         ArticleId: no,
         TimeStamp: CURRENT_TIMESTAMP,
+        UserAppId: userid,
       },
       function (error, results, fields) {
         if (error != null) {
