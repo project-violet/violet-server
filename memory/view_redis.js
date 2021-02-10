@@ -61,6 +61,22 @@ redis_sub.psubscribe('*').then(function (e) {
 init();
 
 function append(no) {
+  var now = new Date();
+  var key_name = now + no.toString();
+
+  redis.zincrby('alltime', 1, no);
+
+  redis.zincrby('daily', 1, no);
+  redis.set('daily-' + key_name, 1);
+  redis.expire('daily-' + key_name, 1 * 1000 * 60 * 60 * 24);
+
+  redis.zincrby('weekly', 1, no);
+  redis.set('weekly-' + key_name, 1);
+  redis.expire('weekly-' + key_name, 7 * 1000 * 60 * 60 * 24);
+
+  redis.zincrby('monthly', 1, no);
+  redis.set('monthly-' + key_name, 1);
+  redis.expire('monthly-' + key_name, 30 * 1000 * 60 * 60 * 24);
 }
 
 module.exports = {
