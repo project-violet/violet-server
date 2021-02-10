@@ -14,7 +14,7 @@ function init() {
   data = qr;
 }
 
-init();
+// init();
 
 class Ranking {
   constructor(days) {

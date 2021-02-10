@@ -18,7 +18,7 @@ const CURRENT_TIMESTAMP = {
 };
 
 const articleSchema = Joi.object({
-  Board: Joi.number().integer().require(),
+  Board: Joi.number().integer().required(),
   Author: Joi.string().max(45).required(),
   Title: Joi.string().max(45).required(),
   Body: Joi.string().max(4995).required(),

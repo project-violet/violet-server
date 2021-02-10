@@ -2,7 +2,7 @@
 // Copyright (C) 2020-2021. violet-team. Licensed under the Apache-2.0 License.
 
 const r_auth = require("../auth/auth");
-const m_view = require("../memory/view");
+const m_view = require("../memory/view_redis");
 
 // This function is triggered when the user reads a specific article.
 module.exports = async function view(req, res, next) {
