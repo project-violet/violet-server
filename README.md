@@ -41,6 +41,4 @@ yarn install
 yarn build
 ```
 
-## Tools
-
-### hsync - Database synchronizer
+You neee to set redis `notify-keyspace-events` parameter to `AKE`. 
