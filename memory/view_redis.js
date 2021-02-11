@@ -44,7 +44,7 @@ async function query(group, offset, count) {
   var query = await zrevrangeAsync(group, offset, count, 'withscores');
   var result = [];
   for (var i = 0; i < query.length; i += 2)
-    result.push([query[i], query[i+1]]);
+    result.push([parseInt(query[i]), parseInt(query[i+1])]);
   return result;
 }
 
