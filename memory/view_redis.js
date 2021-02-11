@@ -41,7 +41,11 @@ function append(no) {
 
 const zrevrangeAsync = promisify(redis.zrevrange).bind(redis);
 async function query(group, offset, count) {
-  return await zrevrangeAsync(group, offset, count, 'withscores');
+  var query = await zrevrangeAsync(group, offset, count, 'withscores');
+  var result = [];
+  for (var i = 0; i < query.length; i += 2)
+    result.push([query[i], query[i+1]]);
+  return result;
 }
 
 var CURRENT_TIMESTAMP = { toSqlString: function() { return 'CURRENT_TIMESTAMP()'; } };
