@@ -1,6 +1,8 @@
 // This source code is a part of Project Violet.
 // Copyright (C) 2021. violet-team. Licensed under the Apache-2.0 License.
 
+const {promisify} = require('util');
+
 const a_database = require('../api/database');
 const a_syncdatabase = require('../api/syncdatabase');
 
@@ -37,10 +39,9 @@ function append(no) {
   redis.expire('monthly-' + key_name, 30 * 1000 * 60 * 60 * 24);
 }
 
-function query(group, offset, count, resolve) {
-  redis.zrange(group, offset, count, (err, reply) => {
-    resolve(reply);
-  });
+const zrangeAsync = promisify(redis.zrange).bind(redis);
+async function query(group, offset, count) {
+  return await zrangeAsync(group, offset, count);
 }
 
 var CURRENT_TIMESTAMP = { toSqlString: function() { return 'CURRENT_TIMESTAMP()'; } };
@@ -75,19 +76,19 @@ module.exports = {
       resolve(null);
       return;
     }
-    return new Promise(function(resolve, reject) {
+    return new Promise(async function(resolve, reject) {
       switch (type) {
         case 'daily':
-          query('daily', offset, count, resolve);
+          resolve(await query('daily', offset, count));
           break;
         case 'week':
-          query('weekly', offset, count, resolve);
+          resolve(await query('weekly', offset, count));
           break;
         case 'month':
-          query('monthly', offset, count, resolve);
+          resolve(await query('monthly', offset, count));
           break;
         case 'alltime':
-          query('alltime', offset, count, resolve);
+          resolve(await query('alltime', offset, count));
           break;
       }
       resolve(null);
