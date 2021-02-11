@@ -39,9 +39,9 @@ function append(no) {
   redis.expire('monthly-' + key_name, 30 * 1000 * 60 * 60 * 24);
 }
 
-const zrangeAsync = promisify(redis.zrange).bind(redis);
+const zrevrangeAsync = promisify(redis.zrevrange).bind(redis);
 async function query(group, offset, count) {
-  return await zrangeAsync(group, offset, count);
+  return await zrevrangeAsync(group, offset, count, 'withscores');
 }
 
 var CURRENT_TIMESTAMP = { toSqlString: function() { return 'CURRENT_TIMESTAMP()'; } };
