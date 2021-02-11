@@ -13,13 +13,14 @@ function init() {
     return;
 
   redis.flushall();
+  redis.setMaxListeners(0);
 
   var conn = a_syncdatabase();
   var count = conn.query('SELECT COUNT(*) AS C FROM viewtotal')[0]['C'];
 
   console.log('[init] ' + count + ' datas ready to load.');
 
-  const load_per = 50000;
+  const load_per = 5000;
   var offset = 0;
 
   var now = new Date();
