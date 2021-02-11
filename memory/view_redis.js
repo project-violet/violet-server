@@ -13,7 +13,7 @@ const redis_sub = require('../api/redis_sub');
 redis_sub.psubscribe('*').then(function(e) {
   redis_sub.on('pmessage', function(pattern, message, channel) {
     if (message.toString().startsWith('__keyevent') &&
-        message.toString().endsWith('expire')) {
+        message.toString().endsWith('expired')) {
       // This method must called only one per keyevent.
       redis.zincrby(channel.split('-')[0], -1, channel.split('-')[1]);
     }
