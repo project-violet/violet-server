@@ -43,6 +43,8 @@ function query(group, offset, count, resolve) {
   });
 }
 
+var CURRENT_TIMESTAMP = { toSqlString: function() { return 'CURRENT_TIMESTAMP()'; } };
+
 module.exports = {
   append: function(no, userid) {
     try {
