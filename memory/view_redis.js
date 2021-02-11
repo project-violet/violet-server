@@ -9,6 +9,11 @@ const redis = require('../api/redis');
 const redis_sub = require('../api/redis_sub');
 
 function init() {
+  if (redis.get('initialized') == 1)
+    return;
+
+  redis.flushall();
+
   var conn = a_syncdatabase();
   var count = conn.query('SELECT COUNT(*) AS C FROM viewtotal')[0]['C'];
 
@@ -23,7 +28,7 @@ function init() {
     var data = conn.query(
         'SELECT * FROM viewtotal ORDER BY Id DESC LIMIT ' +
         load_per.toString() + ' OFFSET ' + offset.toString());
-        
+
     for (var i = 0; i < data.length; i++) {
       var diff = now - new Date(data[i].TimeStamp);
 
@@ -54,12 +59,16 @@ function init() {
         '%)');
     if (offset > count || data.length == 0) break;
   }
+
+  redis.set('initialized', 1);
+  redis.set('latest-update', new Date().toString());
 }
 
 redis_sub.psubscribe('*').then(function(e) {
   redis_sub.on('pmessage', function(pattern, message, channel) {
     if (message.toString().startsWith('__keyevent') &&
         message.toString().endsWith('expire')) {
+      // This method must called only one per keyevent.
       redis.zincrby(channel.split('-')[0], -1, channel.split('-')[1]);
     }
   });
@@ -84,6 +93,10 @@ function append(no) {
   redis.zincrby('monthly', 1, no);
   redis.set('monthly-' + key_name, 1);
   redis.expire('monthly-' + key_name, 30 * 1000 * 60 * 60 * 24);
+}
+
+function query(group) {
+  return redis.zrange(group, 0, 1000);
 }
 
 module.exports = {
@@ -115,16 +128,16 @@ module.exports = {
     return new Promise(function(resolve, reject) {
       switch (type) {
         case 'daily':
-          resolve(daily.query(offset, count).map((e) => [e.k, e.v]));
+          resolve(query('daily'));
           break;
         case 'week':
-          resolve(week.query(offset, count).map((e) => [e.k, e.v]));
+          resolve(query('weekly'));
           break;
         case 'month':
-          resolve(month.query(offset, count).map((e) => [e.k, e.v]));
+          resolve(query('monthly'));
           break;
         case 'alltime':
-          resolve(alltime.query(offset, count).map((e) => [e.k, e.v]));
+          resolve(query('alltime'));
           break;
       }
       resolve(null);
