@@ -95,8 +95,8 @@ function append(no) {
   redis.expire('monthly-' + key_name, 30 * 1000 * 60 * 60 * 24);
 }
 
-function query(group) {
-  return redis.zrange(group, 0, 1000);
+function query(group, offset, count) {
+  return redis.zrange(group, offset, count);
 }
 
 module.exports = {
@@ -125,19 +125,23 @@ module.exports = {
   },
 
   query: function(offset, count, type) {
+    if (count > 10000) {
+      resolve(null);
+      return;
+    }
     return new Promise(function(resolve, reject) {
       switch (type) {
         case 'daily':
-          resolve(query('daily'));
+          resolve(query('daily', offset, count));
           break;
         case 'week':
-          resolve(query('weekly'));
+          resolve(query('weekly', offset, count));
           break;
         case 'month':
-          resolve(query('monthly'));
+          resolve(query('monthly', offset, count));
           break;
         case 'alltime':
-          resolve(query('alltime'));
+          resolve(query('alltime', offset, count));
           break;
       }
       resolve(null);
