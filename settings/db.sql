@@ -14,6 +14,20 @@ COLLATE='utf8_general_ci'
 ENGINE=InnoDB
 ;
 
+CREATE TABLE `viewtime` (
+	`Id` INT(11) NOT NULL AUTO_INCREMENT,
+	`ArticleId` INT(11) NULL DEFAULT NULL,
+	`TimeStamp` TIMESTAMP NULL DEFAULT NULL,
+	`ViewSeconds` INT(11) NULL DEFAULT NULL,
+	`UserAppId` CHAR(50) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
+	PRIMARY KEY (`Id`) USING BTREE,
+	INDEX `AritcleId` (`ArticleId`) USING BTREE,
+	FULLTEXT INDEX `UserAppId` (`UserAppId`)
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;
+
 CREATE TABLE `article` (
 	`Id` INT(11) NOT NULL AUTO_INCREMENT,
 	`TimeStamp` TIMESTAMP NULL DEFAULT NULL,

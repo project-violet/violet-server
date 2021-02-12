@@ -20,6 +20,7 @@ const r_index = require("./routes/index");
 const r_read = require("./routes/read");
 const r_top = require("./routes/top");
 const r_view = require("./routes/view");
+const r_view_close = require("./routes/view_close");
 const r_write = require("./routes/write");
 const p = require("./pages/status");
 
@@ -58,6 +59,8 @@ app.use("/read", r_read);
 app.use("/top", r_top);
 app.post("/view", r_view);
 app.get("/view", function (req, res, next) { res.status(405).type("html").send(p.p405); });
+app.post("/view_close", r_view_close);
+app.get("/view_close", function (req, res, next) { res.status(405).type("html").send(p.p405); });
 app.use("/write", r_write);
 app.get('/', function (req, res) {
   res.redirect('/api-docs');
