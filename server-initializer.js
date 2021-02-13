@@ -52,17 +52,17 @@ async function init() {
         if (diff < 1 * 1000 * 60 * 60 * 24 && diff > 0) {
           redis.zincrby('daily', 1, data[i].ArticleId);
           redis.set('daily-' + key_name, 1);
-          redis.expire('daily-' + key_name, diff / 1000);
+          redis.expire('daily-' + key_name, diff / 1000 | 0);
         }
         if (diff < 7 * 1000 * 60 * 60 * 24 && diff > 0) {
           redis.zincrby('weekly', 1, data[i].ArticleId);
           redis.set('weekly-' + key_name, 1);
-          redis.expire('weekly-' + key_name, diff / 1000);
+          redis.expire('weekly-' + key_name, diff / 1000 | 0);
         }
-        if (diff < 30 * 1000 * 60 * 60 * 24 && diff > 0) {
+        if (diff < 30 * 1000 * 60 * 60 * 24 && diff > 0 | 0) {
           redis.zincrby('monthly', 1, data[i].ArticleId);
           redis.set('monthly-' + key_name, 1);
-          redis.expire('monthly-' + key_name, diff / 1000);
+          redis.expire('monthly-' + key_name, diff / 1000 | 0);
         }
       }
 
