@@ -12,6 +12,7 @@ const redis_sub = require('../api/redis_sub');
 
 redis_sub.psubscribe('*').then(function(e) {
   redis_sub.on('pmessage', function(pattern, message, channel) {
+    console.log(message, channel);
     if (message.toString().startsWith('__keyevent') &&
         message.toString().endsWith('expired')) {
       // This method must called only one per keyevent.
@@ -36,9 +37,6 @@ function append(no) {
   redis.zincrby('monthly', 1, no);
   redis.setex('monthly-' + key_name, 30 * 60 * 60 * 24, '1');
 }
-
-redis.set('asdfasdf21', 1);
-redis.expire('asdfasdf21', 4);
 
 const zrevrangeAsync = promisify(redis.zrevrange).bind(redis);
 async function query(group, offset, count) {
