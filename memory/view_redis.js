@@ -28,17 +28,17 @@ function append(no) {
   redis.zincrby('alltime', 1, no);
 
   redis.zincrby('daily', 1, no);
-  redis.set('daily-' + key_name, 1);
-  redis.expire('daily-' + key_name, 1 * 60 * 60 * 24);
+  redis.setex('daily-' + key_name, 1 * 60 * 60 * 24, '1');
 
   redis.zincrby('weekly', 1, no);
-  redis.set('weekly-' + key_name, 1);
-  redis.expire('weekly-' + key_name, 7 * 60 * 60 * 24);
+  redis.setex('weekly-' + key_name, 7 * 60 * 60 * 24, '1');
 
   redis.zincrby('monthly', 1, no);
-  redis.set('monthly-' + key_name, 1);
-  redis.expire('monthly-' + key_name, 30 * 60 * 60 * 24);
+  redis.setex('monthly-' + key_name, 30 * 60 * 60 * 24, '1');
 }
+
+redis.set('asdfasdf21', 1);
+redis.expire('asdfasdf21', 4);
 
 const zrevrangeAsync = promisify(redis.zrevrange).bind(redis);
 async function query(group, offset, count) {
