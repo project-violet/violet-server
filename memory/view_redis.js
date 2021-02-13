@@ -15,6 +15,7 @@ redis_sub.psubscribe('*').then(function(e) {
     if (message.toString().startsWith('__keyevent') &&
         message.toString().endsWith('expired')) {
       // This method must called only one per keyevent.
+      logger.info('expired %s', channel);
       redis.zincrby(channel.split('-')[0], -1, channel.split('-')[1]);
     }
   });
@@ -28,15 +29,15 @@ function append(no) {
 
   redis.zincrby('daily', 1, no);
   redis.set('daily-' + key_name, 1);
-  redis.expire('daily-' + key_name, 1 * 1000 * 60 * 60 * 24);
+  redis.expire('daily-' + key_name, 1 * 60 * 60 * 24);
 
   redis.zincrby('weekly', 1, no);
   redis.set('weekly-' + key_name, 1);
-  redis.expire('weekly-' + key_name, 7 * 1000 * 60 * 60 * 24);
+  redis.expire('weekly-' + key_name, 7 * 60 * 60 * 24);
 
   redis.zincrby('monthly', 1, no);
   redis.set('monthly-' + key_name, 1);
-  redis.expire('monthly-' + key_name, 30 * 1000 * 60 * 60 * 24);
+  redis.expire('monthly-' + key_name, 30 * 60 * 60 * 24);
 }
 
 const zrevrangeAsync = promisify(redis.zrevrange).bind(redis);
