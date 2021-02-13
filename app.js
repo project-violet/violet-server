@@ -17,6 +17,7 @@ const rateLimit = require("express-rate-limit");
 const m_view = require("./memory/view");
 
 const r_index = require("./routes/index");
+const r_query = require("./routes/query");
 const r_read = require("./routes/read");
 const r_top = require("./routes/top");
 const r_view = require("./routes/view");
@@ -55,6 +56,7 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
+app.use("/query", r_query);
 app.use("/read", r_read);
 app.use("/top", r_top);
 app.post("/view", r_view);
