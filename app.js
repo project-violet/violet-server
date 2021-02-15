@@ -14,8 +14,6 @@ const expressDefend = require("express-defend");
 const blacklist = require("express-blacklist");
 const rateLimit = require("express-rate-limit");
 
-const m_view = require("./memory/view");
-
 const r_index = require("./routes/index");
 const r_query = require("./routes/query");
 const r_read = require("./routes/read");
