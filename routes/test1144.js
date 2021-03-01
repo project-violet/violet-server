@@ -6,7 +6,7 @@ const a_database = require('../api/database');
 function _lookupViewTime(res) {
   const pool = a_database();
   const qr = pool.query(
-      'SELECT ArticleId, sum(ViewSeconds) as SumOfViewSeconds, count(UserAppId) as HowManyUserRead from viewtime group by ArticleId order by SumOfViewSeconds asc',
+      'SELECT ArticleId, sum(ViewSeconds) as SumOfViewSeconds, count(UserAppId) as HowManyUserRead from viewtime group by ArticleId order by SumOfViewSeconds desc',
       function(error, results, fields) {
         if (error != null) {
           logger.error('lookup-viewtime');
