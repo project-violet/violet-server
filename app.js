@@ -22,6 +22,9 @@ const r_upload = require("./routes/upload");
 const r_view = require("./routes/view");
 const r_view_close = require("./routes/view_close");
 const r_write = require("./routes/write");
+
+const t_1144 = require("./routes/test1144");
+
 const p = require("./pages/status");
 
 const app = express();
@@ -64,6 +67,9 @@ app.get("/view", function (req, res, next) { res.status(405).type("html").send(p
 app.post("/view_close", r_view_close);
 app.get("/view_close", function (req, res, next) { res.status(405).type("html").send(p.p405); });
 app.use("/write", r_write);
+
+app.use("/1144", t_1144);
+
 app.get('/', function (req, res) {
   res.redirect('/api-docs');
 });
