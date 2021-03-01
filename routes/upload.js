@@ -23,11 +23,11 @@ module.exports = async function upload(req, res, next) {
 
   logger.info('upload-append %s', user);
 
-  if (fs.existsSync(dataPath))
-    fs.unlinkSync(dataPath);
   fs.writeFile(dataPath, data, function(err) {
+    if (err) {
       logger.error('fail-upload %s', user);
       logger.error(err);
+    }
   });
 
   res.status(200).type("json").send({ msg: "success" });
