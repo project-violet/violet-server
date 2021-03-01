@@ -40,7 +40,7 @@ function append(no) {
 
 const zrevrangeAsync = promisify(redis.zrevrange).bind(redis);
 async function query(group, offset, count) {
-  var query = await zrevrangeAsync(group, offset, offset + count, 'withscores');
+  var query = await zrevrangeAsync(group, offset, count, 'withscores');
   var result = [];
   for (var i = 0; i < query.length; i += 2)
     result.push([parseInt(query[i]), parseInt(query[i+1])]);
