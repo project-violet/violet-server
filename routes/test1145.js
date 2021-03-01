@@ -7,7 +7,7 @@ function _lookupViewTimeAvg(res) {
   const pool = a_database();
   const qr = pool.query(
       'SELECT ArticleId, AvgOfViewSeconds, HowManyUserRead from ' +
-      '(SELECT ArticleId, avg(ViewSeconds) as AvgOfViewSeconds, count(UserAppId) as HowManyUserRead from viewtime where HowManyUserRead <> 1 group by ArticleId order by AvgOfViewSeconds desc) as B'+
+      '(SELECT ArticleId, avg(ViewSeconds) as AvgOfViewSeconds, count(UserAppId) as HowManyUserRead from viewtime where HowManyUserRead <> 1 group by ArticleId order by AvgOfViewSeconds desc) as B '+
       'where HowManyUserRead <> 1',
       function(error, results, fields) {
         if (error != null) {
