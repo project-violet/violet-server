@@ -6,7 +6,9 @@ const a_database = require('../api/database');
 function _lookupViewTimeAvg(res) {
   const pool = a_database();
   const qr = pool.query(
-      'SELECT ArticleId, avg(ViewSeconds) as AvgOfViewSeconds, count(UserAppId) as HowManyUserRead from viewtime where HowManyUserRead <> 1 group by ArticleId order by AvgOfViewSeconds desc',
+      'SELECT ArticleId, AvgOfViewSeconds, HowManyUserRead from ' +
+      '(SELECT ArticleId, avg(ViewSeconds) as AvgOfViewSeconds, count(UserAppId) as HowManyUserRead from viewtime where HowManyUserRead <> 1 group by ArticleId order by AvgOfViewSeconds desc) as B'+
+      'where HowManyUserRead <> 1',
       function(error, results, fields) {
         if (error != null) {
           logger.error('lookup-viewtime');
@@ -19,5 +21,5 @@ function _lookupViewTimeAvg(res) {
 }
 
 module.exports = async function test1145(req, res, next) {
-    _lookupViewTimeAvg(res);
+  _lookupViewTimeAvg(res);
 };
