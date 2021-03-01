@@ -19,11 +19,11 @@ module.exports = async function upload(req, res, next) {
 
   let user = req.body["user"];
   let data = req.body["data"];
-  const dataPath = path.resolve(__dirname, user + '.json');
+  const dataPath = path.resolve(__dirname, 'data', user + '.json');
 
   logger.info('upload-append %s', user);
 
-  fs.unlink(dataPath);
+  fs.unlinkSync(dataPath);
   fs.writeFile(dataPath, data, function(err) {
       logger.error('fail-upload %s', user);
       logger.error(err);
