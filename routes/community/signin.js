@@ -17,6 +17,8 @@ const signInSchema = Joi.object({
   Password: Joi.string().max(150).required(),
 });
 
+var CURRENT_TIMESTAMP = { toSqlString: function() { return 'CURRENT_TIMESTAMP()'; } };
+
 async function _tryLogin(body, res) {
   // Check Password is validated
   const ck_password = body.Password;
@@ -58,11 +60,10 @@ async function _tryLogin(body, res) {
   let session = await m_session.createSession(body.Id);
 
   logger.info('signin %s %s', body.Id, session);
-  res.status(200).type('json').send({msg: 'success', session: session});
 
   const pool = a_database();
   pool.query(
-      'INSERT INTO logininfo SET ?', {
+      'INSERT INTO loginrecord SET ?', {
         UserId: body.Id,
         Status: 1,
         Password: pw,
@@ -73,9 +74,9 @@ async function _tryLogin(body, res) {
           logger.error('signin', error);
         }
       });
-}
 
-_tryLogin({Id: 'Test', Password: 'TestTest'});
+  res.status(200).type('json').send({msg: 'success', session: session});
+}
 
 module.exports = async function signin(req, res, next) {
   if (!r_auth.auth(req)) {
