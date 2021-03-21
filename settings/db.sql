@@ -86,3 +86,15 @@ CREATE TABLE `user` (
 COLLATE='utf8_general_ci'
 ENGINE=InnoDB
 ;
+
+CREATE TABLE `loginrecord` (
+	`Id` INT(11) NOT NULL AUTO_INCREMENT,
+	`UserId` VARCHAR(50) NOT NULL COLLATE 'utf8_general_ci',
+	`Password` VARCHAR(150) NOT NULL COLLATE 'utf8_general_ci',
+	`TimeStamp` TIMESTAMP NULL DEFAULT NULL,
+	`Status` INT(11) NOT NULL,
+	PRIMARY KEY (`Id`) USING BTREE
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;
