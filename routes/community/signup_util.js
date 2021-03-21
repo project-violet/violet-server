@@ -20,7 +20,7 @@ const userAppIdSchema = Joi.object({
 });
 
 const nickNameSchema = Joi.object({
-  NickName: Joi.string().max(50).require(),
+  NickName: Joi.string().max(50).required(),
 });
 
 async function _run_qurey(attr, value) {

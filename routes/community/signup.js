@@ -14,7 +14,7 @@ const signUpSchema = Joi.object({
   Id: Joi.string().max(50).required(),
   Password: Joi.string().max(150).required(),
   UserAppId: Joi.string().max(150).required(),
-  NickName: Joi.string().max(50).require(),
+  NickName: Joi.string().max(50).required(),
   Etc: Joi.string().max(150),
 });
 
