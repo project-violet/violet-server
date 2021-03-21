@@ -4,12 +4,12 @@
 const express = require("express");
 const router = express.Router();
 
-const r_auth = require("../auth/auth");
-const a_database = require("../api/database");
-const a_redis = require("../api/redis");
-const p = require("../pages/status");
+const r_auth = require("../../auth/auth");
+const a_database = require("../../api/database");
+const a_redis = require("../../api/redis");
+const p = require("../../pages/status");
 
-const logger = require("../etc/logger");
+const logger = require("../../etc/logger");
 
 function _lookupBoard(res) {
   const pool = a_database();

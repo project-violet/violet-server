@@ -78,6 +78,8 @@ CREATE TABLE `user` (
 	`Id` VARCHAR(50) NOT NULL COLLATE 'utf8_general_ci',
 	`Password` VARCHAR(150) NOT NULL COLLATE 'utf8_general_ci',
 	`UserAppId` VARCHAR(150) NOT NULL COLLATE 'utf8_general_ci',
+	`NickName` VARCHAR(50) NOT NULL COLLATE 'utf8_general_ci',
+	`Etc` VARCHAR(150) NOT NULL COLLATE 'utf8_general_ci',
 	PRIMARY KEY (`Pid`) USING BTREE,
 	FULLTEXT INDEX `Id` (`Id`)
 )

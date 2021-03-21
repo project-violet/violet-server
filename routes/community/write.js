@@ -5,11 +5,11 @@ const express = require("express");
 const router = express.Router();
 const Joi = require("joi");
 
-const r_auth = require("../auth/auth");
-const a_database = require("../api/database");
-const p = require("../pages/status");
+const r_auth = require("../../auth/auth");
+const a_database = require("../../api/database");
+const p = require("../../pages/status");
 
-const logger = require("../etc/logger");
+const logger = require("../../etc/logger");
 
 const CURRENT_TIMESTAMP = {
   toSqlString: function () {

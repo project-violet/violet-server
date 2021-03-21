@@ -16,12 +16,13 @@ const rateLimit = require("express-rate-limit");
 
 const r_index = require("./routes/index");
 const r_query = require("./routes/query");
-const r_read = require("./routes/read");
+const r_read = require("./routes/community/read");
+const r_signup = require("./routes/community/signup");
 const r_top = require("./routes/top");
 const r_upload = require("./routes/upload");
 const r_view = require("./routes/view");
 const r_view_close = require("./routes/view_close");
-const r_write = require("./routes/write");
+const r_write = require("./routes/community/write");
 
 const t_1144 = require("./routes/test1144");
 const t_1145 = require("./routes/test1145");
@@ -61,6 +62,7 @@ app.use(limiter);
 
 app.use("/query", r_query);
 app.use("/read", r_read);
+app.post("/signup", r_signup);
 app.use("/top", r_top);
 app.post("/upload", r_upload);
 app.post("/view", r_view);
