@@ -28,7 +28,7 @@ async function _run_qurey(attr, value) {
 
   try {
     const check = await connection.query(
-        'SELECT count(*) AS C FROM User WHERE ' + attr + '=?', [value]);
+        'SELECT count(*) AS C FROM user WHERE ' + attr + '=?', [value]);
     return check;
   } catch (err) {
     logger.error('signup-util-query', err);

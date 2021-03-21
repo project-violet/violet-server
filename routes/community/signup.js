@@ -24,9 +24,9 @@ async function _trySignUp(body, res) {
 
   try {
     // Check UserAppId already exists
-    const ck_userappid = await connection.query(
-        'SELECT count(*) AS C FROM User WHERE UserAppId=?',
-        [body.UserAppId])[0]['C'];
+    const ck_userappid = (await connection.query(
+        'SELECT count(*) AS C FROM user WHERE UserAppId=?',
+        [body.UserAppId]))[0][0]['C'];
     if (ck_userappid != 0) {
       connection.release();
       res.status(200).type('json').send({msg: 'ck_userappid'});
@@ -34,8 +34,9 @@ async function _trySignUp(body, res) {
     }
 
     // Check Id already exists
-    const ck_id = await connection.query(
-        'SELECT count(*) AS C FROM User WHERE Id=?', [body.Id]);
+    const ck_id = (await connection.query(
+        'SELECT count(*) AS C FROM user WHERE Id=?', [body.Id]))[0][0]
+                      .C;
     if (ck_id != 0) {
       connection.release();
       res.status(200).type('json').send({msg: 'ck_id'});
@@ -43,8 +44,10 @@ async function _trySignUp(body, res) {
     }
 
     // Check NickName already exists
-    const ck_nickname = await connection.query(
-        'SELECT count(*) AS C FROM User WHERE NickName=?', [body.NickName]);
+    const ck_nickname = (await connection.query(
+        'SELECT count(*) AS C FROM user WHERE NickName=?', [
+          body.NickName
+        ]))[0][0].C;
     if (ck_nickname != 0) {
       connection.release();
       res.status(200).type('json').send({msg: 'ck_nickname'});
