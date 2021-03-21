@@ -101,7 +101,7 @@ module.exports = async function signup(req, res, next) {
 
   try {
     await signUpSchema.validateAsync(req.body);
-    await _trySignUp(req.body);
+    await _trySignUp(req.body, res);
   } catch (e) {
     res.status(400).type('json').send({msg: 'bad request'});
   }
