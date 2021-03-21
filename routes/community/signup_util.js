@@ -27,8 +27,8 @@ async function _run_qurey(attr, value) {
   const connection = await a_database2().getConnection(async conn => conn);
 
   try {
-    const check = await connection.query(
-        'SELECT count(*) AS C FROM user WHERE ' + attr + '=?', [value]);
+    const check = (await connection.query(
+        'SELECT count(*) AS C FROM user WHERE ' + attr + '=?', [value]))[0][0].C;
     return check;
   } catch (err) {
     logger.error('signup-util-query', err);
@@ -66,7 +66,7 @@ async function checkUserAppId(req, res, next) {
   await _check('UserAppId', userAppIdSchema, req.body.UserAppId, res, req);
 }
 
-router.post('/checkNickName', checkNickName);
+router.post('/checknickname', checkNickName);
 async function checkNickName(req, res, next) {
   await _check('NickName', nickNameSchema, req.body.NickName, res, req);
 }
@@ -77,7 +77,7 @@ router.get('/checkid', function(req, res, next) {
 router.get('/checkuserappid', function(req, res, next) {
   res.status(405).type('html').send(p.p405);
 });
-router.get('/checkNickName', function(req, res, next) {
+router.get('/checknickname', function(req, res, next) {
   res.status(405).type('html').send(p.p405);
 });
 
