@@ -4,6 +4,7 @@
 const {promisify} = require('util');
 
 const crypto = require('crypto');
+const config = require('config');
 const logger = require('../etc/logger');
 const redis = require('../api/redis');
 
@@ -15,10 +16,10 @@ const testSalt = config.get('auth.salt') || 'salt';
 
 module.exports = {
   createSession: async function(user) {
-    const clientTimestamp = parseInt(token);
+    const serverTimestamp = new Date().getTime();
 
     let mac = crypto.createHash('sha512');
-    let hmac = mac.update(user + clientTimestamp.toString() + testSalt);
+    let hmac = mac.update(user + serverTimestamp.toString() + testSalt);
     let sess = hmac.digest('hex');
 
     logger.info('create-session %s, %s', user, sess);

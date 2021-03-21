@@ -17,6 +17,7 @@ const rateLimit = require("express-rate-limit");
 const r_index = require("./routes/index");
 const r_query = require("./routes/query");
 const r_read = require("./routes/community/read");
+const r_signin = require("./routes/community/signin");
 const r_signup = require("./routes/community/signup");
 const r_signup_util = require("./routes/community/signup_util");
 const r_top = require("./routes/top");
@@ -63,6 +64,7 @@ app.use(limiter);
 
 app.use("/query", r_query);
 app.use("/read", r_read);
+app.post("/signin", r_signin);
 app.post("/signup", r_signup);
 app.use("/signutil", r_signup_util);
 app.use("/top", r_top);

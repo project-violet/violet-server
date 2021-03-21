@@ -57,7 +57,7 @@ async function _tryLogin(body, res) {
 
   let session = await m_session.createSession(body.Id);
 
-  logger.info('signin %s %s', body.Id, body.session);
+  logger.info('signin %s %s', body.Id, session);
   res.status(200).type('json').send({msg: 'success', session: session});
 
   const pool = a_database();
@@ -74,6 +74,8 @@ async function _tryLogin(body, res) {
         }
       });
 }
+
+_tryLogin({Id: 'Test', Password: 'TestTest'});
 
 module.exports = async function signin(req, res, next) {
   if (!r_auth.auth(req)) {
