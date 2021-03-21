@@ -8,6 +8,7 @@ const a_database = require('../../api/database');
 const a_database2 = require('../../api/database2');
 const a_syncdatabase = require('../../api/syncdatabase');
 
+const crypto = require('crypto');
 const logger = require('../../etc/logger');
 
 const signUpSchema = Joi.object({
@@ -64,6 +65,13 @@ async function _trySignUp(body, res) {
     res.status(200).type('json').send({msg: 'pw_too_short'});
     return;
   }
+
+  // Hash to Password
+  let mac = crypto.createHash('sha512');
+  let hmac = mac.update(body.Password);
+  let pw = hmac.digest('hex');
+
+  body.Password = pw;
 
   // SignUp
   const pool = a_database();
