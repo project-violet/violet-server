@@ -17,7 +17,11 @@ const signInSchema = Joi.object({
   Password: Joi.string().max(150).required(),
 });
 
-var CURRENT_TIMESTAMP = { toSqlString: function() { return 'CURRENT_TIMESTAMP()'; } };
+var CURRENT_TIMESTAMP = {
+  toSqlString: function() {
+    return 'CURRENT_TIMESTAMP()';
+  }
+};
 
 async function _tryLogin(body, res) {
   // Check Password is validated
@@ -53,13 +57,17 @@ async function _tryLogin(body, res) {
     return;
   }
 
+  const pid = (await connection.query(
+      'SELECT Pid AS P FROM user WHERE Id=?', [body.Id]))[0][0]
+                  .P;
+
   // Remove exists Session
-  if (await m_session.isExists(null, body.Id))
-    await m_session.closeSession(null, body.Id);
+  if (await m_session.isExists(null, pid))
+    await m_session.closeSession(null, pid);
 
-  let session = await m_session.createSession(body.Id);
+  let session = await m_session.createSession(pid);
 
-  logger.info('signin %s %s', body.Id, session);
+  logger.info('signin %s(%d) %s', body.Id, pid, session);
 
   const pool = a_database();
   pool.query(
