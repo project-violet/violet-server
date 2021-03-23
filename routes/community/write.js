@@ -58,6 +58,9 @@ function _insertComment(body) {
           logger.error('write-comment', error);
         }
       });
+  pool.query(
+      'UPDATE article SET Comments=Comments+1 WHERE ArticleId=' + no,
+      function(error, results, fields) {});
 }
 
 async function _checkSession(body) {
