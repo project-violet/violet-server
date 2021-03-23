@@ -28,7 +28,7 @@ function _lookupBoard(res) {
 function _lookupPage(res, page, board) {
   const pool = a_database();
   const qr = pool.query(
-      'SELECT a.Id, a.TimeStamp, b.NickName, a.Comments, a.Title FROM ' +
+      'SELECT a.Id, a.TimeStamp, a.User, b.NickName, a.Comments, a.Title FROM ' +
           'article AS a LEFT JOIN user AS b ON a.User=b.Pid WHERE a.Board=' +
           board + 'ORDER BY Id DESC LIMIT 25 OFFSET ' + page * 25,
       function(error, results, fields) {
@@ -60,7 +60,9 @@ function _lookupArticle(res, no) {
 function _lookupComment(res, no) {
   const pool = a_database();
   const qr = pool.query(
-      'SELECT * FROM comment WHERE ArticleId=' + no,
+      'SELECT a.Id, a.User, b.NickName, a.TimeStamp, a.Body FROM' +
+          ' comment AS a LEFT JOIN user AS b ON a.User=b.Pid WHERE a.ArticleId=' +
+          no,
       function(error, results, fields) {
         if (error != null) {
           logger.error('read-comment');
