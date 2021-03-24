@@ -59,7 +59,7 @@ function _insertComment(body) {
         }
       });
   pool.query(
-      'UPDATE article SET Comments=Comments+1 WHERE ArticleId=' + no,
+      'UPDATE article SET Comments=Comments+1 WHERE ArticleId=' + body.ArticleId,
       function(error, results, fields) {});
 }
 
