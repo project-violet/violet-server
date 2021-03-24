@@ -30,7 +30,7 @@ function _lookupPage(res, page, board) {
   const qr = pool.query(
       'SELECT a.Id, a.TimeStamp, a.User, b.NickName, a.Comments, a.Title FROM ' +
           'article AS a LEFT JOIN user AS b ON a.User=b.Pid WHERE a.Board=' +
-          board + 'ORDER BY Id DESC LIMIT 25 OFFSET ' + page * 25,
+          board + ' ORDER BY Id DESC LIMIT 25 OFFSET ' + page * 25,
       function(error, results, fields) {
         if (error != null) {
           logger.error('read-page');
