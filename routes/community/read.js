@@ -28,7 +28,7 @@ function _lookupBoard(res) {
 function _lookupPage(res, page, board) {
   const pool = a_database();
   const qr = pool.query(
-      'SELECT a.Id, a.TimeStamp, a.User, b.NickName, a.Comments, a.Title FROM ' +
+      'SELECT a.Id, a.TimeStamp, a.User, b.NickName, a.Comments, a.Title, a.View, a.UpVote, a.DownVote FROM ' +
           'article AS a LEFT JOIN user AS b ON a.User=b.Pid WHERE a.Board=' +
           board + ' ORDER BY Id DESC LIMIT 25 OFFSET ' + page * 25,
       function(error, results, fields) {
@@ -56,8 +56,7 @@ function _lookupArticle(res, no) {
         }
       });
   pool.query(
-      'UPDATE article SET View=View+1 WHERE ArticleId=' +
-          body.ArticleId,
+      'UPDATE article SET View=View+1 WHERE ArticleId=' + body.ArticleId,
       function(error, results, fields) {});
 }
 
