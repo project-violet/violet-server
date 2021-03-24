@@ -55,6 +55,10 @@ function _lookupArticle(res, no) {
           res.status(200).type('json').send({msg: 'success', result: results});
         }
       });
+  pool.query(
+      'UPDATE article SET View=View+1 WHERE ArticleId=' +
+          body.ArticleId,
+      function(error, results, fields) {});
 }
 
 function _lookupComment(res, no) {
