@@ -99,7 +99,7 @@ function page(req, res, next) {
   const board = req.query.board;
   const page = req.query.p;
 
-  if ((board == null) == (page == null) || isNaN(page) || isNaN(board)) {
+  if ((board == null) || (page == null) || isNaN(page) || isNaN(board)) {
     res.status(400).type('html').send(p.p400);
     return;
   }
