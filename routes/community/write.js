@@ -119,7 +119,7 @@ async function comment(req, res, next) {
   }
 }
 
-router.get('/main', function(req, res, next) {
+router.get('/article', function(req, res, next) {
   res.status(405).type('html').send(p.p405);
 });
 router.get('/comment', function(req, res, next) {
