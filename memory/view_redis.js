@@ -47,7 +47,7 @@ async function query(group, offset, count) {
   return result;
 }
 
-// var CURRENT_TIMESTAMP = { toSqlString: function() { return 'CURRENT_TIMESTAMP()'; } };
+var CURRENT_TIMESTAMP = { toSqlString: function() { return 'CURRENT_TIMESTAMP()'; } };
 
 module.exports = {
   append: function(no, userid) {
