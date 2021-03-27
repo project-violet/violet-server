@@ -10,6 +10,9 @@ as a left join article_pages as b on a.ArticleId=b.Id where b.Pages<>0;
 +----------------------------+---------------------------------+
 |                 6.21027920 |                  26519.15946969 |
 +----------------------------+---------------------------------+
+std: 162.847043171
+  p: x<=302.50143 = 0.9808
+
 
 # Max seconds per pages item
 select *, a.ViewSeconds/b.Pages FROM 
