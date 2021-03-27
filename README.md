@@ -31,6 +31,53 @@ Also, for the authenticity of the request body, you need to add a body hash.
 
 For details, go https://github.com/project-violet/violet-server/blob/master/auth/auth.js
 
+### Community
+
+```
+Auth (Auth Area: To use the api below, you need to authenticate.)
+  |
+  |=> SignUp (/signup， {"Id","Password","NickName","UserAppId","Etc"}, return success|ck_userappid|ck_id|ck_nickname|pw_too_short|internal server error)
+         |
+         |=> SignIn (/signin, {"Id"，"Password"}， return Session)
+         |      |
+         |      |=> Session (Session Area: To use the api below, you must have a session.)
+         |            |
+         |            |=> Board (/board)
+         |            |     |
+         |            |     |=> Pages (/page)
+         |            |           |
+         |            |           |=> Article (/read/article, /write/article, /del_article, /mod_article, /upvote, /downvote)
+         |            |                  |
+         |            |                  |=> Comment (/read/comment, /write/comment, /del_comment)
+         |            |
+         |            |=> SignOut (/signout)
+         |
+         |=> SignDown (/signdown)
+```
+
+#### Board
+
+#### SignUp/Down/In/Out
+
+#### Session
+
+#### Article
+
+```
+Write Article: https://koromo.xyz/api/write/article
+    {Board, Session, Title, Body, Etc}
+View Article: https://koromo.xyz/api/read/article
+    {no}
+Delete Article: https://koromo.xyz/api/del_article
+    {Session, no}
+Modify Article: https://koromo.xyz/api/mod_article
+    {Session, no}
+Up Vote: https://koromo.xyz/api/upvote
+    {Session, no}
+Down Vote: https://koromo.xyz/api/downvote
+    {Session, no}
+```
+
 ## How to build
 
 ### Build frontend

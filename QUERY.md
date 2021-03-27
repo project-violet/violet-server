@@ -848,3 +848,23 @@ order by C desc
 limit 100;
 
 ```
+
+## Real Time Ranking (use SQL)
+
+```sql
+# Last Day
+select ArticleId, count(*) as C
+from viewtime
+where ViewSeconds>=24 and TimeStamp between date_sub(now(),INTERVAL 1 DAY) and now()
+group by ArticleId
+order by C desc
+limit 100;
+
+# Last Week
+select ArticleId, count(*) as C
+from viewtime
+where ViewSeconds>=24 and TimeStamp between date_sub(now(),INTERVAL 1 WEEK) and now()
+group by ArticleId
+order by C desc
+limit 100;
+```
