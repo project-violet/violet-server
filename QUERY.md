@@ -31,7 +31,7 @@ from
 |     3084 |
 +----------+
 
-# Average, Variance whatching seconds per pages
+# Average, Variance watching seconds per pages
 select avg(a.ViewSeconds/b.Pages), variance(a.ViewSeconds/b.Pages)
 from viewtime as a left join article_pages as b on a.ArticleId=b.Id 
 where b.Pages<>0;
@@ -42,6 +42,20 @@ where b.Pages<>0;
 +----------------------------+---------------------------------+
 std: 162.847043171
   p: x<=302.50143 = 0.9808
+
+# Median watching seconds per pages
+select ceil(count(*)/2)
+from viewtime as a left join article_pages as b on a.ArticleId=b.Id 
+where b.Pages<>0;
+select a.ViewSeconds/b.Pages as c
+from viewtime as a left join article_pages as b on a.ArticleId=b.Id 
+where b.Pages<>0 order by c asc limit 99596,1;
++--------+
+| c      |
++--------+
+| 1.8000 |
++--------+
+
 
 # ViewSeconds Counts
 select ViewSeconds, count(*), repeat('#', count(*)/100), count(*)/199059*100 as percent, 
