@@ -28,7 +28,7 @@ async function init() {
     redis.flushall();
 
     var conn = a_syncdatabase();
-    var count = conn.query('SELECT COUNT(*) AS C FROM viewtotal')[0]['C'];
+    var count = conn.query('SELECT COUNT(*) AS C FROM viewtime WHERE ViewSeconds>=24')[0]['C'];
 
     console.log('[init] ' + count + ' datas ready to load.');
 
@@ -39,7 +39,7 @@ async function init() {
 
     for (;;) {
       var data = conn.query(
-          'SELECT * FROM viewtotal ORDER BY Id DESC LIMIT ' +
+          'SELECT * FROM viewtime WHERE ViewSeconds>=24 ORDER BY Id DESC LIMIT ' +
           load_per.toString() + ' OFFSET ' + offset.toString());
 
       for (var i = 0; i < data.length; i++) {
