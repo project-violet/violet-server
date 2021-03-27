@@ -10,17 +10,17 @@ const logger = require('../etc/logger');
 const redis = require('../api/redis');
 const redis_sub = require('../api/redis_sub');
 
-redis_sub.psubscribe('*').then(function(e) {
-  redis_sub.on('pmessage', function(pattern, message, channel) {
-    console.log(message, channel);
-    if (message.toString().startsWith('__keyevent') &&
-        message.toString().endsWith('expired')) {
-      // This method must called only one per keyevent.
-      logger.info('expired %s', channel);
-      redis.zincrby(channel.split('-')[0], -1, channel.split('-')[1]);
-    }
-  });
-});
+// redis_sub.psubscribe('*').then(function(e) {
+//   redis_sub.on('pmessage', function(pattern, message, channel) {
+//     console.log(message, channel);
+//     if (message.toString().startsWith('__keyevent') &&
+//         message.toString().endsWith('expired')) {
+//       // This method must called only one per keyevent.
+//       logger.info('expired %s', channel);
+//       redis.zincrby(channel.split('-')[0], -1, channel.split('-')[1]);
+//     }
+//   });
+// });
 
 function append(no) {
   var now = new Date();
@@ -36,15 +36,6 @@ function append(no) {
 
   redis.zincrby('monthly', 1, no);
   redis.setex('monthly-' + key_name, 30 * 60 * 60 * 24, '1');
-}
-
-const zrevrangeAsync = promisify(redis.zrevrange).bind(redis);
-async function query(group, offset, count) {
-  var query = await zrevrangeAsync(group, offset, count, 'withscores');
-  var result = [];
-  for (var i = 0; i < query.length; i += 2)
-    result.push([parseInt(query[i]), parseInt(query[i+1])]);
-  return result;
 }
 
 var CURRENT_TIMESTAMP = { toSqlString: function() { return 'CURRENT_TIMESTAMP()'; } };
