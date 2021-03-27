@@ -44,7 +44,8 @@ module.exports = {
   append: function(no, userid, seconds) {
     try {
       logger.info('view-close-append %d %s %s', no, userid, seconds);
-      append(no);
+      if (seconds >= 24)
+        append(no);
     } catch (e) {
       logger.error('view-close-append');
       logger.error(e);
