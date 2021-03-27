@@ -3,6 +3,14 @@
 ## Query for View Time
 
 ```sql
+# Basic
+select count(*) from viewtime;
++----------+
+| count(*) |
++----------+
+|   209119 |
++----------+
+
 # ViewSeconds Counts
 select ViewSeconds, count(*), repeat('#', count(*)/100)  from viewtime
 group by ViewSeconds order by ViewSeconds limit 1000;
