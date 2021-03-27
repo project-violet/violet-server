@@ -9,6 +9,13 @@ select count(*) from viewtime;
 | count(*) |
 +----------+
 |   209119 |
++----------+ 
+select count(*) 
+from viewtime as a left join article_pages as b on a.ArticleId=b.Id where b.Pages<>0;
++----------+
+| count(*) |
++----------+
+|   199059 |
 +----------+
 select count(*) from (select * from viewtime
 group by ViewSeconds order by ViewSeconds) as a;
@@ -146,8 +153,7 @@ group by ViewSeconds order by ViewSeconds limit 1000;
 # Seconds per Pages Counts
 select truncate(round(a.ViewSeconds/b.Pages*5.0)/5.0,1) as c, count(*), repeat('#', count(*)/500), 
 count(*)/209119*100 as percent, SUM(count(*)/209119*100) OVER(ORDER BY c) as acc 
-from viewtime 
-as a left join article_pages as b on a.ArticleId=b.Id 
+from viewtime as a left join article_pages as b on a.ArticleId=b.Id 
 where b.Pages <> 0
 group by c order by c limit 100;
 +------+----------+--------------------------------------+---------+---------+
