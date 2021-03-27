@@ -49,6 +49,19 @@ COLLATE='utf8_general_ci'
 ENGINE=InnoDB
 ;
 
+CREATE TABLE `voterecord` (
+	`Id` INT(11) NOT NULL AUTO_INCREMENT,
+	`TimeStamp` TIMESTAMP NULL DEFAULT NULL,
+	`Article`  INT(11) NOT NULL,
+	/* 0: up, 1: down */
+	`Status` INT(11) NOT NULL DEFAULT 0,
+	PRIMARY KEY (`Id`) USING BTREE,
+	CONSTRAINT `VoteReffer` FOREIGN KEY (`Article`) REFERENCES `violet`.`article` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;
+
 CREATE TABLE `board` (
 	`Id` INT(11) NOT NULL AUTO_INCREMENT,
 	`ShortName` CHAR(50) NOT NULL COLLATE 'utf8_general_ci',
