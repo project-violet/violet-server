@@ -58,7 +58,7 @@ app.use(
 // Limit Request
 const limiter = rateLimit({
   windowMs: 1000 * 60,
-  max: 5 * 6,
+  max: 5 * 6 * 3,
 });
 app.use(limiter);
 
