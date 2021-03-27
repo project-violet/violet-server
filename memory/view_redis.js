@@ -82,10 +82,16 @@ module.exports = {
     return new Promise(async function(resolve, reject) {
       switch (type) {
         case 'daily':
+          resolve(await query('daily', offset, count));
+          break;
         case 'week':
+          resolve(await query('weekly', offset, count));
+          break;
         case 'month':
+          resolve(await query('monthly', offset, count));
+          break;
         case 'alltime':
-          resolve(await query(type, offset, count));
+          resolve(await query('alltime', offset, count));
           break;
       }
       resolve(null);
