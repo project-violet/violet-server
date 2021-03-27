@@ -867,4 +867,20 @@ where ViewSeconds>=24 and TimeStamp between date_sub(now(),INTERVAL 1 WEEK) and 
 group by ArticleId
 order by C desc
 limit 100;
+
+# Last Month
+select ArticleId, count(*) as C
+from viewtime
+where ViewSeconds>=24 and TimeStamp between date_sub(now(),INTERVAL 1 MONTH) and now()
+group by ArticleId
+order by C desc
+limit 100;
+
+# All Time
+select ArticleId, count(*) as C
+from viewtime
+where ViewSeconds>=24
+group by ArticleId
+order by C desc
+limit 100;
 ```
