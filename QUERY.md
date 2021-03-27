@@ -65,7 +65,6 @@ where b.Pages<>0 order by c asc limit 99596,1;
 | 1.8000 |
 +--------+
 
-
 # ViewSeconds Counts
 select ViewSeconds, count(*), repeat('#', count(*)/100), count(*)/199059*100 as percent, 
     sum(count(*)/209119*100) OVER(ORDER BY ViewSeconds) as acc
@@ -778,4 +777,74 @@ order by a.ViewSeconds/b.Pages desc limit 100;
 | 156071 |   1665991 | 2021-03-20 14:46:18 |        9027 | f9b134fc9eaac116b0666984c703085864455ed1 | 1665991 |     7 |             1289.5714 |
 |  86967 |   1747586 | 2021-03-12 04:06:48 |       38589 | bd6256742105a71c86be53e90fb203b5e3c4b143 | 1747586 |    30 |             1286.3000 |
 ...
+```
+
+## Detect Abuse
+
+```sql
+# Total Users Count
+select count(*) as C, UserAppId from viewtotal 
+    group by UserAppId 
+    order by C desc;
+
+# Read per User
+select C, count(*) as D from 
+(
+    select count(*) as C, UserAppId from viewtotal 
+    group by UserAppId 
+    order by C
+) as B
+group by C 
+order by D asc;
+
+# Read per Article
+select ArticleId, count(*) as C
+from viewtotal 
+group by ArticleId 
+order by C asc;
+
+# User per Read
+select UserAppId, count(*) as C from viewtotal 
+where UserAppId IS NOT NULL and UserAppId<>'test'
+group by UserAppId order by C desc limit 100;
+
+# User Read Rhythm
+select hour(TimeStamp), count(*), repeat('#', count(*)/10)
+from viewtotal
+where UserAppId='42c86650039a2a4e674ae89fb23b63d89c74bd59' 
+group by hour(TimeStamp);
+
+# User Duplicate Read Articles
+select ArticleId, count(*) from viewtotal
+where UserAppId='42c86650039a2a4e674ae89fb23b63d89c74bd59' 
+group by ArticleId;
+
+# Check using viewtotal
+select ArticleId, count(*) as C, UserAppId, min(TimeStamp), max(TimeStamp) from viewtotal
+where UserAppId IS NOT NULL and UserAppId<>'test'
+group by UserAppId, ArticleId
+order by C desc
+limit 100;
+
+select a.ArticleId, count(*) as C, a.UserAppId, min(a.TimeStamp), max(a.TimeStamp), sum(b.ViewSeconds), avg(b.ViewSeconds)
+from viewtotal as a left join viewtime as b on a.ArticleId=b.ArticleId and a.UserAppId=b.UserAppId 
+where a.UserAppId IS NOT NULL and a.UserAppId<>'test'
+group by a.UserAppId, a.ArticleId
+order by C desc
+limit 100;
+
+select a.Id, a.ArticleId, a.TimeStamp, a.UserAppId, b.TimeStamp, b.ViewSeconds
+from viewtotal as a left join viewtime as b on a.ArticleId=b.ArticleId and a.UserAppId=b.UserAppId
+where a.UserAppId IS NOT NULL and a.UserAppId<>'test' and b.ViewSeconds IS NOT NULL
+order by a.Id desc
+limit 100;
+
+# Check using viewtime
+select ArticleId, count(*) as C, UserAppId, min(TimeStamp), max(TimeStamp), avg(ViewSeconds), min(ViewSeconds), max(ViewSeconds)
+from viewtime
+where UserAppId IS NOT NULL and UserAppId<>'test'
+group by UserAppId, ArticleId
+order by C desc
+limit 100;
+
 ```
