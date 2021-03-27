@@ -5,11 +5,11 @@ const express = require('express');
 const router = express.Router();
 const Joi = require('joi');
 
-const r_auth = require('../../auth/auth');
-const a_database2 = require('../../api/database2');
-const p = require('../../pages/status');
+const r_auth = require('../../../auth/auth');
+const a_database2 = require('../../../api/database2');
+const p = require('../../../pages/status');
 
-const logger = require('../../etc/logger');
+const logger = require('../../../etc/logger');
 
 const idSchema = Joi.object({
   Id: Joi.string().max(50).required(),

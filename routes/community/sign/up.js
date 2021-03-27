@@ -3,13 +3,13 @@
 
 const Joi = require('joi');
 
-const r_auth = require('../../auth/auth');
-const a_database = require('../../api/database');
-const a_database2 = require('../../api/database2');
-const a_syncdatabase = require('../../api/syncdatabase');
+const r_auth = require('../../../auth/auth');
+const a_database = require('../../../api/database');
+const a_database2 = require('../../../api/database2');
+const a_syncdatabase = require('../../../api/syncdatabase');
 
 const crypto = require('crypto');
-const logger = require('../../etc/logger');
+const logger = require('../../../etc/logger');
 
 const signUpSchema = Joi.object({
   Id: Joi.string().max(50).required(),

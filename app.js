@@ -14,17 +14,10 @@ const expressDefend = require("express-defend");
 const blacklist = require("express-blacklist");
 const rateLimit = require("express-rate-limit");
 
-const r_index = require("./routes/index");
+const r_community = require('./routes/community/routes');
 const r_query = require("./routes/query");
-const r_read = require("./routes/community/read");
-const r_signin = require("./routes/community/signin");
-const r_signup = require("./routes/community/signup");
-const r_signup_util = require("./routes/community/signup_util");
 const r_top = require("./routes/top");
 const r_upload = require("./routes/upload");
-const r_view = require("./routes/view");
-const r_view_close = require("./routes/view_close");
-const r_write = require("./routes/community/write");
 
 const t_1144 = require("./routes/test1144");
 const t_1145 = require("./routes/test1145");
@@ -62,18 +55,10 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
+app.use("/community", r_community);
 app.use("/query", r_query);
-app.use("/read", r_read);
-app.post("/signin", r_signin);
-app.post("/signup", r_signup);
-app.use("/signutil", r_signup_util);
 app.use("/top", r_top);
 app.post("/upload", r_upload);
-app.post("/view", r_view);
-app.get("/view", function (req, res, next) { res.status(405).type("html").send(p.p405); });
-app.post("/view_close", r_view_close);
-app.get("/view_close", function (req, res, next) { res.status(405).type("html").send(p.p405); });
-app.use("/write", r_write);
 
 app.use("/1144", t_1144);
 app.use("/1145", t_1145);
