@@ -17,7 +17,6 @@ async function test_com_article_write() {
   }}, null, null);
 }
 
-
 async function test_com_article_edit() {
   var auth = testAuth();
 
@@ -31,4 +30,5 @@ async function test_com_article_edit() {
   }}, null, null);
 }
 
+// test_com_article_write().then();
 test_com_article_edit().then();
