@@ -55,7 +55,7 @@ async function _checkValidRequestAndSessionToUser(body) {
 
   try {
     const info = (await connection.query(
-        'SELECT User FROM article WHERE Id=?', [body['Id']]))[0][0];
+        'SELECT user FROM article WHERE Id=?', [body['Id']]))[0][0];
     connection.release();
 
     if (info == null) {
