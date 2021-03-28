@@ -28,11 +28,37 @@ COLLATE='utf8_general_ci'
 ENGINE=InnoDB
 ;
 
+CREATE TABLE `user` (
+	`Pid` INT(11) NOT NULL AUTO_INCREMENT,
+	`Id` VARCHAR(50) NOT NULL COLLATE 'utf8_general_ci',
+	`Password` VARCHAR(150) NOT NULL COLLATE 'utf8_general_ci',
+	`UserAppId` VARCHAR(150) NOT NULL COLLATE 'utf8_general_ci',
+	`NickName` VARCHAR(50) NOT NULL COLLATE 'utf8_general_ci',
+	`Etc` VARCHAR(150) NOT NULL COLLATE 'utf8_general_ci',
+	PRIMARY KEY (`Pid`) USING BTREE,
+	FULLTEXT INDEX `Id` (`Id`)
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;
+
+CREATE TABLE `board` (
+	`Id` INT(11) NOT NULL AUTO_INCREMENT,
+	`ShortName` CHAR(50) NOT NULL COLLATE 'utf8_general_ci',
+	`Name` VARCHAR(50) NOT NULL COLLATE 'utf8_general_ci',
+	`Description` VARCHAR(500) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
+	PRIMARY KEY (`Id`) USING BTREE,
+	FULLTEXT INDEX `ShortName` (`ShortName`)
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;
+
 CREATE TABLE `article` (
 	`Id` INT(11) NOT NULL AUTO_INCREMENT,
 	`TimeStamp` TIMESTAMP NULL DEFAULT NULL,
 	`User` INT(11) NOT NULL,
-	`Comments` INT(10) UNSIGNED ZEROFILL NOT NULL,
+	`Comments` INT(10) UNSIGNED NOT NULL DEFAULT 0,
 	`Title` CHAR(50) NULL DEFAULT '' COLLATE 'utf8_general_ci',
 	`Body` VARCHAR(5000) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
 	`Etc` VARCHAR(5000) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
@@ -62,18 +88,6 @@ COLLATE='utf8_general_ci'
 ENGINE=InnoDB
 ;
 
-CREATE TABLE `board` (
-	`Id` INT(11) NOT NULL AUTO_INCREMENT,
-	`ShortName` CHAR(50) NOT NULL COLLATE 'utf8_general_ci',
-	`Name` VARCHAR(50) NOT NULL COLLATE 'utf8_general_ci',
-	`Description` VARCHAR(500) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
-	PRIMARY KEY (`Id`) USING BTREE,
-	FULLTEXT INDEX `ShortName` (`ShortName`)
-)
-COLLATE='utf8_general_ci'
-ENGINE=InnoDB
-;
-
 CREATE TABLE `comment` (
 	`Id` INT(11) NOT NULL AUTO_INCREMENT,
 	`ArticleId` INT(11) NOT NULL,
@@ -87,20 +101,6 @@ CREATE TABLE `comment` (
 	CONSTRAINT `ArticleId` FOREIGN KEY (`ArticleId`) REFERENCES `violet`.`article` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
 	CONSTRAINT `UserId` FOREIGN KEY (`User`) REFERENCES `violet`.`user` (`Pid`) ON UPDATE RESTRICT ON DELETE RESTRICT,
   	CONSTRAINT `SelfKey` FOREIGN KEY (`Parent`) REFERENCES `comment` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-)
-COLLATE='utf8_general_ci'
-ENGINE=InnoDB
-;
-
-CREATE TABLE `user` (
-	`Pid` INT(11) NOT NULL AUTO_INCREMENT,
-	`Id` VARCHAR(50) NOT NULL COLLATE 'utf8_general_ci',
-	`Password` VARCHAR(150) NOT NULL COLLATE 'utf8_general_ci',
-	`UserAppId` VARCHAR(150) NOT NULL COLLATE 'utf8_general_ci',
-	`NickName` VARCHAR(50) NOT NULL COLLATE 'utf8_general_ci',
-	`Etc` VARCHAR(150) NOT NULL COLLATE 'utf8_general_ci',
-	PRIMARY KEY (`Pid`) USING BTREE,
-	FULLTEXT INDEX `Id` (`Id`)
 )
 COLLATE='utf8_general_ci'
 ENGINE=InnoDB

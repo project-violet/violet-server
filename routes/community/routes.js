@@ -11,11 +11,14 @@ function p405(req, res, next) {
 
 const a_read = require('./article/read');
 const a_write = require('./article/write');
+const a_edit = require('./article/edit');
 
 router.get('/article/read', a_read);
 router.post('/article/write', a_write);
+router.post('/article/edit', a_edit);
 router.post('/article/read', p405);
 router.get('/article/write', p405);
+router.get('/article/edit', p405);
 
 const b_list = require('./board/list');
 const b_page = require('./board/page');

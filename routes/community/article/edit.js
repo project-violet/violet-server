@@ -28,10 +28,17 @@ const editSchema = Joi.object({
 function _editArticle(body) {
   const pool = a_database();
   pool.query(
-      'INSERT INTO article SET ? ON DUPLICATE KEY UPDATE', {
-        TimeStamp: CURRENT_TIMESTAMP,
-        ...body,
-      },
+      'INSERT INTO article SET ? ON DUPLICATE KEY UPDATE ?',
+      [
+        {
+          TimeStamp: CURRENT_TIMESTAMP,
+          ...body,
+        },
+        {
+          TimeStamp: CURRENT_TIMESTAMP,
+          ...body,
+        }
+      ],
       function(error, results, fields) {
         if (error != null) {
           logger.error('write-main', error);
@@ -48,8 +55,7 @@ async function _checkValidRequestAndSessionToUser(body) {
 
   try {
     const info = (await connection.query(
-        'SELECT User FROM article WHERE Id=?',
-        [body['Id']]))[0][0];
+        'SELECT User FROM article WHERE Id=?', [body['Id']]))[0][0];
     connection.release();
 
     if (info == null) {
@@ -62,9 +68,8 @@ async function _checkValidRequestAndSessionToUser(body) {
     var user = await m_session.sessionToUser(session);
     body['User'] = user;
 
-    if (info.User != user)
-      return null;
-    
+    if (info.User != user) return null;
+
     return body;
   } catch (err) {
     logger.error('signin-try', err);
