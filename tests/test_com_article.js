@@ -3,6 +3,7 @@
 
 const a_write = require('../routes/community/article/write');
 const a_edit = require('../routes/community/article/edit');
+const a_vote = require('../routes/community/article/vote');
 const testAuth = require('./test_auth');
 
 async function test_com_article_write() {
@@ -30,5 +31,15 @@ async function test_com_article_edit() {
   }}, null, null);
 }
 
+async function test_com_article_vote() {
+  var auth = testAuth();
+  
+  await a_vote({headers: auth, body: {
+    Article: 5,
+    Session: 'a1b9180a193f6ae95d83c5577fbdd2b03c712d5a0ccf17ab43ae312930824812ddcc7128334c1021a5e60c72f690b598ea08b4df0b3195aa79fc005b61710aec',
+    Status: 0,
+  }}, null, null);
+}
+
 // test_com_article_write().then();
-test_com_article_edit().then();
+test_com_article_vote().then();

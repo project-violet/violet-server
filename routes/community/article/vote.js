@@ -3,6 +3,8 @@
 
 const r_auth = require('../../../auth/auth');
 const a_database = require('../../../api/database');
+const a_database2 = require('../../../api/database2');
+const m_session = require('../../../memory/session');
 
 const redis = require('../../../api/redis');
 const logger = require('../../../etc/logger');
@@ -24,14 +26,14 @@ const voteSchema = Joi.object({
 
 function _voteArticle(res, body) {
   try {
-    redlock(body['User'], function(done) {
+    redlock(body['User'], async function(done) {
       const connection = await a_database2().getConnection(async conn => conn);
 
       try {
         // Check already voting
         const info = (await connection.query(
             'SELECT count(*) as C FROM voterecord WHERE User=? AND Article=?',
-            [body['User'], body['Id']]))[0][0]['C'];
+            [body['User'], body['Article']]))[0][0]['C'];
         connection.release();
 
         if (info != 0) {
@@ -50,10 +52,10 @@ function _voteArticle(res, body) {
             function(error, results, fields) {});
 
         // Vote to article
-        const type = ['UpVote', 'DownVote'][body['Status'] == 0];
+        const type = ['UpVote', 'DownVote'][body['Status'] == 0 ? 0 : 1];
         pool.query(
             'UPDATE article SET ' + type + '=' + type +
-                '+1 WHERE Article=' + body['Article'],
+                '+1 WHERE Id=' + body['Article'],
             function(error, results, fields) {
               if (error != null) {
                 logger.error('vote-article', error);
@@ -70,7 +72,8 @@ function _voteArticle(res, body) {
       done();
     });
   } catch (e) {
-    logger.error('vote-lock', err);
+    console.log(e);
+    logger.error('vote-lock', e);
     res.status(500).type('json').send({msg: 'internal server error'});
   }
 }
@@ -100,8 +103,7 @@ module.exports = async function vote(req, res, next) {
       return;
     }
 
-    _voteArticle(await _sessionToUser(req.body));
-    res.status(200).type('json').send({msg: 'success'});
+    _voteArticle(res, await _sessionToUser(req.body));
   } catch (e) {
     res.status(400).type('json').send({msg: 'bad request'});
   }
