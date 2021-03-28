@@ -43,13 +43,12 @@ async function _tryLogin(body, res) {
         'SELECT count(*) AS C FROM user WHERE Id=? AND Password=?',
         [body.Id,
          pw]))[0][0].C;
+    connection.release();
+    
     if (fail == 0) {
-      connection.release();
       res.status(200).type('json').send({msg: 'fail'});
       return;
     }
-
-    connection.release();
   } catch (err) {
     logger.error('signin-try', err);
     connection.release();
