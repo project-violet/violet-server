@@ -17,7 +17,7 @@ const CURRENT_TIMESTAMP = {
 
 const articleSchema = Joi.object({
   Board: Joi.number().integer().required(),
-  Session: Joi.string().max(65).required(),
+  Session: Joi.string().max(130).required(),
   Title: Joi.string().max(45).required(),
   Body: Joi.string().max(4995).required(),
   Etc: Joi.string().max(4995).required(),
@@ -44,8 +44,8 @@ async function _checkSession(body) {
 async function _sessionToUser(body) {
   let session = body['Session'];
   delete body['Session'];
-  session['User'] = await m_session.sessionToUser(session);
-  return session;
+  body['User'] = await m_session.sessionToUser(session);
+  return body;
 }
 
 module.exports = async function article(req, res, next) {
@@ -57,12 +57,12 @@ module.exports = async function article(req, res, next) {
   try {
     await articleSchema.validateAsync(req.body);
 
-    if (!_checkSession(req.body)) {
+    if (!await _checkSession(req.body)) {
       res.status(200).type('json').send({msg: 'session not found'});
       return;
     }
 
-    _insertArticle(_sessionToUser(req.body));
+    _insertArticle(await _sessionToUser(req.body));
     res.status(200).type('json').send({msg: 'success'});
   } catch (e) {
     res.status(400).type('json').send({msg: 'bad request'});

@@ -17,7 +17,7 @@ const CURRENT_TIMESTAMP = {
 };
 
 const commentSchema = Joi.object({
-  Session: Joi.string().max(65).required(),
+  Session: Joi.string().max(130).required(),
   ArticleId: Joi.number().integer().required(),
   Etc: Joi.string().max(500).required(),
 });

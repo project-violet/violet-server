@@ -5,6 +5,7 @@ const Joi = require('joi');
 
 const r_auth = require('../../../auth/auth');
 const a_database = require('../../../api/database');
+const a_database2 = require('../../../api/database2');
 const m_session = require('../../../memory/session');
 
 const logger = require('../../../etc/logger');
@@ -15,19 +16,19 @@ const CURRENT_TIMESTAMP = {
   },
 };
 
-const modifySchema = Joi.object({
+const editSchema = Joi.object({
   Id: Joi.number().integer().required(),
   Board: Joi.number().integer().required(),
-  Session: Joi.string().max(65).required(),
+  Session: Joi.string().max(130).required(),
   Title: Joi.string().max(45).required(),
   Body: Joi.string().max(4995).required(),
   Etc: Joi.string().max(4995).required(),
 });
 
-function _modfiyArticle(body) {
+function _editArticle(body) {
   const pool = a_database();
   pool.query(
-      'INSERT INTO article SET ?', {
+      'INSERT INTO article SET ? ON DUPLICATE KEY UPDATE', {
         TimeStamp: CURRENT_TIMESTAMP,
         ...body,
       },
@@ -42,40 +43,53 @@ async function _checkSession(body) {
   return await m_session.isExists(body.Session, null);
 }
 
-async function _checkValidRequest(body) {
-  // Check article exists
-  // Check User=Session
+async function _checkValidRequestAndSessionToUser(body) {
+  const connection = await a_database2().getConnection(async conn => conn);
 
-  let session = body['Session'];
-  return await m_session.sessionToUser(session);
+  try {
+    const info = (await connection.query(
+        'SELECT User FROM article WHERE Id=?',
+        [body['Id']]))[0][0];
+    connection.release();
+
+    if (info == null) {
+      res.status(200).type('json').send({msg: 'fail'});
+      return null;
+    }
+
+    var session = body['Session'];
+    delete body['Session'];
+    var user = await m_session.sessionToUser(session);
+    body['User'] = user;
+
+    if (info.User != user)
+      return null;
+    
+    return body;
+  } catch (err) {
+    logger.error('signin-try', err);
+    connection.release();
+    res.status(500).type('json').send({msg: 'internal server error'});
+  }
+
+  return null;
 }
 
-async function _checkUser(body) {
-
-}
-
-async function _sessionToUser(body) {
-  let session = body['Session'];
-  delete body['Session'];
-  session['User'] = await m_session.sessionToUser(session);
-  return session;
-}
-
-module.exports = async function article(req, res, next) {
+module.exports = async function edit(req, res, next) {
   if (!r_auth.auth(req)) {
     res.status(403).type('json').send({msg: 'forbidden'});
     return;
   }
 
   try {
-    await modifySchema.validateAsync(req.body);
+    await editSchema.validateAsync(req.body);
 
-    if (!_checkSession(req.body)) {
+    if (!await _checkSession(req.body)) {
       res.status(200).type('json').send({msg: 'session not found'});
       return;
     }
 
-    _modfiyArticle(_sessionToUser(req.body));
+    _editArticle(await _checkValidRequestAndSessionToUser(req.body));
     res.status(200).type('json').send({msg: 'success'});
   } catch (e) {
     res.status(400).type('json').send({msg: 'bad request'});

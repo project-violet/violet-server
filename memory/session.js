@@ -54,11 +54,11 @@ module.exports = {
   },
   isExists: async function(session, user) {
     if (session != null) {
-      const user = await getAsync(ssesion);
-      return user == null;
+      const user = await getAsync(session);
+      return user != null;
     } else if (user != null) {
-      const ssesion = await getAsync(user);
-      return ssesion == null;
+      const session = await getAsync(user);
+      return session != null;
     }
     return false;
   },
