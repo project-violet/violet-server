@@ -10,7 +10,7 @@ const logger = require('../../../etc/logger');
 function _lookupComment(res, no) {
   const pool = a_database();
   const qr = pool.query(
-      'SELECT a.Id, a.User, b.NickName, a.TimeStamp, a.Body FROM' +
+      'SELECT a.Id, a.User, b.NickName, a.TimeStamp, a.Body, a.Parent FROM' +
           ' comment AS a LEFT JOIN user AS b ON a.User=b.Pid WHERE a.ArticleId=' +
           no,
       function(error, results, fields) {

@@ -19,7 +19,8 @@ const CURRENT_TIMESTAMP = {
 const commentSchema = Joi.object({
   Session: Joi.string().max(130).required(),
   ArticleId: Joi.number().integer().required(),
-  Etc: Joi.string().max(500).required(),
+  Body: Joi.string().max(500).required(),
+  Parent: Joi.number().integer(),
 });
 
 function _insertComment(body) {
