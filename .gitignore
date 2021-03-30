@@ -481,3 +481,4 @@ blacklist.txt
 log/*
 config/production.json
 export.cmd
+config/config.json
