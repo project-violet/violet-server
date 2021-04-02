@@ -119,3 +119,42 @@ CREATE TABLE `loginrecord` (
 COLLATE='utf8_general_ci'
 ENGINE=InnoDB
 ;
+
+CREATE TABLE `usertokens` (
+	`Id` INT(11) NOT NULL AUTO_INCREMENT,
+	`User` INT(11) NOT NULL,
+	/* 0: fcm, 1: google, 2: kakao, 3: facebook etc... */
+	`TokenType` INT(11) NOT NULL,
+	`Token` VARCHAR(256) NOT NULL COLLATE 'utf8_general_ci',
+	PRIMARY KEY (`Id`) USING BTREE,
+	INDEX `usertokens_User_Index` (`User`) USING BTREE,
+	CONSTRAINT `usertokens_UserForeign` FOREIGN KEY (`User`) REFERENCES `violet`.`user` (`Pid`) ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;
+
+CREATE TABLE `eharticles` (
+	`Id` INT(11) NOT NULL,
+	`Title` VARCHAR(5000),
+	`EHash` CHAR(20),
+	`Type` CHAR(20),
+	`Artists` TEXT(65535),
+	`Characters` TEXT(65535),
+	`Groups` TEXT(65535),
+	`Language` CHAR(20),
+	`Series` TEXT(65535),
+	`Tags` TEXT(65535),
+	`Uploader` CHAR(255),
+	`Published` TIMESTAMP NULL DEFAULT NULL,
+	`Files` INT(11),
+	`Class` VARCHAR(256),
+	`ExistOnHitomi` INT(11),
+	PRIMARY KEY (`Id`) USING BTREE,
+	INDEX `eharticles_TypeIndex` (`Type`) USING BTREE,
+	INDEX `eharticles_LanguageIndex` (`Language`) USING BTREE
+)
+CHARSET=utf8mb4
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+;
