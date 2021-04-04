@@ -148,7 +148,7 @@ CREATE TABLE `eharticles` (
 	PRIMARY KEY (`Id`) USING BTREE,
 	INDEX `eharticles_TypeIndex` (`Type`) USING BTREE,
 	INDEX `eharticles_LanguageIndex` (`Language`) USING BTREE,
-    FULLTEXT `eharticles_TitleIndex` (title)
+	FULLTEXT `eharticles_TitleIndex` (title)
 )
 CHARSET=utf8mb4
 COLLATE='utf8mb4_general_ci'
