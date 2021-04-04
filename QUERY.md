@@ -1013,4 +1013,60 @@ group by a.Id;
 | 1331958 | Ane Taiken Jogakuryou 5                                    | 0b59ba11fa | manga | korean   | MFRIE             | 2018-12-20 10:43:00 |    22 |       |             1 | incest,male:shota                                                                                                                                                                                                                                                                                                                                                                                                                                                                | michiking        | NULL       | NULL   | NULL   |
 +---------+------------------------------------------------------------+------------+-------+----------+-------------------+---------------------+-------+-------+---------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------+------------+--------+--------+
 
+# Artist Tag Informations
+with search_query as 
+(
+  select c.Id
+  from
+    eharticles_artists as a
+    right join eharticles_artists_junction as b on a.Id=b.Artist
+    right join eharticles as c on c.Id=b.Article
+  where a.Name="michiking" and c.Language="korean"
+  order by b.Article desc
+)
+select c.Name, COUNT(*) as cc
+from 
+  search_query as a 
+  left join eharticles_tags_junction as b on a.Id=b.Article 
+  left join eharticles_tags as c on b.Tag=c.Id
+group by c.Id
+order by cc desc;
++---------------------------+----+
+| Name                      | cc |
++---------------------------+----+
+| female:big breasts        | 68 |
+| male:shota                | 53 |
+| male:sole male            | 48 |
+| female:sole female        | 37 |
+| female:nakadashi          | 31 |
+| female:stockings          | 30 |
+| full censorship           | 27 |
+| female:femdom             | 25 |
+| female:maid               | 23 |
+| female:loli               | 19 |
+| female:glasses            | 16 |
+| full color                | 16 |
+| female:paizuri            | 16 |
+| group                     | 16 |
+| incest                    | 14 |
+| female:sister             | 13 |
+| male:glasses              | 12 |
+| female:garter belt        | 12 |
+| female:handjob            | 12 |
+| female:ahegao             | 10 |
+| female:x-ray              | 10 |
+| ffm threesome             |  9 |
+| female:blowjob            |  8 |
+| uncensored                |  8 |
+| female:schoolgirl uniform |  8 |
+| female:bike shorts        |  7 |
+| female:harem              |  7 |
+| tankoubon                 |  6 |
+| female:ponytail           |  6 |
+| female:footjob            |  6 |
+| NULL                      |  6 |
+| female:beauty mark        |  5 |
+| female:inverted nipples   |  4 |
+| female:lactation          |  4 |
+...
 ```
