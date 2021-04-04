@@ -1106,4 +1106,25 @@ limit 100;
 | female:double penetration  |  61310 |
 | female:defloration         |  59342 |
 ...
+
+# Search with Title
+select *
+from eharticles
+where match (title) against ('imouto' in natural language mode)
+order by Id desc
+limit 10;
++---------+-----------------------------------------------------------------------------------------------------------------------------------------------+------------+-----------+----------+---------------+---------------------+-------+-------+---------------+
+| Id      | Title                                                                                                                                         | EHash      | Type      | Language | Uploader      | Published           | Files | Class | ExistOnHitomi |
++---------+-----------------------------------------------------------------------------------------------------------------------------------------------+------------+-----------+----------+---------------+---------------------+-------+-------+---------------+
+| 1877891 | Namaiki Gyaru na Imouto wa Kimoota Anichin de Kousei Shimashita | 건방진 갸루 여동생은 개씹덕 오빠 자지로 갱생했습니다                        | 13fd5784c8 | doujinshi | korean   | 티아마트      | 2021-03-29 12:28:00 |    36 |       |             1 |
+| 1877057 | Ninyousei no Takai 7-tsu Shita no Imouto to Futarime o Kosaeru Hon                                                                            | d33924ba3a | doujinshi | chinese  | caixiao970221 | 2021-03-28 07:08:00 |    33 |       |             1 |
+| 1876325 | shin-neko ~Saikai Shita Imouto to no Arata na Kankei~                                                                                         | 682e9a102c | game CG   | n/a      | franky987     | 2021-03-27 07:09:00 |  1021 |       |             1 |
+| 1876301 | Chinkamo Twins 2! ~Natsu da! Umi da! Futago no Imouto Oppai Taiketsu da!~                                                                     | dc29e5c0ae | game CG   | n/a      | franky987     | 2021-03-27 07:09:00 |  1018 |       |             1 |
+| 1876290 | Chinkamo Twins 2! ~Natsu da! Umi da! Futago no Imouto Oppai Taiketsu da!~                                                                     | 5ca33a68f2 | game CG   | n/a      | franky987     | 2021-03-27 07:09:00 |   962 |       |             1 |
+| 1875594 | Chinkamo Twins 2! ~Natsu da! Umi da! Futago no Imouto Oppai Taiketsu da!~                                                                     | 545944a72a | game CG   | n/a      | Pokom         | 2021-03-26 13:52:00 |   256 |       |             1 |
+| 1874151 | Kouhai JK ga Gimai ni!? Namaiki na Imouto ni Iroiro Wakarasete Mita.                                                                          | 7882892bd5 | doujinshi | english  | Dynellen      | 2021-03-26 22:35:00 |    44 |       |             1 |
+| 1873976 | Imouto ni Saimin Kakete Asobu Hon | A Book About Using Hypno To Play Around With My Little Sister                                             | bc6a289dc5 | doujinshi | english  | Dynellen      | 2021-03-27 14:07:00 |    16 |       |             1 |
+| 1873953 | Ore no Imouto ga Oji-san no &quot;Onaho&quot; ni Naru to Iidashita!! | My Little Sister Said She&#39;s Going To Become My Uncle&#39;s Bride!! | 3d6095da2e | doujinshi | english  | Dynellen      | 2021-03-27 20:01:00 |    33 | C97   |             1 |
+| 1873406 | [Itaba Hiroshi] Imouto to Yatte Shimattashi, Imouto no Tomodachi to Moyatte Shimatta [Chinese]                                                | ffa31c9bef | manga     | chinese  | dfsgg         | 2021-03-26 05:08:00 |   201 |       |             1 |
++---------+-----------------------------------------------------------------------------------------------------------------------------------------------+------------+-----------+----------+---------------+---------------------+-------+-------+---------------+
 ```
