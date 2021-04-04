@@ -147,7 +147,8 @@ CREATE TABLE `eharticles` (
 	`ExistOnHitomi` INT(11),
 	PRIMARY KEY (`Id`) USING BTREE,
 	INDEX `eharticles_TypeIndex` (`Type`) USING BTREE,
-	INDEX `eharticles_LanguageIndex` (`Language`) USING BTREE
+	INDEX `eharticles_LanguageIndex` (`Language`) USING BTREE,
+    FULLTEXT `eharticles_TitleIndex` (title)
 )
 CHARSET=utf8mb4
 COLLATE='utf8mb4_general_ci'
@@ -176,7 +177,8 @@ CREATE TABLE `eharticles_artists_junction` (
 	PRIMARY KEY (`Article`, `Artist`),
 	CONSTRAINT `eharticles_ArtistJunction` FOREIGN KEY (`Artist`) REFERENCES `violet`.`eharticles_artists` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
 	CONSTRAINT `eharticles_ArtistArticle` FOREIGN KEY (`Article`) REFERENCES `violet`.`eharticles` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
-	INDEX `eharticles_artists_junction_index` (`Article`) USING BTREE
+	INDEX `eharticles_artists_junction_index` (`Article`) USING BTREE,
+	INDEX `eharticles_artists_junction_index_vol` (`Artist`) USING BTREE
 );
 
 CREATE TABLE `eharticles_characters` (
@@ -195,7 +197,8 @@ CREATE TABLE `eharticles_characters_junction` (
 	PRIMARY KEY (`Article`, `Character`),
 	CONSTRAINT `eharticles_CharacterJunction` FOREIGN KEY (`Character`) REFERENCES `violet`.`eharticles_characters` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
 	CONSTRAINT `eharticles_CharacterArticle` FOREIGN KEY (`Article`) REFERENCES `violet`.`eharticles` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
-	INDEX `eharticles_characters_junction_index` (`Article`) USING BTREE
+	INDEX `eharticles_characters_junction_index` (`Article`) USING BTREE,
+	INDEX `eharticles_characters_junction_index_vol` (`Character`) USING BTREE
 );
 
 CREATE TABLE `eharticles_groups` (
@@ -214,7 +217,8 @@ CREATE TABLE `eharticles_groups_junction` (
 	PRIMARY KEY (`Article`, `Group`),
 	CONSTRAINT `eharticles_GroupJunction` FOREIGN KEY (`Group`) REFERENCES `violet`.`eharticles_groups` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
 	CONSTRAINT `eharticles_GroupArticle` FOREIGN KEY (`Article`) REFERENCES `violet`.`eharticles` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
-	INDEX `eharticles_groups_junction_index` (`Article`) USING BTREE
+	INDEX `eharticles_groups_junction_index` (`Article`) USING BTREE,
+	INDEX `eharticles_groups_junction_index_vol` (`Group`) USING BTREE
 );
 
 CREATE TABLE `eharticles_series` (
@@ -233,7 +237,8 @@ CREATE TABLE `eharticles_series_junction` (
 	PRIMARY KEY (`Article`, `Series`),
 	CONSTRAINT `eharticles_SeriesJunction` FOREIGN KEY (`Series`) REFERENCES `violet`.`eharticles_series` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
 	CONSTRAINT `eharticles_SeriesArticle` FOREIGN KEY (`Article`) REFERENCES `violet`.`eharticles` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
-	INDEX `eharticles_series_junction_index` (`Article`) USING BTREE
+	INDEX `eharticles_series_junction_index` (`Article`) USING BTREE,
+	INDEX `eharticles_series_junction_index_vol` (`Series`) USING BTREE
 );
 
 CREATE TABLE `eharticles_tags` (
@@ -252,5 +257,6 @@ CREATE TABLE `eharticles_tags_junction` (
 	PRIMARY KEY (`Article`, `Tag`),
 	CONSTRAINT `eharticles_TagJunction` FOREIGN KEY (`Tag`) REFERENCES `violet`.`eharticles_tags` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
 	CONSTRAINT `eharticles_TagArticle` FOREIGN KEY (`Article`) REFERENCES `violet`.`eharticles` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
-	INDEX `eharticles_tags_junction_index` (`Article`) USING BTREE
+	INDEX `eharticles_tags_junction_index` (`Article`) USING BTREE,
+	INDEX `eharticles_tags_junction_index_vol` (`Tag`) USING BTREE
 );
