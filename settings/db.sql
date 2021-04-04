@@ -139,12 +139,7 @@ CREATE TABLE `eharticles` (
 	`Title` VARCHAR(5000),
 	`EHash` CHAR(20),
 	`Type` CHAR(20),
-	`Artists` TEXT(65535),
-	`Characters` TEXT(65535),
-	`Groups` TEXT(65535),
 	`Language` CHAR(20),
-	`Series` TEXT(65535),
-	`Tags` TEXT(65535),
 	`Uploader` CHAR(255),
 	`Published` TIMESTAMP NULL DEFAULT NULL,
 	`Files` INT(11),
@@ -158,3 +153,104 @@ CHARSET=utf8mb4
 COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB
 ;
+
+/*---------------------------------------------------
+
+			eharticles junction tables
+
+---------------------------------------------------*/
+
+CREATE TABLE `eharticles_artists` (
+	`Id` INT(11) NOT NULL,
+	`Name` VARCHAR(256) UNIQUE,
+	PRIMARY KEY (`Id`) USING BTREE
+)
+CHARSET=utf8mb4
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+;
+
+CREATE TABLE `eharticles_artists_junction` (
+	`Article` INT(11) NOT NULL,
+	`Artist` INT(11) NOT NULL,
+	PRIMARY KEY (`Article`, `Artist`),
+	CONSTRAINT `eharticles_ArtistJunction` FOREIGN KEY (`Artist`) REFERENCES `violet`.`eharticles_artists` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	CONSTRAINT `eharticles_ArtistArticle` FOREIGN KEY (`Article`) REFERENCES `violet`.`eharticles` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	INDEX `eharticles_artists_junction_index` (`Article`) USING BTREE
+);
+
+CREATE TABLE `eharticles_characters` (
+	`Id` INT(11) NOT NULL,
+	`Name` VARCHAR(256) UNIQUE,
+	PRIMARY KEY (`Id`) USING BTREE
+)
+CHARSET=utf8mb4
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+;
+
+CREATE TABLE `eharticles_characters_junction` (
+	`Article` INT(11) NOT NULL,
+	`Character` INT(11) NOT NULL,
+	PRIMARY KEY (`Article`, `Character`),
+	CONSTRAINT `eharticles_CharacterJunction` FOREIGN KEY (`Character`) REFERENCES `violet`.`eharticles_characters` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	CONSTRAINT `eharticles_CharacterArticle` FOREIGN KEY (`Article`) REFERENCES `violet`.`eharticles` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	INDEX `eharticles_characters_junction_index` (`Article`) USING BTREE
+);
+
+CREATE TABLE `eharticles_groups` (
+	`Id` INT(11) NOT NULL,
+	`Name` VARCHAR(256) UNIQUE,
+	PRIMARY KEY (`Id`) USING BTREE
+)
+CHARSET=utf8mb4
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+;
+
+CREATE TABLE `eharticles_groups_junction` (
+	`Article` INT(11) NOT NULL,
+	`Group` INT(11) NOT NULL,
+	PRIMARY KEY (`Article`, `Group`),
+	CONSTRAINT `eharticles_GroupJunction` FOREIGN KEY (`Group`) REFERENCES `violet`.`eharticles_groups` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	CONSTRAINT `eharticles_GroupArticle` FOREIGN KEY (`Article`) REFERENCES `violet`.`eharticles` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	INDEX `eharticles_groups_junction_index` (`Article`) USING BTREE
+);
+
+CREATE TABLE `eharticles_series` (
+	`Id` INT(11) NOT NULL,
+	`Name` VARCHAR(256) UNIQUE,
+	PRIMARY KEY (`Id`) USING BTREE
+)
+CHARSET=utf8mb4
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+;
+
+CREATE TABLE `eharticles_series_junction` (
+	`Article` INT(11) NOT NULL,
+	`Series` INT(11) NOT NULL,
+	PRIMARY KEY (`Article`, `Series`),
+	CONSTRAINT `eharticles_SeriesJunction` FOREIGN KEY (`Series`) REFERENCES `violet`.`eharticles_series` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	CONSTRAINT `eharticles_SeriesArticle` FOREIGN KEY (`Article`) REFERENCES `violet`.`eharticles` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	INDEX `eharticles_series_junction_index` (`Article`) USING BTREE
+);
+
+CREATE TABLE `eharticles_tags` (
+	`Id` INT(11) NOT NULL,
+	`Name` VARCHAR(256) UNIQUE,
+	PRIMARY KEY (`Id`) USING BTREE
+)
+CHARSET=utf8mb4
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+;
+
+CREATE TABLE `eharticles_tags_junction` (
+	`Article` INT(11) NOT NULL,
+	`Tag` INT(11) NOT NULL,
+	PRIMARY KEY (`Article`, `Tag`),
+	CONSTRAINT `eharticles_TagJunction` FOREIGN KEY (`Tag`) REFERENCES `violet`.`eharticles_tags` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	CONSTRAINT `eharticles_TagArticle` FOREIGN KEY (`Article`) REFERENCES `violet`.`eharticles` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	INDEX `eharticles_tags_junction_index` (`Article`) USING BTREE
+);
