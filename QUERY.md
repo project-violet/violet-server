@@ -1069,4 +1069,41 @@ order by cc desc;
 | female:inverted nipples   |  4 |
 | female:lactation          |  4 |
 ...
+
+# Tag Index Ranking
+select b.Name, count(*) as c 
+from 
+  eharticles_tags_junction as a 
+  left join eharticles_tags as b on a.Tag=b.Id
+group by a.Tag
+order by c desc
+limit 100;
++----------------------------+--------+
+| Name                       | c      |
++----------------------------+--------+
+| female:big breasts         | 334803 |
+| female:sole female         | 191270 |
+| female:loli                | 186734 |
+| female:stockings           | 175024 |
+| group                      | 167474 |
+| male:sole male             | 155069 |
+| female:schoolgirl uniform  | 129482 |
+| female:nakadashi           | 128282 |
+| female:blowjob             | 127900 |
+| female:anal                | 126779 |
+| full color                 | 121324 |
+| mosaic censorship          | 111676 |
+| male:shota                 |  99931 |
+| female:bondage             |  92899 |
+| female:rape                |  83923 |
+| female:glasses             |  79870 |
+| female:ahegao              |  78540 |
+| female:paizuri             |  73163 |
+| male:yaoi                  |  72331 |
+| female:milf                |  70364 |
+| incest                     |  70319 |
+| female:futanari            |  65662 |
+| female:double penetration  |  61310 |
+| female:defloration         |  59342 |
+...
 ```
