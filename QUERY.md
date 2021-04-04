@@ -1,5 +1,8 @@
 # Violet Statistics
 
+You can see the whole database schema here 
+https://github.com/project-violet/violet-server/blob/master/settings/db.sql.
+
 ## Query for View Time
 
 ```sql
