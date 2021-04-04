@@ -923,6 +923,94 @@ group by a.Id;
 | 1879689 | [Ankoman] Bunnyue, Astolfo Ni Yobidasareru... | 바니씨, 아스톨포에게 불려가다... (Fate/Grand Order) [Korean]                                      | 7c86d20418 | doujinshi | korean   | Alias01       | 2021-04-01 01:16:00 |     5 |                                  |             1 | female:big breasts,female:blowjob,male:sole male,male:crossdressing,male:tomgirl,female:sole female,female:bunny girl,female:pantyhose,male:big penis,male:stockings,female:crotch tattoo,male:josou seme,male:gloves | ankoman         | astolfo,artoria pendragon                                                                                           | NULL                | fate grand order                                                        |
 +---------+---------------------------------------------------------------------------------------------------------------------------------------------------+------------+-----------+----------+---------------+---------------------+-------+----------------------------------+---------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------+---------------------------------------------------------------------------------------------------------------------+---------------------+-------------------------------------------------------------------------+
 
-# 
+# Search Artist
+with search_query as 
+(
+  select c.Id, Title, EHash, Type, Language, Uploader, Published, Files, Class, ExistOnHitomi
+  from
+    eharticles_artists as a
+    right join eharticles_artists_junction as b on a.Id=b.Artist
+    right join eharticles as c on c.Id=b.Article
+  where a.Name="michiking" and c.Language="korean"
+  order by b.Article desc
+)
+select a.Id, Title, EHash, Type, Language, Uploader, Published, Files, Class, ExistOnHitomi,
+             GROUP_CONCAT(DISTINCT c.Name) as Tags, 
+             GROUP_CONCAT(DISTINCT e.Name) as Artists, 
+             GROUP_CONCAT(DISTINCT g.Name) as Characters,
+             GROUP_CONCAT(DISTINCT i.Name) as Groups,
+             GROUP_CONCAT(DISTINCT k.Name) as Series
+from 
+  search_query as a 
+  left join eharticles_tags_junction as b on a.Id=b.Article 
+  left join eharticles_tags as c on b.Tag=c.Id
+  left join eharticles_artists_junction as d on a.Id=d.Article 
+  left join eharticles_artists as e on d.Artist=e.Id
+  left join eharticles_characters_junction as f on a.Id=f.Article 
+  left join eharticles_characters as g on f.Character=g.Id
+  left join eharticles_groups_junction as h on a.Id=h.Article 
+  left join eharticles_groups as i on h.Group=i.Id
+  left join eharticles_series_junction as j on a.Id=j.Article 
+  left join eharticles_series as k on j.Series=k.Id
+group by a.Id;
+
+# Search Artist with Tag
+with search_query as 
+(
+  select a.Id, Title, EHash, Type, Language, Uploader, Published, Files, Class, ExistOnHitomi
+  from
+    eharticles as a
+    right join (
+      select artist.Article from
+      (select * from 
+        eharticles_artists as a
+        right join eharticles_artists_junction as b on a.Id=b.Artist
+      where a.Name="michiking") as artist
+      join
+      (select * from 
+        eharticles_tags as a
+        right join eharticles_tags_junction as b on a.Id=b.Tag
+      where a.Name="incest") as tag on artist.Article=tag.Article
+    ) as b on a.Id=b.Article
+  where a.Language="korean"
+  order by b.Article desc
+)
+select a.Id, Title, EHash, Type, Language, Uploader, Published, Files, Class, ExistOnHitomi,
+             GROUP_CONCAT(DISTINCT c.Name) as Tags, 
+             GROUP_CONCAT(DISTINCT e.Name) as Artists, 
+             GROUP_CONCAT(DISTINCT g.Name) as Characters,
+             GROUP_CONCAT(DISTINCT i.Name) as Groups,
+             GROUP_CONCAT(DISTINCT k.Name) as Series
+from 
+  search_query as a 
+  left join eharticles_tags_junction as b on a.Id=b.Article 
+  left join eharticles_tags as c on b.Tag=c.Id
+  left join eharticles_artists_junction as d on a.Id=d.Article 
+  left join eharticles_artists as e on d.Artist=e.Id
+  left join eharticles_characters_junction as f on a.Id=f.Article 
+  left join eharticles_characters as g on f.Character=g.Id
+  left join eharticles_groups_junction as h on a.Id=h.Article 
+  left join eharticles_groups as i on h.Group=i.Id
+  left join eharticles_series_junction as j on a.Id=j.Article 
+  left join eharticles_series as k on j.Series=k.Id
+group by a.Id;
++---------+------------------------------------------------------------+------------+-------+----------+-------------------+---------------------+-------+-------+---------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------+------------+--------+--------+
+| Id      | Title                                                      | EHash      | Type  | Language | Uploader          | Published           | Files | Class | ExistOnHitomi | Tags                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | Artists          | Characters | Groups | Series |
++---------+------------------------------------------------------------+------------+-------+----------+-------------------+---------------------+-------+-------+---------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------+------------+--------+--------+
+|  751146 | Seisai-kei Imouto                                          |            |       | korean   |                   | 2014-10-29 11:58:36 |     0 |       |             1 | female:big breasts,female:blowjob,female:schoolgirl,incest,full censorship,female:femdom,male:bondage,female:sister,inseki,male:netorare                                                                                                                                                                                                                                                                                                                                         | michiking        | NULL       | NULL   | N/A    |
+|  792991 | Ane Taiken Order                                           |            |       | korean   |                   | 2015-03-12 14:37:48 |     0 |       |             1 | ffm threesome,incest,group,male:shota,female:femdom,replaced,female:sister,male:age regression                                                                                                                                                                                                                                                                                                                                                                                   | michiking        | NULL       | NULL   | NULL   |
+|  819783 | Ane Taiken Shuukan 2                                       |            |       | korean   |                   | 2015-06-05 04:55:59 |     0 |       |             1 | incest,female:loli,male:shota,replaced,female:sister                                                                                                                                                                                                                                                                                                                                                                                                                             | michiking        | NULL       | NULL   | NULL   |
+|  821973 | Ane Taiken Shuukan 3                                       |            |       | korean   |                   | 2015-06-12 01:57:39 |     0 |       |             1 | female:big breasts,ffm threesome,incest,group,female:loli,female:handjob,female:stockings,male:shota,female:femdom,replaced,female:sister,female:oppai loli                                                                                                                                                                                                                                                                                                                      | michiking        | NULL       | NULL   | NULL   |
+|  842924 | Ane Taiken Shuukan ch.1-4                                  | 6ba8f86bb1 | manga | korean   | louise_fransouise | 2015-08-16 08:53:00 |    85 |       |             1 | female:big breasts,incest,group,female:loli,female:stockings,male:shota,female:femdom,female:sister,male:age regression                                                                                                                                                                                                                                                                                                                                                          | michiking        | NULL       | NULL   | NULL   |
+|  842966 | Ane Taiken Shuukan 4                                       |            |       | korean   |                   | 2015-08-16 17:06:05 |     0 |       |             1 | female:big breasts,female:mind control,incest,female:harem,group,female:loli,female:femdom,female:sister                                                                                                                                                                                                                                                                                                                                                                         | michiking        | NULL       | NULL   | NULL   |
+|  900155 | 性活週間                                                   | b0efdc33a7 | manga | korean   | MFRIE             | 2016-01-31 11:53:00 |   199 |       |             1 | female:ahegao,female:big breasts,female:mind break,female:mind control,female:nakadashi,female:x-ray,ffm threesome,incest,female:harem,group,female:paizuri,female:bondage,female:sex toys,female:loli,male:teacher,female:schoolgirl uniform,female:stockings,male:shota,male:glasses,story arc,female:femdom,female:big ass,female:huge breasts,female:inverted nipples,female:bloomers,female:pantyhose,female:sister,tankoubon,female:lingerie,male:age regression,shokugeki | michiking        | NULL       | NULL   | NULL   |
+|  914176 | Ane Taiken Shuukan SP                                      | 4e7502d506 | manga | korean   | mjjs              | 2016-03-14 17:25:00 |     8 |       |             1 | female:big breasts,female:nakadashi,incest,male:sole male,female:stockings,male:shota,female:sole female,female:sister                                                                                                                                                                                                                                                                                                                                                           | michiking        | NULL       | NULL   | NULL   |
+|  914312 | 性活週間 とらのあな描き下ろし8P小冊子                      | 0c5ada8c97 | manga | korean   | MFRIE             | 2016-03-15 06:23:00 |     8 |       |             1 | incest,male:sole male,female:stockings,male:shota,female:sole female,female:sister                                                                                                                                                                                                                                                                                                                                                                                               | michiking        | NULL       | NULL   | NULL   |
+|  930038 | Ane Taiken Saigetsu／Years Of The Older Sister Experience  | 5775da8a5b | manga | korean   | MFRIE             | 2016-05-01 22:53:00 |     4 |       |             1 | female:x-ray,incest,female:handjob,male:sole male,female:cunnilingus,male:shota,female:sole female,female:femdom,male:blindfold,male:bondage,full color,female:sister,female:facesitting,male:condom                                                                                                                                                                                                                                                                             | michiking        | NULL       | NULL   | NULL   |
+| 1034124 | Ane Taiken Ganbou                                          |            | manga | korean   |                   | 2017-02-25 18:07:00 |     0 |       |             1 | female:big breasts,incest,male:sole male,male:shota,female:sole female,full color,female:sister                                                                                                                                                                                                                                                                                                                                                                                  | michiking        | NULL       | NULL   | NULL   |
+| 1034314 | Hore Tokidoki Nukumori                                     |            | manga | korean   |                   | 2017-02-26 02:47:00 |     0 |       |             1 | female:ahegao,female:big breasts,female:nakadashi,female:rape,female:x-ray,incest,female:paizuri,female:anal,female:milf,female:double penetration,female:schoolgirl uniform,female:stockings,male:dilf,female:hairy,story arc,female:big ass,female:daughter,female:sister,tankoubon,male:condom,female:lingerie,female:bikini,female:mother,female:bride,female:widow,male:yandere                                                                                             | doumou,michiking | NULL       | NULL   | NULL   |
+| 1059144 | Ane Taiken Ganbou                                          | 69345fe228 | manga | korean   | MFRIE             | 2017-05-05 06:37:00 |     7 |       |             1 | female:big breasts,incest,male:sole male,male:shota,female:sole female,full color,female:sister                                                                                                                                                                                                                                                                                                                                                                                  | michiking        | NULL       | NULL   | NULL   |
+| 1331958 | Ane Taiken Jogakuryou 5                                    | 0b59ba11fa | manga | korean   | MFRIE             | 2018-12-20 10:43:00 |    22 |       |             1 | incest,male:shota                                                                                                                                                                                                                                                                                                                                                                                                                                                                | michiking        | NULL       | NULL   | NULL   |
++---------+------------------------------------------------------------+------------+-------+----------+-------------------+---------------------+-------+-------+---------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------+------------+--------+--------+
 
 ```
