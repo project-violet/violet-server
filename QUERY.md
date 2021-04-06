@@ -997,6 +997,7 @@ from
   left join eharticles_series_junction as j on a.Id=j.Article 
   left join eharticles_series as k on j.Series=k.Id
 group by a.Id;
+/* We can just return Id, EHash */
 +---------+------------------------------------------------------------+------------+-------+----------+-------------------+---------------------+-------+-------+---------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------+------------+--------+--------+
 | Id      | Title                                                      | EHash      | Type  | Language | Uploader          | Published           | Files | Class | ExistOnHitomi | Tags                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | Artists          | Characters | Groups | Series |
 +---------+------------------------------------------------------------+------------+-------+----------+-------------------+---------------------+-------+-------+---------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------+------------+--------+--------+
@@ -1071,6 +1072,82 @@ order by cc desc;
 | female:beauty mark        |  5 |
 | female:inverted nipples   |  4 |
 | female:lactation          |  4 |
+...
+
+# Artists Article Count Ranking
+with search_query as 
+(
+  select c.Id
+  from
+    eharticles_artists as a
+    right join eharticles_artists_junction as b on a.Id=b.Artist
+    right join eharticles as c on c.Id=b.Article
+  where c.Language="korean"
+  order by b.Article desc
+)
+select b.Name, count(a.Artist) as C 
+from 
+  search_query as sq
+  left join eharticles_artists_junction as a on sq.Id=a.Article
+  left join eharticles_artists as b on a.Artist=b.Id
+group by a.Artist order by C desc;
++-------------------+------+
+| Name              | C    |
++-------------------+------+
+| N/A               | 6082 |
+| reizei            |  215 |
+| izumi             |  207 |
+| mizuryu kei       |  173 |
+| sanbun kyoden     |  161 |
+| noise             |  138 |
+| shimaji           |  126 |
+| shindol           |  125 |
+| michiking         |  124 |
+| hyji              |  124 |
+| tsukino jyogi     |  115 |
+| asanagi           |  109 |
+| takatsu           |  107 |
+| yuzuki n dash     |  107 |
+| cle masahiro      |  105 |
+| nakajima yuka     |  105 |
+| ueda yuu          |  104 |
+| saikawa yusa      |  104 |
+| crimson           |  103 |
+| kidmo             |  102 |
+| nakagami takashi  |  102 |
+| shinobe           |  101 |
+| maeshima ryou     |   99 |
+| saigado           |   99 |
+| fan no hitori     |   96 |
+| ichihaya          |   96 |
+| kizuki aruchu     |   96 |
+| mozu              |   96 |
+| carn              |   94 |
+| abbb              |   94 |
+| meme50            |   93 |
+| kitoen            |   93 |
+| yukino minato     |   93 |
+| z-ton             |   92 |
+| gengorou          |   91 |
+| tamagoro          |   91 |
+| date              |   91 |
+| katsurai yoshiaki |   90 |
+| zan               |   90 |
+| kojima saya       |   89 |
+| tagame gengoroh   |   89 |
+| heizo             |   88 |
+| hazuki kaoru      |   87 |
+| sasamori tomoe    |   87 |
+| alp               |   86 |
+| shiwasu no okina  |   86 |
+| chuuka naruto     |   85 |
+| laliberte         |   85 |
+| erect sawaru      |   84 |
+| takeda hiromitsu  |   84 |
+| fuetakishi        |   83 |
+| momoya show-neko  |   82 |
+| yukimi            |   82 |
+| umu rahi          |   82 |
 ...
 
 # Tag Index Ranking
