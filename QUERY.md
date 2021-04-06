@@ -1247,4 +1247,20 @@ GET test/_search
     "Id": "desc"
   }
 }
+
+# Multi Match
+GET test/_search
+{
+  "query": {
+    "bool": {
+      "must":  [
+        {"match" : {"Language": "korean"}},
+        {"match" : {"Tags": "sister"}}
+      ]
+    }
+  },
+  "sort" : {
+    "Id": "desc"
+  }
+}
 ```
