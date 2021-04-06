@@ -1131,3 +1131,38 @@ limit 10;
 | 1873406 | [Itaba Hiroshi] Imouto to Yatte Shimattashi, Imouto no Tomodachi to Moyatte Shimatta [Chinese]                                                | ffa31c9bef | manga     | chinese  | dfsgg         | 2021-03-26 05:08:00 |   201 |       |             1 |
 +---------+-----------------------------------------------------------------------------------------------------------------------------------------------+------------+-----------+----------+---------------+---------------------+-------+-------+---------------+
 ```
+
+## ElasticSearch
+
+```es
+# Search by DateTime
+GET test/_search
+{
+  "query": {
+    "range": {
+      "Published": {
+        "time_zone": "+00:00",        
+        "gte": "2021-04-01T00:00:00", 
+        "lte": "now"                  
+      }
+    }
+  },
+  "sort": {
+    "Id": "asc"
+  }
+}
+
+# Query by Tag
+GET test/_search
+{
+  "query": {
+    "query_string": {
+      "default_field": "Tags",
+      "query": "\"female:sister\""
+    }
+  },
+  "sort": {
+    "Id": "desc"
+  }
+}
+```
