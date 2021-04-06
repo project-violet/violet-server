@@ -886,6 +886,11 @@ where ViewSeconds>=24
 group by ArticleId
 order by C desc
 limit 100;
+
+# Usage Trend
+select CONCAT(Year(TimeStamp), '-', MONTH(TimeStamp), '-', DAY(TimeStamp)) as DateTime, count(*), repeat('#', count(*)/600)
+from viewtime
+group by YEAR(TimeStamp), MONTH(TimeStamp), DAY(TimeStamp);
 ```
 
 ## EHArticles
