@@ -1,6 +1,8 @@
 // This source code is a part of Project Violet.
 // Copyright (C) 2021. violet-team. Licensed under the Apache-2.0 License.
 
+const a_syncdatabase = require('../api/syncdatabase');
+
 const tokenType = {
   // Allow Redundancy
   'artist': [1, 'eharticles_artists', 'Artist'],
@@ -19,7 +21,36 @@ const tokenType = {
   'title': [0, 'Title'],
 };
 
-function _loadTagMap() {}
+const tagCountMap = {
+
+};
+
+function _loadTagMap() {
+  var conn = a_syncdatabase();
+  var mm = [
+    ['eharticles_tags', 'Tag'], ['eharticles_artists', 'Artist'],
+    ['eharticles_series', 'Series'], ['eharticles_groups', 'Group'],
+    ['eharticles_characters', 'Character']
+  ];
+
+  for (var i = 0; i < mm.length; i++) {
+    var query = 'select b.Name as N, count(*) as C from ' + mm[i][0] +
+        '_junction as a left join ' + mm[i][0] + ' as b on a.' + mm[i][1] +
+        '=b.Id group by a.' + mm[i][1] + ' order by c desc';
+    console.log(query);
+    var rr = conn.query(query);
+
+    for (var j = 0; j < rr.length; j++) {
+      if (i == 0) tagCountMap[rr[j]['N'].replace(' ', '_')] = rr[j]['C'];
+      tagCountMap[mm[i][1].toLowerCase() + ':' + rr[j]['N'].replace(' ', '_')] =
+          rr[j]['C'];
+    }
+  }
+
+  console.log(Object.keys(tagCountMap).length);
+}
+
+_loadTagMap();
 
 function _createRandomString() {
   var result = [];
@@ -164,7 +195,28 @@ function _alignTreeNodeChilds(node) {
     if (c1.op == c2.op) return 0;
     var x = c1.op == '-' || c1.op == 'or' || c1.op == 'and';
     var y = c2.op == '-' || c2.op == 'or' || c2.op == 'and';
-    if (!x && !y) return 0;
+    if (!x && !y) {
+      // compare content
+      // tag (ar => dr) => title
+      var tt1 = c1.op.includes(':');
+      var tt2 = c2.op.includes(':');
+      if (!tt1 && !tt2) return 0;
+      if (tt1 != tt2) return tt1 ? -1 : 1;
+      if (tokenType[c1.op.split(':')[0]][0] > tokenType[c2.op.split(':')[0]][0])
+        return -1;
+      else if (
+          tokenType[c1.op.split(':')[0]][0] < tokenType[c2.op.split(':')[0]][0])
+        return 1;
+      var x = tagCountMap[c1.op];
+      var y = tagCountMap[c2.op];
+      if ((x == null) != (y == null)) return x == null ? -1 : 1;
+      if (x == null && y == null) return 0;
+      if (x < y)
+        return -1;
+      else if (x > y)
+        return 1;
+      return 0;
+    }
     if (!x) return -1;
     if (!y) return 1;
     if (c1.op == 'and') return -1;
