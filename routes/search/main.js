@@ -206,7 +206,7 @@ function _createRandomString() {
   return result.join('');
 }
 
-function _searchToSQL(rawSearch) {
+function _searchToSQL(rawSearch, enableInjection = false) {
   function _split(what) {
     var result = [];
     var ga = [];
@@ -289,9 +289,6 @@ function _searchToSQL(rawSearch) {
   var innerQuery = '';
   var outerQuery = '';
   var requireJoin = false;
-  var latestTable = '';
-  var latestValidTable = '';
-  var latestExcept = false;
 
   var innerExcepts = [];
 
@@ -304,40 +301,17 @@ function _searchToSQL(rawSearch) {
     if (tokenType[key][0] == 1) {
       value.forEach((val => {
         if (innerQuery != '') {
-          // if (!val.startsWith('-') && latestExcept == false)
-          //   innerQuery += ' join ';
-          // else if (!val.startsWith('-') && latestExcept)
-          //   innerQuery += ' full outer join ';
-          // else if (latestExcept)
-          //   innerQuery += ' right join ';
-          // else
-          // innerQuery += ' left join ';
           innerQuery += ' left join ';
           requireJoin = true;
         } else if (val.startsWith('-')) {
           latestExcept = true;
         }
 
-        // var include = value.some(e => !(String)(e).startsWith('-'));
-        // var exclude = value.some(e => (String)(e).startsWith('-'));
-
-        var where = '';
-
-        // if (include && !exclude) {
-        //   where = 'a.Name IN ?';
-        // } else if (exclude && !include) {
-        //   where = 'a.Name NOT IN ?';
-        // } else if (include && exclude) {
-        //   where = 'a.Name IN ? AND a.Name NOT IT ?';
-        // }
-
-        where = 'a.Name=?';
-
         var rs = _createRandomString();
         innerQuery += '(select * from ' + tokenType[key][1] + ' as a ' +
             'right join ' + tokenType[key][1] + '_junction as b on a.Id=b.' +
             tokenType[key][2] + ' ' +
-            'where ' + where + ') as ' + key + rs;
+            'where a.Name=?) as ' + key + rs;
         if (requireJoin) {
           innerQuery += ' on eh.Id=' + key + rs + '.Article';
         } else {
@@ -350,8 +324,6 @@ function _searchToSQL(rawSearch) {
           innerQuery += ' on eh.Id=' + key + rs + '.Article';
         }
         latestTable = key + rs;
-        // innerQValues.push(value.map(e => e.startsWith('-') ? e.slice(1) :
-        // e));
         if (val.startsWith('-'))
           innerExcepts.push(key + rs);
         else
@@ -376,25 +348,6 @@ function _searchToSQL(rawSearch) {
 
   var tq = '';
 
-  // if (innerQuery != '' && outerQuery != '') {
-  //   tq = 'select a.Id from eharticles as a right join (select ' +
-  //       latestValidTable + '.' + (latestValidTable == 'eh' ? 'Id' :
-  //       'Article') + ' from ' + innerQuery + ') as b on a.Id=b.' +
-  //       (latestValidTable == 'eh' ? 'Id' : 'Article') + ' where ' +
-  //       outerQuery + ' group by a.Id order by b.' + (latestValidTable == 'eh'
-  //       ? 'Id' : 'Article') + ' desc ';
-  // } else if (innerQuery != '') {
-  //   tq = 'select a.Id from eharticles as a right join (select ' +
-  //       latestValidTable + '.' + (latestValidTable == 'eh' ? 'Id' :
-  //       'Article') + ' from ' + innerQuery + ') as b on a.Id=b.' +
-  //       (latestValidTable == 'eh' ? 'Id' : 'Article') +
-  //       ' group by a.Id order by b.' +
-  //       (latestValidTable == 'eh' ? 'Id' : 'Article') + ' desc ';
-  // } else if (outerQuery != '') {
-  //   tq = 'select Id from eharticles where ' + outerQuery +
-  //       ' group by Id order by Id desc';
-  // }
-
   if (innerQuery != '' && outerQuery != '') {
     tq = 'select eh.Id from ' + innerQuery +
         (innerExcepts.length == 0 ? ' where ' : ' and ') + outerQuery +
@@ -407,34 +360,45 @@ function _searchToSQL(rawSearch) {
         ' group by Id order by Id desc';
   }
 
-  console.log(tq);
-
   function _checkValid(ch) {
     return 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789:()-_ '
         .includes(ch);
   }
 
-  innerQValues.forEach(x => {
-    var i = tq.indexOf('?');
-    tq = tq.slice(0, i) + '"' + x + '"' + tq.slice(i + 1);
-  });
-
-  outerQValues.forEach(x => {
-    var y = '';
-    x.forEach(e => {
-      if (y != '') y += ',';
-      y += '"' + e + '"';
+  if (enableInjection) {
+    innerQValues.forEach(x => {
+      var i = tq.indexOf('?');
+      tq = tq.slice(0, i) + '"' +
+          x.replace('\\', '\\\\')
+              .replace('"', '\\"')
+              .replace('＼', '\\\\')
+              .replace('＂', '\\"') +
+          '"' + tq.slice(i + 1);
     });
-    var i = tq.indexOf('?');
-    tq = tq.slice(0, i) + '(' + y + ')' + tq.slice(i + 1);
-  });
 
+    outerQValues.forEach(x => {
+      var y = '';
+      x.forEach(e => {
+        if (y != '') y += ',';
+        y += '"' +
+            e.replace('\\', '\\\\')
+                .replace('"', '\\"')
+                .replace('＼', '\\\\')
+                .replace('＂', '\\"') +
+            '"';
+      });
+      var i = tq.indexOf('?');
+      tq = tq.slice(0, i) + '(' + y + ')' + tq.slice(i + 1);
+    });
 
-  console.log(tq);
+    return tq;
+  }
+
+  return [tq, innerQValues.concat(outerQValues)];
 }
 
-_searchToSQL(
-    '-female:loli male:sole_male artist:michiking -tag:incest lang:korean');
+console.log(_searchToSQL(
+    '-female:loli male:sole_male artist:michiking -tag:incest lang:korean')[0]);
 
 module.exports = function(req, res, next) {
   if (!r_auth.auth(req)) {
