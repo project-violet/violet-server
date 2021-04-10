@@ -143,7 +143,7 @@ function _printTree(node) {
       builder.s += ' ' + node.op + '\r\n';
     else
       builder.s += '\r\n';
-      
+
     for (var i = 0; i < node.contents.length; i++)
       _innerPrintNode(
           builder, node.contents[i], indent, i == node.contents.length - 1)
@@ -155,6 +155,49 @@ function _printTree(node) {
   console.log(x.s);
 }
 
+function _alignTreeNodeChilds(node) {
+  if (node.contents.length == 0) return;
+
+  function _compareContent(c1, c2) {
+    // priority
+    // nt => and => exclude => or
+    if (c1.op == c2.op) return 0;
+    var x = c1.op == '-' || c1.op == 'or' || c1.op == 'and';
+    var y = c2.op == '-' || c2.op == 'or' || c2.op == 'and';
+    if (!x && !y) return 0;
+    if (!x) return -1;
+    if (!y) return 1;
+    if (c1.op == 'and') return -1;
+    if (c2.op == 'and') return 1;
+    if (c1.op == '-') return -1;
+    if (c2.op == '-') return 1;
+    return 0;
+  }
+
+  function _nodeContentsSwap(node, p1, p2) {
+    var tmp = node.contents[p1];
+    node.contents[p1] = node.contents[p2];
+    node.contents[p2] = tmp;
+  }
+
+  // selection sort
+  for (var i = 0; i < node.contents.length - 1; i++) {
+    var least = i;
+    for (var j = i + 1; j < node.contents.length; j++) {
+      if (_compareContent(node.contents[j], node.contents[least]) < 0)
+        least = j;
+    }
+
+    if (least != i) _nodeContentsSwap(node, least, i);
+  }
+}
+
+function _alignTree(node) {
+  _alignTreeNodeChilds(node);
+  for (var i = 0; i < node.contents.length; i++) {
+    _alignTree(node.contents[i]);
+  }
+}
 
 /*
     Search To SQL
@@ -355,8 +398,11 @@ function _searchToSQL(rawSearch, enableInjection = false) {
 
 
 // _makeTree('-female:loli');
-_printTree(_makeTree(
-    '-female:loli male:sole_male  (lang:korean or lang:n/a) artist:michiking -tag:incest'));
+var tree = _makeTree(
+    '-female:loli male:sole_male  (lang:korean or lang:n/a) artist:michiking -tag:incest');
+_alignTree(tree);
+
+_printTree(tree);
 /*
 +- and
   |- and
