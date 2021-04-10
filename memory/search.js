@@ -21,10 +21,11 @@ const tokenType = {
   'title': [0, 'Title'],
 };
 
-const tagCountMap = {
+const tagCountMap = {};
 
-};
-
+//
+//  Load Tag Map from Database Server
+//
 function _loadTagMap() {
   var conn = a_syncdatabase();
   var mm = [
@@ -52,18 +53,6 @@ function _loadTagMap() {
 
 _loadTagMap();
 
-function _createRandomString() {
-  var result = [];
-  var characters =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  var charactersLength = characters.length;
-  for (var i = 0; i < 4; i++) {
-    result.push(
-        characters.charAt(Math.floor(Math.random() * charactersLength)));
-  }
-  return result.join('');
-}
-
 class _treeNode {
   constructor(contents, parent, op) {
     this.parent = parent;
@@ -75,7 +64,11 @@ class _treeNode {
 function _makeTree(what) {
   var point = 0;
   var latestToken = '';
-  function _getNextToken() {
+
+  //
+  //  Set latestToken to Next Token
+  //
+  function _next() {
     latestToken = '';
     for (; point < what.length; point++) {
       if (what[point] == ' ')
@@ -83,37 +76,33 @@ function _makeTree(what) {
           continue;
         else {
           point++;
-          return latestToken;
+          return;
         }
       latestToken += what[point];
       if ('()-'.includes(what[point]) ||
           (point <= what.length && '()-'.includes(what[point + 1]))) {
         point++;
-        return latestToken;
+        return;
       }
     }
     // Finish Token Scan
-    if (latestToken == '') return latestToken = null;
-    return latestToken;
+    if (latestToken == '') latestToken = null;
   }
 
-  function _getLookahead() {
-    var tpt = point;
-    var tlt = latestToken;
-    var la = _getNextToken();
-    point = tpt;
-    latestToken = tlt;
-    return la;
-  }
+  //
+  //  Test Tokenizer
+  //
+  // var tmp = '';
+  //   while ((tmp = _next()) != null) console.log(tmp);
 
-  var tmp = '';
-  //   while ((tmp = _getNextToken()) != null) console.log(tmp);
-
+  //
+  //  LL Based Tree Construction Routines
+  //
   function _expr() {
     var l = _term();
     var n;
     while (latestToken == 'or') {
-      _getNextToken();  // consume or
+      _next();  // consume or
       var r = _term();
       if (n == null)
         n = new _treeNode([l, r], null, 'or');
@@ -138,27 +127,30 @@ function _makeTree(what) {
   }
   function _factor() {
     if (latestToken == '-') {
-      _getNextToken();  // consume -
+      _next();  // consume -
       var r = _factor();
       var n = new _treeNode([r], null, '-');
       r.parent = n;
       return n;
     } else if (latestToken == '(') {
-      _getNextToken();  // consume (
+      _next();  // consume (
       var r = _expr();
       if (latestToken != ')') throw 'Unpredicted character ' + latestToken;
-      _getNextToken();  // consume )
+      _next();  // consume )
       return r;
     }
     var n = new _treeNode([], null, latestToken);
-    _getNextToken();  // consume Non-Terminal
+    _next();  // consume Non-Terminal
     return n;
   }
 
-  _getNextToken();
+  _next();
   return _expr();
 }
 
+//
+//  Print Tree To Console Pretty
+//
 function _printTree(node) {
   function _innerPrintNode(builder, node, indent, last) {
     builder.s += indent;
@@ -190,23 +182,39 @@ function _alignTreeNodeChilds(node) {
   if (node.contents.length == 0) return;
 
   function _compareContent(c1, c2) {
-    // priority
+    //
+    // Global Priority
     // nt => and => exclude => or
+    //
     if (c1.op == c2.op) return 0;
     var x = c1.op == '-' || c1.op == 'or' || c1.op == 'and';
     var y = c2.op == '-' || c2.op == 'or' || c2.op == 'and';
+
+    //
+    // Compare Content
+    // tag (ar => dr) => title
+    //
     if (!x && !y) {
-      // compare content
-      // tag (ar => dr) => title
+      //
+      // Compare Is Token Or TitleText
+      //
       var tt1 = c1.op.includes(':');
       var tt2 = c2.op.includes(':');
       if (!tt1 && !tt2) return 0;
       if (tt1 != tt2) return tt1 ? -1 : 1;
+
+      //
+      // Compare Allow Redundancy
+      //
       if (tokenType[c1.op.split(':')[0]][0] > tokenType[c2.op.split(':')[0]][0])
         return -1;
       else if (
           tokenType[c1.op.split(':')[0]][0] < tokenType[c2.op.split(':')[0]][0])
         return 1;
+
+      //
+      //  Compare with Counts (lower is unique)
+      //
       var x = tagCountMap[c1.op];
       var y = tagCountMap[c2.op];
       if ((x == null) != (y == null)) return x == null ? -1 : 1;
@@ -232,7 +240,9 @@ function _alignTreeNodeChilds(node) {
     node.contents[p2] = tmp;
   }
 
-  // selection sort
+  //
+  //  Selection Sort
+  //
   for (var i = 0; i < node.contents.length - 1; i++) {
     var least = i;
     for (var j = i + 1; j < node.contents.length; j++) {
@@ -258,6 +268,18 @@ function _alignTree(node) {
     2. Align using Tag Count Map
  */
 function _searchToSQL(rawSearch, enableInjection = false) {
+  function _createRandomString() {
+    var result = [];
+    var characters =
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for (var i = 0; i < 4; i++) {
+      result.push(
+          characters.charAt(Math.floor(Math.random() * charactersLength)));
+    }
+    return result.join('');
+  }
+
   function _split(what) {
     var result = [];
     var ga = [];
@@ -455,6 +477,7 @@ var tree = _makeTree(
 _alignTree(tree);
 
 _printTree(tree);
+
 /*
 +- and
   |- and
@@ -469,4 +492,15 @@ _printTree(tree);
   | +- artist:michiking
   +- -
     +- tag:incest
+
++- and
+  |- artist:michiking
+  |- male:sole_male
+  |- -
+  | +- female:loli
+  |- -
+  | +- tag:incest
+  +- or
+    |- lang:korean
+    +- lang:n/a
 */
