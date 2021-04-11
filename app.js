@@ -15,6 +15,7 @@ const blacklist = require("express-blacklist");
 const rateLimit = require("express-rate-limit");
 
 const r_community = require('./routes/community/routes');
+const r_search = require('./routes/search/routes');
 const r_index = require("./routes/index");
 const r_query = require("./routes/query");
 const r_top = require("./routes/top");
@@ -59,6 +60,7 @@ const limiter = rateLimit({
 app.use(limiter);
 
 app.use("/community", r_community);
+app.use("/search", r_search);
 app.use("/query", r_query);
 app.use("/top", r_top);
 app.post("/upload", r_upload);

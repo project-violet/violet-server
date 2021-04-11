@@ -11,7 +11,7 @@ function p405(req, res, next) {
 
 const main = require('./main');
 
-router.post('/main', main);
-router.get('/main', p405);
+router.get('/main', main);
+router.post('/main', p405);
 
 module.exports = router;
