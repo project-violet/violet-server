@@ -11,10 +11,13 @@ function p405(req, res, next) {
 
 const main = require('./main');
 const detail = require('./detail');
+const ehash = require('./ehash');
 
 router.get('/main', main);
 router.post('/main', p405);
 router.get('/detail', detail);
 router.post('/detail', p405);
+router.get('/ehash', ehash);
+router.post('/ehash', p405);
 
 module.exports = router;
