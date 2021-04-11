@@ -4,6 +4,7 @@
 const Joi = require('joi');
 
 const a_database = require('../../api/database');
+const logger = require('../../etc/logger');
 const m_search = require('../../memory/search');
 
 const searchSchema = Joi.object({
@@ -14,6 +15,7 @@ const searchSchema = Joi.object({
 function _search(res, search, offset) {
   const query = m_search.searchToSQL(search);
   const pool = a_database();
+  logger.info('search: ' + search);
   const qr = pool.query(
       'select GROUP_CONCAT(r.Id) as R from (' + query[0] + ' offset ' + offset +
           ') as r group by null',
