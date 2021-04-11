@@ -4,17 +4,14 @@
 const Joi = require('joi');
 
 const a_database = require('../../api/database');
-const r_auth = require('../../auth/auth');
 const m_search = require('../../memory/search');
-const m_session = require('../../memory/session');
 
 const searchSchema = Joi.object({
-  Search: Joi.string().max(500).required(),
-  Session: Joi.string().required(),
-  Offset: Joi.number().integer().required(),
+  q: Joi.string().max(500).required(),
+  offset: Joi.number().integer().required(),
 });
 
-function _search(res, user, search, offset) {
+function _search(res, search, offset) {
   const query = m_search.searchToSQL(search);
   const pool = a_database();
   const qr = pool.query(
@@ -35,33 +32,11 @@ function _search(res, user, search, offset) {
       });
 }
 
-async function _checkSession(body) {
-  return await m_session.isExists(body.Session, null);
-}
-
-async function _sessionToUser(body) {
-  let session = body['Session'];
-  delete body['Session'];
-  body['User'] = await m_session.sessionToUser(session);
-  return body;
-}
-
 module.exports = async function(req, res, next) {
-  if (!r_auth.auth(req)) {
-    res.status(403).type('html').send(p.p403);
-    return;
-  }
-
   try {
-    await searchSchema.validateAsync(req.body);
+    await searchSchema.validateAsync(req.query);
 
-    if (!await _checkSession(req.body)) {
-      res.status(200).type('json').send({msg: 'session not found'});
-      return;
-    }
-
-    _search(
-        res, await _sessionToUser(req.body), req.body.Search, req.body.Offset);
+    _search(res, req.query.q, req.query.offset);
   } catch (e) {
     console.log(e);
     res.status(400).type('json').send({msg: 'bad request'});
