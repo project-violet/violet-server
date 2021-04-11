@@ -10,8 +10,11 @@ function p405(req, res, next) {
 }
 
 const main = require('./main');
+const detail = require('./detail');
 
 router.get('/main', main);
 router.post('/main', p405);
+router.get('/detail', detail);
+router.post('/detail', p405);
 
 module.exports = router;

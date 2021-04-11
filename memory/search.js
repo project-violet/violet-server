@@ -402,7 +402,7 @@ function _optimizeTree(node) {
 
     WHERE IN vs INNER JOIN
  */
-function _innerNodeToSQL(node,  or = false) {
+function _innerNodeToSQL(node, or = false) {
   function _createRandomString() {
     var result = [];
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' +
@@ -522,7 +522,29 @@ function _injectValues(sql, values) {
   return sql;
 }
 
+function _getDetailQuery(articleId) {
+  return 'select a.Id, Title, EHash, Type, Language, Uploader, Published, Files, Class, ExistOnHitomi,' +
+      'GROUP_CONCAT(DISTINCT c.Name) as Tags, ' +
+      'GROUP_CONCAT(DISTINCT e.Name) as Artists, ' +
+      'GROUP_CONCAT(DISTINCT g.Name) as Characters,' +
+      'GROUP_CONCAT(DISTINCT i.Name) as Groups,' +
+      'GROUP_CONCAT(DISTINCT k.Name) as Series ' +
+      'from ' +
+      '(select * from eharticles where Id=' + articleId + ') as a ' +
+      'left join eharticles_tags_junction as b on a.Id=b.Article ' +
+      'left join eharticles_tags as c on b.Tag=c.Id ' +
+      'left join eharticles_artists_junction as d on a.Id=d.Article ' +
+      'left join eharticles_artists as e on d.Artist=e.Id ' +
+      'left join eharticles_characters_junction as f on a.Id=f.Article ' +
+      'left join eharticles_characters as g on f.Character=g.Id ' +
+      'left join eharticles_groups_junction as h on a.Id=h.Article ' +
+      'left join eharticles_groups as i on h.Group=i.Id ' +
+      'left join eharticles_series_junction as j on a.Id=j.Article ' +
+      'left join eharticles_series as k on j.Series=k.Id ';
+}
+
 module.exports = {
   searchToSQL: _searchToSQL,
   injectValues: _injectValues,
+  getDetailQuery: _getDetailQuery
 }

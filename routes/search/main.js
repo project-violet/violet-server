@@ -27,7 +27,7 @@ function _search(res, search, offset) {
             res.status(200).type('json').send({msg: 'results zero'});
           else
             res.status(200).type('json').send(
-                {msg: 'success', result: results[0].R.split(',')});
+                {msg: 'success', result: results[0].R.split(',').map(e => parseInt(e))});
         }
       });
 }
