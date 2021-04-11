@@ -76,6 +76,8 @@ async function _trySignUp(body, res) {
 
   body.Password = pw;
 
+  body.Permission = 0;
+
   // SignUp
   const pool = a_database();
   pool.query(
