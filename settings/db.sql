@@ -35,6 +35,8 @@ CREATE TABLE `user` (
 	`UserAppId` VARCHAR(150) NOT NULL COLLATE 'utf8_general_ci',
 	`NickName` VARCHAR(50) NOT NULL COLLATE 'utf8_general_ci',
 	`Etc` VARCHAR(150) NOT NULL COLLATE 'utf8_general_ci',
+	/* 0: normal, 1: manager, 2: admin */
+	`Permission` INT(11) NOT NULL,
 	PRIMARY KEY (`Pid`) USING BTREE,
 	FULLTEXT INDEX `Id` (`Id`)
 )
@@ -151,6 +153,16 @@ CREATE TABLE `eharticles` (
 	FULLTEXT `eharticles_TitleIndex` (title)
 )
 CHARSET=utf8mb4
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+;
+
+CREATE TABLE `permission` (
+	`User` INT(11) NOT NULL,
+	PRIMARY KEY (`User`) USING BTREE,
+	INDEX `permission_User_Index` (`User`) USING BTREE,
+	CONSTRAINT `permission_UserForeign` FOREIGN KEY (`User`) REFERENCES `violet`.`user` (`Pid`) ON UPDATE RESTRICT ON DELETE RESTRICT
+)
 COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB
 ;
