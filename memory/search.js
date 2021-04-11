@@ -51,7 +51,7 @@ function _loadTagMap() {
   console.log(Object.keys(tagCountMap).length);
 }
 
-_loadTagMap();
+// _loadTagMap();
 
 class _treeNode {
   constructor(contents, parent, op) {
@@ -402,7 +402,7 @@ function _optimizeTree(node) {
 
     WHERE IN vs INNER JOIN
  */
-function _innerNodeToSQL(node) {
+function _innerNodeToSQL(node,  or = false) {
   function _createRandomString() {
     var result = [];
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' +
@@ -499,11 +499,11 @@ function _innerNodeToSQL(node) {
   }
 
   const front = 'select eh.Id from ';
-  const back = ' group by eh.Id order by eh.Id desc';
+  const back = ' group by eh.Id order by Id desc limit 30';
   return [front + sql + back, innerQValues.concat(outerQValues)];
 }
 
-function _searchToSQL(rawSearch, enableInjection = false) {
+function _searchToSQL(rawSearch) {
   var tree = _makeTree(rawSearch);
   _optimizeTree(tree);
   return _innerNodeToSQL(tree);
@@ -522,45 +522,7 @@ function _injectValues(sql, values) {
   return sql;
 }
 
-
-// _makeTree('-female:loli');
-// var tree = _makeTree(
-//     '-female:loli male:sole_male  (lang:korean or lang:n/a) artist:michiking -tag:incest');
-var tree = _makeTree(
-    ' lang:korean artist:michiking -(female:loli or male:shota or male:sole_male)');
-// var tree = _makeTree('lang:korean -female:loli');
-// var tree = _makeTree(
-//     'artist:michiking lang:korean -female:loli -male:shota
-//     -male:sole_male');
-_optimizeTree(tree);
-_printTree(tree);
-r = _innerNodeToSQL(tree);
-console.log(r[0]);
-console.log(_injectValues(r[0], r[1]));
-
-/*
-+- and
-  |- and
-  | |- and
-  | | |- and
-  | | | |- -
-  | | | | +- female:loli
-  | | | +- male:sole_male
-  | | +- or
-  | |   |- lang:korean
-  | |   +- lang:n/a
-  | +- artist:michiking
-  +- -
-    +- tag:incest
-
-+- and
-  |- artist:michiking
-  |- male:sole_male
-  |- -
-  | +- female:loli
-  |- -
-  | +- tag:incest
-  +- or
-    |- lang:korean
-    +- lang:n/a
-*/
+module.exports = {
+  searchToSQL: _searchToSQL,
+  injectValues: _injectValues,
+}
