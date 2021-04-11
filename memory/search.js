@@ -51,7 +51,7 @@ function _loadTagMap() {
   console.log(Object.keys(tagCountMap).length);
 }
 
-// _loadTagMap();
+_loadTagMap();
 
 class _treeNode {
   constructor(contents, parent, op) {
