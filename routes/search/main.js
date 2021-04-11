@@ -23,7 +23,7 @@ function _search(res, search, offset) {
           logger.error(error);
           res.status(500).type('json').send({msg: 'internal server error'});
         } else {
-          if (results == null || results[0].R == null)
+          if (results == null || results[0] == null || !results[0].hasOwnProperty('R'))
             res.status(200).type('json').send({msg: 'results zero'});
           else
             res.status(200).type('json').send(
