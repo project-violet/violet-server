@@ -31,6 +31,25 @@ router.get('/board/page', b_page);
 router.post('/board/list', p405);
 router.post('/board/page', p405);
 
+const c_read = require('./comment/read');
+const c_write = require('./comment/write');
+
+router.get('/comment/read', c_read);
+router.post('/comment/wrtie', c_write);
+router.post('/comment/read', p405);
+router.get('/comment/write', p405);
+
+const p_enroll = require('./push/enroll');
+const p_leave = require('./push/leave');
+const p_lookup = require('./push/lookup');
+
+router.post('/push/enroll', p_enroll);
+router.post('/push/leave', p_leave);
+router.post('/push/lookup', p_lookup);
+router.get('/push/enroll', p405);
+router.get('/push/leave', p405);
+router.get('/push/lookup', p405);
+
 const s_in = require('./sign/in');
 const s_up = require('./sign/up');
 const s_util = require('./sign/util');
