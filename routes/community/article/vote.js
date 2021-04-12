@@ -90,7 +90,7 @@ async function _sessionToUser(body) {
 }
 
 module.exports = async function vote(req, res, next) {
-  if (!r_auth.auth(req)) {
+  if (!r_auth.wauth(req)) {
     res.status(403).type('json').send({msg: 'forbidden'});
     return;
   }

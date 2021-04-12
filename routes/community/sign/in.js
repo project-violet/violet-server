@@ -86,7 +86,7 @@ async function _tryLogin(body, res) {
 }
 
 module.exports = async function signin(req, res, next) {
-  if (!r_auth.auth(req)) {
+  if (!r_auth.wauth(req)) {
     res.status(403).type('json').send({msg: 'forbidden'});
     return;
   }

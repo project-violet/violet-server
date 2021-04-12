@@ -25,7 +25,7 @@ function _lookupPage(res, page, board) {
 }
 
 module.exports = function page(req, res, next) {
-  if (!r_auth.auth(req)) {
+  if (!r_auth.wauth(req)) {
     res.status(403).type('html').send(p.p403);
     return;
   }

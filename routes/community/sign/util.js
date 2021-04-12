@@ -38,7 +38,7 @@ async function _run_qurey(attr, value) {
 }
 
 async function _check(what, scheme, value, res, req) {
-  if (!r_auth.auth(req)) {
+  if (!r_auth.wauth(req)) {
     res.status(403).type('json').send({msg: 'forbidden'});
     return;
   }

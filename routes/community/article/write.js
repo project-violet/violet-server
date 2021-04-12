@@ -6,6 +6,7 @@ const Joi = require('joi');
 const r_auth = require('../../../auth/auth');
 const a_database = require('../../../api/database');
 const m_session = require('../../../memory/session');
+// const a_es = require('../../../api/elasticsearch');
 
 const logger = require('../../../etc/logger');
 
@@ -49,7 +50,7 @@ async function _sessionToUser(body) {
 }
 
 module.exports = async function article(req, res, next) {
-  if (!r_auth.auth(req)) {
+  if (!r_auth.wauth(req)) {
     res.status(403).type('json').send({msg: 'forbidden'});
     return;
   }

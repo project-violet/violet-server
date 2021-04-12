@@ -22,7 +22,7 @@ function _lookupBoard(res) {
 }
 
 module.exports = function list(req, res, next) {
-  if (!r_auth.auth(req)) {
+  if (!r_auth.wauth(req)) {
     res.status(403).type('html').send(p.p403);
     return;
   }

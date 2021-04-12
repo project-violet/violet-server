@@ -3,12 +3,12 @@
 
 const Joi = require('joi');
 
-const r_auth = require('../../auth/auth');
-const a_database = require('../../api/database');
-const m_session = require('../../memory/session');
-const p = require('../../pages/status');
+const r_auth = require('../../../auth/auth');
+const a_database = require('../../../api/database');
+const m_session = require('../../../memory/session');
+const p = require('../../../pages/status');
 
-const logger = require('../../etc/logger');
+const logger = require('../../../etc/logger');
 
 const CURRENT_TIMESTAMP = {
   toSqlString: function() {
@@ -53,7 +53,7 @@ async function _sessionToUser(body) {
 }
 
 module.exports = async function comment(req, res, next) {
-  if (!r_auth.auth(req)) {
+  if (!r_auth.wauth(req)) {
     res.status(403).type('json').send({msg: 'forbidden'});
     return;
   }

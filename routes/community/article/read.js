@@ -28,7 +28,7 @@ function _lookupArticle(res, no) {
 }
 
 module.exports = function read(req, res, next) {
-  if (!r_auth.auth(req)) {
+  if (!r_auth.wauth(req)) {
     res.status(403).type('html').send(p.p403);
     return;
   }
