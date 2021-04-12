@@ -6,16 +6,17 @@ const config = require('config');
 const logger = require('../etc/logger');
 
 const testSalt = config.get('auth.salt') || 'salt';
+const testWSalt = config.get('auth.wsalt') || 'wsalt';
 
-let authTest = function (token, valid) {
+let authTest = function (token, valid, salt) {
   let mac = crypto.createHash('sha512');
-  let hmac = mac.update(token + testSalt);
+  let hmac = mac.update(token + salt);
   let hash = hmac.digest('hex').substr(0, 7);
 
   return hash == valid;
 }
 
-let auth = function (req) {
+let auth = function (req, salt) {
   const token = req.headers['v-token'];
   const valid = req.headers['v-valid'];
   if (token == null || valid == null) {
@@ -41,6 +42,16 @@ let auth = function (req) {
 }
 
 module.exports = {
-  authTest: authTest,
-  auth: auth,
+  authTest: function (token, valid) {
+    return authTest(token, valid, testSalt);
+  },
+  auth: function (token, valid) {
+    return auth(token, valid, testSalt);
+  },
+  wauthTest: function (token, valid) {
+    return authTest(token, valid, testWSalt);
+  },
+  wauth: function (token, valid) {
+    return auth(token, valid, testWSalt);
+  },
 }
