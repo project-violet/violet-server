@@ -435,13 +435,13 @@ function _innerNodeToSQL(node, or = false) {
                 if (e.op.includes(':')) {
                   var kv = e.op.split(':');
                   if (kv[0] == 'female' || kv[0] == 'male')
-                    outerQValues.push(e.op.replace('_', ' '));
+                    outerQValues.push(e.op.replace(/_/gi, ' '));
                   else
                     outerQValues.push(
-                        e.op.slice(e.op.indexOf(':') + 1).replace('_', ' '));
+                        e.op.slice(e.op.indexOf(':') + 1).replace(/_/gi, ' '));
                   return 'eh.' + tokenType[kv[0]][1] + '=?';
                 } else {
-                  outerQValues.push(e.op.replace('_', ' '));
+                  outerQValues.push(e.op.replace(/_/gi, ' '));
                   return 'match (eh.Title) against (? in natural language mode)';
                 }
               })
@@ -474,17 +474,17 @@ function _innerNodeToSQL(node, or = false) {
         if (neg) wheres.push(kv[0] + rs + '.Article IS NULL');
 
         if (kv[0] == 'female' || kv[0] == 'male')
-          innerQValues.push(target.op.replace('_', ' '));
+          innerQValues.push(target.op.replace(/_/gi, ' '));
         else
           innerQValues.push(
-              target.op.slice(target.op.indexOf(':') + 1).replace('_', ' '));
+              target.op.slice(target.op.indexOf(':') + 1).replace(/_/gi, ' '));
       } else {
         wheres.push('eh.' + tokenType[kv[0]][1] + (neg ? '<>' : '=') + '?');
         if (kv[0] == 'female' || kv[0] == 'male')
-          outerQValues.push(target.op.replace('_', ' '));
+          outerQValues.push(target.op.replace(/_/gi, ' '));
         else
           outerQValues.push(
-              target.op.slice(target.op.indexOf(':') + 1).replace('_', ' '));
+              target.op.slice(target.op.indexOf(':') + 1).replace(/_/gi, ' '));
       }
     } else {
       wheres.push(
