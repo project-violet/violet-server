@@ -23,7 +23,7 @@ var CURRENT_TIMESTAMP = {
   }
 };
 
-async function _tryLogin(body, res) {
+async function _tryLogin(body, res, ip) {
   // Check Password is validated
   const ck_password = body.Password;
   if (ck_password.length < 8) {
@@ -44,8 +44,22 @@ async function _tryLogin(body, res) {
         [body.Id,
          pw]))[0][0].C;
     connection.release();
-    
+
     if (fail == 0) {
+      const pool = a_database();
+      pool.query(
+          'INSERT INTO loginrecord SET ?', {
+            UserId: body.Id,
+            Status: 2,
+            Password: pw,
+            TimeStamp: CURRENT_TIMESTAMP,
+            IPAddress: ip
+          },
+          function(error, results, fields) {
+            if (error != null) {
+              logger.error('signin', error);
+            }
+          });
       res.status(200).type('json').send({msg: 'fail'});
       return;
     }
@@ -75,6 +89,7 @@ async function _tryLogin(body, res) {
         Status: 1,
         Password: pw,
         TimeStamp: CURRENT_TIMESTAMP,
+        IPAddress: ip
       },
       function(error, results, fields) {
         if (error != null) {
@@ -93,7 +108,9 @@ module.exports = async function signin(req, res, next) {
 
   try {
     await signInSchema.validateAsync(req.body);
-    await _tryLogin(req.body, res);
+    await _tryLogin(
+        req.body, res,
+        req.headers['x-forwarded-for'] || req.connection.remoteAddress);
   } catch (e) {
     res.status(400).type('json').send({msg: 'bad request'});
   }

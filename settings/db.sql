@@ -116,6 +116,7 @@ CREATE TABLE `loginrecord` (
 	`Password` VARCHAR(150) NOT NULL COLLATE 'utf8_general_ci',
 	`TimeStamp` TIMESTAMP NULL DEFAULT NULL,
 	`Status` INT(11) NOT NULL,
+	`IPAddress` VARCHAR(50) NOT NULL COLLATE 'utf8_general_ci',
 	PRIMARY KEY (`Id`) USING BTREE
 )
 COLLATE='utf8_general_ci'
