@@ -402,7 +402,7 @@ function _optimizeTree(node) {
 
     WHERE IN vs INNER JOIN
  */
-function _innerNodeToSQL(node, or = false) {
+function _innerNodeToSQL(node, or = false, detail = false) {
   function _createRandomString() {
     var result = [];
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' +
@@ -498,15 +498,18 @@ function _innerNodeToSQL(node, or = false) {
     sql += ' where ' + wheres.join(' and ');
   }
 
-  const front = 'select eh.Id from ';
+  const front = detail ?
+      'select eh.Id, eh.Title, eh.EHash, eh.Type, eh.Language, eh.Uploader, eh.Published, eh.Files, ' +
+          'eh.Class, eh.ExistOnHitomi from ' :
+      'select eh.Id from ';
   const back = ' group by eh.Id order by Id desc limit 30';
   return [front + sql + back, innerQValues.concat(outerQValues)];
 }
 
-function _searchToSQL(rawSearch) {
+function _searchToSQL(rawSearch, detail = false) {
   var tree = _makeTree(rawSearch);
   _optimizeTree(tree);
-  return _innerNodeToSQL(tree);
+  return _innerNodeToSQL(tree, false, detail);
 }
 
 function _injectValues(sql, values) {
@@ -543,8 +546,37 @@ function _getDetailQuery(articleId) {
       'left join eharticles_series as k on j.Series=k.Id ';
 }
 
+function _getHybridQuery(search, offset) {
+  var q = _searchToSQL(search, true)
+  return [
+    'with search_query as ' +
+        '(' + q[0] + ' offset ' + offset + ')' +
+        'select a.Id, Title, EHash, Type, Language, Uploader, Published, Files, Class, ExistOnHitomi, ' +
+        '             GROUP_CONCAT(DISTINCT c.Name) as Tags, ' +
+        '             GROUP_CONCAT(DISTINCT e.Name) as Artists,' +
+        '             GROUP_CONCAT(DISTINCT g.Name) as Characters,' +
+        '             GROUP_CONCAT(DISTINCT i.Name) as Groups,' +
+        '             GROUP_CONCAT(DISTINCT k.Name) as Series ' +
+        'from ' +
+        '  search_query as a ' +
+        '  left join eharticles_tags_junction as b on a.Id=b.Article ' +
+        '  left join eharticles_tags as c on b.Tag=c.Id ' +
+        '  left join eharticles_artists_junction as d on a.Id=d.Article ' +
+        '  left join eharticles_artists as e on d.Artist=e.Id ' +
+        '  left join eharticles_characters_junction as f on a.Id=f.Article ' +
+        '  left join eharticles_characters as g on f.Character=g.Id ' +
+        '  left join eharticles_groups_junction as h on a.Id=h.Article ' +
+        '  left join eharticles_groups as i on h.Group=i.Id ' +
+        '  left join eharticles_series_junction as j on a.Id=j.Article ' +
+        '  left join eharticles_series as k on j.Series=k.Id ' +
+        'group by a.Id',
+    q[1]
+  ];
+}
+
 module.exports = {
   searchToSQL: _searchToSQL,
   injectValues: _injectValues,
-  getDetailQuery: _getDetailQuery
+  getDetailQuery: _getDetailQuery,
+  getHybridQuery: _getHybridQuery,
 }

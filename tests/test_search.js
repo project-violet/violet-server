@@ -2,6 +2,7 @@
 // Copyright (C) 2021. violet-team. Licensed under the Apache-2.0 License.
 
 const s_main = require('../routes/search/main');
+const s_hybrid = require('../routes/search/hybrid');
 const testAuth = require('./test_auth');
 
 async function test_search() {
@@ -14,4 +15,14 @@ async function test_search() {
   }}, null, null);
 }
 
-test_search().then();
+async function test_hybrid() {
+  var auth = testAuth();
+
+  await s_hybrid({headers: auth, query: {
+      offset: 0,
+      q: 'lang:korean',
+  }}, null, null);
+}
+
+// test_search().then();
+test_hybrid().then();

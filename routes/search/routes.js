@@ -12,6 +12,7 @@ function p405(req, res, next) {
 const main = require('./main');
 const detail = require('./detail');
 const ehash = require('./ehash');
+const hybrid = require('./hybrid');
 
 router.get('/main', main);
 router.post('/main', p405);
@@ -19,5 +20,7 @@ router.get('/detail', detail);
 router.post('/detail', p405);
 router.get('/ehash', ehash);
 router.post('/ehash', p405);
+router.get('/hybrid', hybrid);
+router.post('/hybrid', p405);
 
 module.exports = router;
