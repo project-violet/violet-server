@@ -30,6 +30,8 @@ const p = require("./pages/status");
 
 const app = express();
 
+const bots = require("./bot/bots");
+
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 const swaggerDocument = YAML.load('./swagger.yaml');
