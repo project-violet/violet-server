@@ -6,7 +6,6 @@ const Joi = require('joi');
 const r_auth = require('../../../auth/auth');
 const a_database = require('../../../api/database');
 const m_session = require('../../../memory/session');
-// const a_es = require('../../../api/elasticsearch');
 
 const logger = require('../../../etc/logger');
 
@@ -24,7 +23,17 @@ const articleSchema = Joi.object({
   Etc: Joi.string().max(4995).required(),
 });
 
-function _insertArticle(body) {
+const etcSchema = Joi.object({
+  Articles: Joi.array().items(Joi.string()),
+  EHArticles: Joi.array().items(Joi.string()),
+  Artists: Joi.array().items(Joi.string()),
+  Groups: Joi.array().items(Joi.string()),
+  Series: Joi.array().items(Joi.string()),
+  Characters: Joi.array().items(Joi.string()),
+  Tags: Joi.array().items(Joi.string()),
+});
+
+async function _insertArticle(body) {
   const pool = a_database();
   pool.query(
       'INSERT INTO article SET ?', {
@@ -57,6 +66,7 @@ module.exports = async function article(req, res, next) {
 
   try {
     await articleSchema.validateAsync(req.body);
+    await etcSchema.validateAsync(body.Etc);
 
     if (!await _checkSession(req.body)) {
       res.status(200).type('json').send({msg: 'session not found'});
