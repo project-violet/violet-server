@@ -174,6 +174,16 @@ ENGINE=InnoDB
 
 ---------------------------------------------------*/
 
+CREATE TABLE `article_article_junction` (
+	`Article` INT(11) NOT NULL,
+	`Target` INT(11) NOT NULL,
+	PRIMARY KEY (`Article`, `Target`),
+	CONSTRAINT `article_articleArticle` FOREIGN KEY (`Article`) REFERENCES `violet`.`article` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	CONSTRAINT `article_articleJunction` FOREIGN KEY (`Target`) REFERENCES `violet`.`article` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	INDEX `article_article_junction_index` (`Article`) USING BTREE,
+	INDEX `article_article_junction_index_vol` (`Target`) USING BTREE
+);
+
 CREATE TABLE `article_eharticle_junction` (
 	`Article` INT(11) NOT NULL,
 	`Target` INT(11) NOT NULL,
