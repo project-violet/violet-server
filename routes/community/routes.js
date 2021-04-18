@@ -60,4 +60,9 @@ router.use('/sign/util', s_util);
 router.get('/sign/in', p405);
 router.get('/sign/up', p405);
 
+const u_info = require('./user/info');
+
+router.get('/user/info', u_info);
+router.post('/user/info', p405);
+
 module.exports = router;
