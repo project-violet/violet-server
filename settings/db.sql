@@ -170,6 +170,72 @@ ENGINE=InnoDB
 
 /*---------------------------------------------------
 
+			article junction tables
+
+---------------------------------------------------*/
+
+CREATE TABLE `article_eharticle_junction` (
+	`Article` INT(11) NOT NULL,
+	`Target` INT(11) NOT NULL,
+	PRIMARY KEY (`Article`, `Target`),
+	CONSTRAINT `article_eharticleArticle` FOREIGN KEY (`Article`) REFERENCES `violet`.`article` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	CONSTRAINT `article_eharticleJunction` FOREIGN KEY (`Target`) REFERENCES `violet`.`eharticles` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	INDEX `article_eharticle_junction_index` (`Article`) USING BTREE,
+	INDEX `article_eharticle_junction_index_vol` (`Target`) USING BTREE
+);
+
+CREATE TABLE `article_artist_junction` (
+	`Article` INT(11) NOT NULL,
+	`Target` INT(11) NOT NULL,
+	PRIMARY KEY (`Article`, `Target`),
+	CONSTRAINT `article_artistArticle` FOREIGN KEY (`Article`) REFERENCES `violet`.`article` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	CONSTRAINT `article_artistJunction` FOREIGN KEY (`Target`) REFERENCES `violet`.`eharticles_artists` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	INDEX `article_artist_junction_index` (`Article`) USING BTREE,
+	INDEX `article_artist_junction_index_vol` (`Target`) USING BTREE
+);
+
+CREATE TABLE `article_group_junction` (
+	`Article` INT(11) NOT NULL,
+	`Target` INT(11) NOT NULL,
+	PRIMARY KEY (`Article`, `Target`),
+	CONSTRAINT `article_groupArticle` FOREIGN KEY (`Article`) REFERENCES `violet`.`article` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	CONSTRAINT `article_groupJunction` FOREIGN KEY (`Target`) REFERENCES `violet`.`eharticles_groups` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	INDEX `article_group_junction_index` (`Article`) USING BTREE,
+	INDEX `article_group_junction_index_vol` (`Target`) USING BTREE
+);
+
+CREATE TABLE `article_character_junction` (
+	`Article` INT(11) NOT NULL,
+	`Target` INT(11) NOT NULL,
+	PRIMARY KEY (`Article`, `Target`),
+	CONSTRAINT `article_characterArticle` FOREIGN KEY (`Article`) REFERENCES `violet`.`article` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	CONSTRAINT `article_characterJunction` FOREIGN KEY (`Target`) REFERENCES `violet`.`eharticles_characters` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	INDEX `article_character_junction_index` (`Article`) USING BTREE,
+	INDEX `article_character_junction_index_vol` (`Target`) USING BTREE
+);
+
+CREATE TABLE `article_series_junction` (
+	`Article` INT(11) NOT NULL,
+	`Target` INT(11) NOT NULL,
+	PRIMARY KEY (`Article`, `Target`),
+	CONSTRAINT `article_seriesArticle` FOREIGN KEY (`Article`) REFERENCES `violet`.`article` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	CONSTRAINT `article_seriesJunction` FOREIGN KEY (`Target`) REFERENCES `violet`.`eharticles_series` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	INDEX `article_series_junction_index` (`Article`) USING BTREE,
+	INDEX `article_series_junction_index_vol` (`Target`) USING BTREE
+);
+
+CREATE TABLE `article_tag_junction` (
+	`Article` INT(11) NOT NULL,
+	`Target` INT(11) NOT NULL,
+	PRIMARY KEY (`Article`, `Target`),
+	CONSTRAINT `article_tagArticle` FOREIGN KEY (`Article`) REFERENCES `violet`.`article` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	CONSTRAINT `article_tagJunction` FOREIGN KEY (`Target`) REFERENCES `violet`.`eharticles_tags` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	INDEX `article_tag_junction_index` (`Article`) USING BTREE,
+	INDEX `article_tag_junction_index_vol` (`Target`) USING BTREE
+);
+
+/*---------------------------------------------------
+
 			eharticles junction tables
 
 ---------------------------------------------------*/
