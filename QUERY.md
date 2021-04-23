@@ -1155,6 +1155,146 @@ group by a.Artist order by C desc;
 | umu rahi          |   82 |
 ...
 
+# Artists Article Count Ranking with Main Tags
+with search_query as 
+(
+  select c.Id
+  from
+    eharticles_artists as a
+    right join eharticles_artists_junction as b on a.Id=b.Artist
+    right join eharticles as c on c.Id=b.Article
+  where c.Language="korean"
+  order by b.Article desc
+)
+select a.ArtistName, a.c as Count, 
+  SUBSTRING_INDEX(GROUP_CONCAT(CONCAT(b.Name, '(', a.cc, ')') ORDER BY a.cc DESC SEPARATOR ','), ',', 5) as MAIN_TAGS 
+  from (
+  select a.ArtistName, count(b.Tag) as cc, b.Tag, a.c from (
+    select * from (
+      select b.Name as ArtistName, b.Id, a.c from (
+        select a.Artist, count(a.Artist) as c
+        from search_query as sq
+        left join eharticles_artists_junction as a on sq.Id=a.Article 
+        group by a.Artist 
+        order by c
+      ) as a left join eharticles_artists as b
+      on a.Artist=b.Id
+      where b.Id<>0
+      order by a.c desc limit 100
+    ) as a left join eharticles_artists_junction as b
+    on a.Id=b.Artist
+  ) as a left join eharticles_tags_junction as b
+  on a.Article=b.Article
+  group by a.ArtistName, b.Tag
+  order by cc desc
+) as a left join eharticles_tags as b on a.Tag=b.Id
+group by a.ArtistName
+order by a.c desc;
++-------------------+-------+--------------------------------------------------------------------------------------------------------------------------------+
+| ArtistName        | Count | MAIN_TAGS                                                                                                                      |
++-------------------+-------+--------------------------------------------------------------------------------------------------------------------------------+
+| reizei            |   215 | female:rape(392),group(224),female:stockings(220),female:big breasts(215),female:bondage(214)                                  |
+| izumi             |   207 | female:rape(394),group(233),female:big breasts(229),female:stockings(222),female:bondage(214)                                  |
+| mizuryu kei       |   173 | female:ahegao(970),female:big breasts(769),group(734),female:stockings(567),female:exhibitionism(374)                          |
+| laliberte         |   172 | female:sole female(110),full color(95),uncensored(74),female:big breasts(72),female:netorare(65)                               |
+| sudoname          |   172 | female:sole female(112),full color(95),uncensored(76),female:big breasts(72),female:netorare(65)                               |
+| sanbun kyoden     |   161 | female:milf(574),female:netorare(551),female:big breasts(454),group(304),female:stockings(289)                                 |
+| noise             |   138 | female:loli(506),female:glasses(287),incest(253),female:sole female(246),male:sole male(238)                                   |
+| shimaji           |   131 | male:yaoi(348),male:shota(344),male:anal(338),male:males only(301),male:crossdressing(287)                                     |
+| shindol           |   125 | female:ahegao(504),group(310),female:big breasts(298),female:mind break(234),female:pregnant(229)                              |
+| hyji              |   124 | female:big breasts(357),female:milf(341),incest(225),female:mother(185),female:glasses(175)                                    |
+| michiking         |   124 | female:big breasts(343),male:shota(302),male:sole male(256),female:nakadashi(198),female:stockings(194)                        |
+| tsukino jyogi     |   115 | female:big breasts(397),female:ahegao(342),female:anal(306),female:x-ray(279),female:milf(263)                                 |
+| asanagi           |   109 | female:ahegao(450),female:loli(390),female:mind break(390),female:big breasts(369),female:rape(304)                            |
+| takatsu           |   107 | male:shota(465),female:big breasts(419),female:milf(309),group(275),female:glasses(256)                                        |
+| shinobe           |   107 | female:furry(121),male:human on furry(89),female:big breasts(76),female:fox girl(58),female:sole female(49)                    |
+| yuzuki n dash     |   107 | female:schoolgirl uniform(385),incest(382),female:big breasts(360),female:sister(332),female:sole female(266)                  |
+| cle masahiro      |   105 | full color(864),female:big breasts(523),uncensored(386),group(316),male:sole male(315)                                         |
+| nakajima yuka     |   105 | male:sole male(361),female:sole female(342),female:schoolgirl uniform(289),female:loli(286),female:stockings(275)              |
+| saikawa yusa      |   105 | female:sole female(222),female:nakadashi(219),multi-work series(198),female:x-ray(184),male:sole male(183)                     |
+| ueda yuu          |   104 | female:loli(352),male:shota(258),anthology(234),female:schoolgirl uniform(201),female:glasses(194)                             |
+| crimson           |   103 | female:rape(898),female:bondage(563),group(425),mosaic censorship(341),female:big breasts(256)                                 |
+| kidmo             |   103 | female:blowjob(101),uncensored(99),female:sole female(98),female:anal(85),female:nakadashi(75)                                 |
+| nakagami takashi  |   102 | female:furry(158),male:human on furry(111),female:loli(109),female:big breasts(78),female:catgirl(76)                          |
+| poyeop            |   101 | female:sole female(33),female:big breasts(24),female:blowjob(17),male:low shotacon(13),male:shota(13)                          |
+| hamabata tomo     |   100 | female:sole female(30),female:big breasts(24),female:blowjob(15),male:shota(15),male:low shotacon(13)                          |
+| maeshima ryou     |   100 | female:loli(457),group(269),female:schoolgirl uniform(195),female:glasses(191),female:anal(191)                                |
+| saigado           |    99 | female:big breasts(627),male:shota(600),group(494),female:milf(437),female:glasses(369)                                        |
+| abbb              |    98 | female:big breasts(82),female:sole female(43),uncensored(41),female:nakadashi(31),female:stockings(24)                         |
+| kekocha           |    98 | female:big breasts(164),group(98),female:nakadashi(89),female:stockings(81),male:sole male(81)                                 |
+| fan no hitori     |    96 | female:big breasts(396),female:ahegao(335),female:rape(307),female:anal(299),female:nakadashi(247)                             |
+| ichihaya          |    96 | female:loli(336),female:sole female(284),male:sole male(281),female:schoolgirl uniform(269),incest(179)                        |
+| kizuki aruchu     |    96 | female:big breasts(188),female:anal(142),group(136),female:rape(98),female:sole female(96)                                     |
+| mozu              |    96 | male:sole male(116),female:sole female(102),female:stockings(89),female:schoolgirl uniform(79),female:loli(65)                 |
+| meme50            |    95 | female:big breasts(430),female:blowjob(223),female:nakadashi(199),group(197),female:anal(155)                                  |
+| carn              |    94 | female:netorare(416),female:big breasts(342),group(297),female:impregnation(260),female:defloration(236)                       |
+| date              |    93 | female:big breasts(244),female:possession(242),male:gender bender(239),female:mind control(233),female:schoolgirl uniform(224) |
+| kitoen            |    93 | female:rape(120),female:sole female(112),female:netorare(87),female:defloration(82),male:sole male(71)                         |
+| gengorou          |    93 | female:loli(373),female:stockings(149),mosaic censorship(113),female:schoolgirl uniform(113),male:sole male(111)               |
+| yukino minato     |    93 | female:loli(541),female:rape(248),female:sole female(243),female:nakadashi(163),group(140)                                     |
+| z-ton             |    92 | female:monster girl(233),male:sole male(144),female:centaur(132),female:sole female(131),female:blowjob(110)                   |
+| tamagoro          |    91 | female:nakadashi(501),female:big breasts(455),female:loli(337),female:x-ray(305),group(293)                                    |
+| katsurai yoshiaki |    90 | female:big breasts(290),group(263),female:stockings(247),female:schoolgirl uniform(187),female:anal(180)                       |
+| zan               |    90 | female:big breasts(143),group(124),female:anal(117),female:rape(91),female:sole female(86)                                     |
+| kojima saya       |    89 | female:anal(275),group(202),female:big breasts(197),female:sex toys(182),female:bondage(173)                                   |
+| tagame gengoroh   |    89 | male:yaoi(487),male:muscle(430),male:males only(374),male:anal(337),male:bondage(289)                                          |
+| devilukez         |    88 | female:sole female(49),variant set(48),female:big breasts(43),female:blowjob(24),uncensored(22)                                |
+| heizo             |    88 | female:rape(104),female:sole female(100),female:netorare(75),female:defloration(69),male:sole male(62)                         |
+| milkychu          |    88 | female:sole female(49),variant set(48),female:big breasts(38),uncensored(22),female:blowjob(21)                                |
+| hazuki kaoru      |    87 | tankoubon(196),female:big breasts(185),full censorship(181),group(165),female:milf(157)                                        |
+| suga hideo        |    87 | female:loli(112),female:ahegao(79),female:nakadashi(70),male:sole male(68),female:sole female(60)                              |
+| sasamori tomoe    |    87 | female:big breasts(359),female:schoolgirl uniform(325),female:glasses(305),male:sole male(293),female:nakadashi(261)           |
+| alp               |    86 | female:sole female(258),male:sole male(243),female:nakadashi(239),group(155),female:big breasts(142)                           |
+| shiwasu no okina  |    86 | group(518),female:loli(494),female:big breasts(424),female:schoolgirl uniform(382),female:glasses(368)                         |
+| erect sawaru      |    85 | female:big breasts(619),group(512),female:anal(415),female:double penetration(369),female:ahegao(324)                          |
+| chuuka naruto     |    85 | male:bbm(331),female:milf(308),female:stockings(281),group(277),female:big breasts(273)                                        |
+| takeda hiromitsu  |    84 | female:big breasts(651),female:ahegao(512),female:stockings(399),female:mind break(377),female:netorare(365)                   |
+| yahiro pochi      |    84 | female:schoolgirl uniform(211),female:sole female(208),male:sole male(207),female:big breasts(175),group(130)                  |
+| fuetakishi        |    83 | female:big breasts(575),multi-work series(287),male:sole male(243),female:big ass(236),female:nakadashi(212)                   |
+| kiya shii         |    83 | female:loli(286),female:schoolgirl uniform(171),group(171),female:stockings(156),incest(126)                                   |
+| fukuyama naoto    |    82 | female:ahegao(412),female:big breasts(304),female:stockings(256),group(184),mosaic censorship(138)                             |
+| umu rahi          |    82 | female:milf(147),female:netorare(132),female:big breasts(96),female:stockings(77),female:lingerie(64)                          |
+| momoya show-neko  |    82 | female:rape(256),female:big breasts(222),female:sole female(215),female:anal(205),group(204)                                   |
+| yukimi            |    82 | female:schoolgirl uniform(150),group(144),female:anal(139),female:glasses(119),female:stockings(112)                           |
+| nyuu              |    80 | female:mind control(231),female:ahegao(206),male:bbm(205),female:rimjob(166),female:anal(154)                                  |
+| yukiu con         |    80 | female:loli(350),female:sole female(148),male:sole male(122),female:stockings(122),female:schoolgirl uniform(119)              |
+| bak hyeong jun    |    79 | full color(161),webtoon(142),male:glasses(130),story arc(112),full censorship(99)                                              |
+| sekiya asami      |    79 | female:loli(407),female:sole female(218),male:sole male(209),incest(199),female:sister(174)                                    |
+| diisuke           |    77 | female:big breasts(201),male:sole male(112),female:paizuri(99),female:impregnation(86),female:sole female(84)                  |
+| locon             |    77 | male:yaoi(354),male:anal(353),male:tomgirl(340),male:crossdressing(333),male:males only(323)                                   |
+| aya shachou       |    76 | female:sole female(87),female:loli(79),male:sole male(61),female:x-ray(51),female:impregnation(48)                             |
+| fuyuno mikan      |    76 | female:loli(261),incest(116),male:sole male(106),female:sister(103),male:miniguy(102)                                          |
+| rico              |    76 | female:loli(255),female:stockings(182),male:sole male(139),anthology(139),female:sole female(127)                              |
+| takayaki          |    76 | male:sole male(262),female:schoolgirl uniform(260),female:sole female(235),female:big breasts(197),female:stockings(194)       |
+| tamano kedama     |    76 | female:loli(301),female:stockings(174),female:demon girl(170),male:sole male(148),female:sole female(147)                      |
+| konomi            |    75 | female:sole female(195),male:sole male(185),female:stockings(142),female:big breasts(108),multi-work series(96)                |
+| soba              |    75 | female:big breasts(344),female:sole female(181),female:paizuri(173),male:sole male(171),female:stockings(133)                  |
+| mizone            |    74 | female:monster girl(261),male:sole male(213),female:nakadashi(192),female:furry(183),female:big breasts(161)                   |
+| arai kei          |    73 | female:big breasts(220),multi-work series(219),female:schoolgirl uniform(156),female:sole female(149),group(148)               |
+| henreader         |    72 | female:loli(255),female:stockings(115),incest(92),female:sole female(82),female:blowjob(80)                                    |
+| ratatatat74       |    72 | uncensored(134),female:big breasts(126),female:netorare(90),female:collar(87),female:rape(61)                                  |
+| jackasss          |    72 | female:big breasts(118),female:muscle(90),group(67),male:shota(53),anthology(49)                                               |
+| morishima kon     |    72 | male:shota(187),female:big breasts(130),male:sole male(104),female:schoolgirl uniform(95),group(83)                            |
+| nekomata naomi    |    72 | female:stockings(215),female:sole female(209),female:big breasts(184),male:sole male(163),group(119)                           |
+| kazuhiro          |    71 | female:big breasts(486),female:anal(384),female:ahegao(315),group(226),female:nakadashi(213)                                   |
+| emons             |    71 | female:loli(73),female:femdom(64),male:sole male(53),female:nakadashi(47),female:big breasts(41)                               |
+| kon-kit           |    71 | female:big breasts(614),group(427),female:glasses(349),female:cheating(335),female:milf(311)                                   |
+| taniguchi-san     |    71 | male:gender bender(306),female:stockings(264),female:possession(191),body swap(178),female:schoolgirl uniform(163)             |
+| tsukuru           |    71 | male:yaoi(296),male:anal(290),male:males only(256),male:shota(226),male:tomgirl(225)                                           |
+| inomaru           |    70 | female:big breasts(370),group(278),female:schoolgirl uniform(176),female:bondage(163),female:glasses(151)                      |
+| ohtomo takuji     |    70 | female:stockings(360),full color(350),female:schoolgirl uniform(321),female:nakadashi(310),female:big breasts(282)             |
+| shiokonbu         |    70 | female:big breasts(177),group(166),female:sole female(164),female:stockings(155),female:ahegao(142)                            |
+| son hee-joon      |    69 | webtoon(75),full color(75),female:demon girl(75),story arc(75),female:paizuri(75)                                              |
+| higashiyama show  |    69 | female:loli(253),female:anal(161),female:schoolgirl uniform(118),group(110),female:blowjob(107)                                |
+| kakao             |    69 | female:big breasts(192),male:sole male(147),female:sole female(127),female:schoolgirl uniform(123),female:stockings(120)       |
+| tsurui            |    69 | male:sole male(233),female:sole female(214),female:blowjob(117),female:x-ray(91),female:nakadashi(79)                          |
+| kira hiroyoshi    |    69 | female:big breasts(225),group(152),female:glasses(127),anthology(114),female:schoolgirl uniform(101)                           |
+| uni8              |    69 | female:paizuri(95),female:big breasts(91),female:clothed paizuri(32),female:stockings(31),male:sole male(24)                   |
+| mutsutake         |    69 | female:big breasts(158),female:loli(116),female:schoolgirl uniform(92),group(77),anthology(74)                                 |
+| nanamatsu kenji   |    69 | male:yaoi(263),male:shota(259),male:anal(233),male:males only(206),male:crossdressing(201)                                     |
+| yasui riosuke     |    69 | female:big breasts(390),group(209),female:stockings(206),female:schoolgirl uniform(146),female:ahegao(140)                     |
++-------------------+-------+--------------------------------------------------------------------------------------------------------------------------------+
+
 # Tag Index Ranking
 select b.Name, count(*) as c 
 from 
