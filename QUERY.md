@@ -1214,6 +1214,67 @@ limit 10;
 +---------+-----------------------------------------------------------------------------------------------------------------------------------------------+------------+-----------+----------+---------------+---------------------+-------+-------+---------------+
 ```
 
+## EHArticles with User Data
+
+```sql
+# Tags Ranking
+select b.Name, count(*) as c 
+from 
+  eharticles_tags_junction as a 
+  left join eharticles_tags as b on a.Tag=b.Id
+group by a.Tag
+order by c desc
+limit 100;
+
+select a.UserAppId, a.ArticleId, a.TimeStamp
+from 
+  viewtime as a
+  left join eharticles as b on a.ArticleId=b.Id
+order by a.TimeStamp desc
+limit 100;
+
+# Users Tag List
+select Tag, Name, tt.Count from (
+select Tag, count(t.Tag) as Count from (
+select Tag from viewtime as a inner join eharticles_tags_junction as b on a.ArticleId=b.Article 
+where a.UserAppId='7aba638aa9a8f13c188261929803f53b90680ba6'
+order by Tag desc limit 1000) as t
+group by t.Tag
+order by Count desc
+) as tt
+left join eharticles_tags as b on tt.Tag=b.Id
+;
++-------+----------------------------+-------+
+| Tag   | Name                       | Count |
++-------+----------------------------+-------+
+|    85 | female:sole female         |    54 |
+|     1 | female:big breasts         |    42 |
+|    60 | male:sole male             |    36 |
+|    58 | mosaic censorship          |    36 |
+|     7 | female:nakadashi           |    34 |
+|    19 | female:paizuri             |    18 |
+|     2 | female:blowjob             |    18 |
+|    70 | female:stockings           |    17 |
+|    10 | female:x-ray               |    17 |
+|     6 | female:mind control        |    16 |
+|     0 | female:ahegao              |    15 |
+|   163 | full color                 |    15 |
+|    86 | multi-work series          |    14 |
+|    32 | female:anal                |    13 |
+|    55 | female:schoolgirl uniform  |    12 |
+|    28 | female:loli                |    12 |
+|    16 | group                      |    11 |
+|    12 | incest                     |    11 |
+|    34 | female:netorare            |    10 |
+|    21 | female:swimsuit            |    10 |
+|   176 | female:sister              |     9 |
+|    33 | female:milf                |     9 |
+|    11 | ffm threesome              |     9 |
+|     8 | female:rape                |     9 |
+|    87 | story arc                  |     8 |
+|   147 | female:impregnation        |     8 |
+```
+
 ## ElasticSearch
 
 ```es
