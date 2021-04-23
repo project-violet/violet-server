@@ -1233,17 +1233,16 @@ from
 order by a.TimeStamp desc
 limit 100;
 
-# Users Tag List
+# User Tag List
 select Tag, Name, tt.Count from (
 select Tag, count(t.Tag) as Count from (
 select Tag from viewtime as a inner join eharticles_tags_junction as b on a.ArticleId=b.Article 
 where a.UserAppId='7aba638aa9a8f13c188261929803f53b90680ba6'
-order by Tag desc limit 1000) as t
+order by Tag desc) as t
 group by t.Tag
 order by Count desc
 ) as tt
-left join eharticles_tags as b on tt.Tag=b.Id
-;
+left join eharticles_tags as b on tt.Tag=b.Id;
 +-------+----------------------------+-------+
 | Tag   | Name                       | Count |
 +-------+----------------------------+-------+
@@ -1273,6 +1272,500 @@ left join eharticles_tags as b on tt.Tag=b.Id
 |     8 | female:rape                |     9 |
 |    87 | story arc                  |     8 |
 |   147 | female:impregnation        |     8 |
+
+# List of artists works most viewed by users
+select b.Name, a.c from (
+select  b.Artist, count(b.Artist) as c from viewtime as a
+left join eharticles_artists_junction as b
+on a.ArticleId=b.Article
+group by b.Artist
+order by c
+) as a left join eharticles_artists as b
+on a.Artist=b.Id;
+...
+| rico                              |   382 |
+| muneshiro                         |   383 |
+| tachibana omina                   |   384 |
+| rocket monkey                     |   384 |
+| pistonring nishizawa              |   384 |
+| kageusu gokuto                    |   385 |
+| yasson yoshiyuki                  |   385 |
+| munyuu                            |   386 |
+| nakajima yuka                     |   387 |
+| akuochisukii sensei               |   389 |
+| nezumin                           |   389 |
+| misao.                            |   389 |
+| fundoshi                          |   392 |
+| jun                               |   393 |
+| hanauna                           |   393 |
+| horosuke                          |   394 |
+| namonashi                         |   397 |
+| gonza                             |   398 |
+| rebe11                            |   400 |
+| bang-you                          |   400 |
+| yaruku                            |   401 |
+| chimosaku                         |   402 |
+| wise speak                        |   402 |
+| phy                               |   404 |
+| shobu                             |   404 |
+| bongojoker                        |   404 |
+| derauea                           |   406 |
+| rhasta                            |   406 |
+| suga hideo                        |   407 |
+| etuzan jakusui                    |   407 |
+| ahemaru                           |   407 |
+| akire                             |   408 |
+| kayanoyuki                        |   408 |
+| monaka                            |   409 |
+| sena youtarou                     |   409 |
+| makinosaka shinichi               |   410 |
+| kyockcho                          |   412 |
+| mitsudoue                         |   414 |
+| hibinpo                           |   417 |
+| ishigaki takashi                  |   418 |
+| yuzuha                            |   420 |
+| morishima kon                     |   422 |
+| 7010                              |   425 |
+| izure                             |   427 |
+| ratoo                             |   431 |
+| sasagiri yuuya                    |   431 |
+| mimic                             |   432 |
+| kakao                             |   432 |
+| takashina asahi                   |   433 |
+| blast                             |   435 |
+| aki                               |   435 |
+| natagara                          |   437 |
+| tanabe kyou                       |   440 |
+| ayanakitori                       |   440 |
+| sasamori tomoe                    |   440 |
+| backfischalter                    |   441 |
+| muunyan                           |   445 |
+| kuronyan                          |   445 |
+| azuse                             |   447 |
+| sumiya                            |   448 |
+| taji                              |   450 |
+| dekosuke 18gou                    |   450 |
+| atte nanakusa                     |   450 |
+| mukoujima tenro                   |   452 |
+| alp                               |   454 |
+| kamaboko                          |   454 |
+| mashiro shirako                   |   455 |
+| noumiso                           |   457 |
+| fukuyama naoto                    |   457 |
+| akino sora                        |   457 |
+| nora higuma                       |   458 |
+| donguri                           |   459 |
+| yanje                             |   460 |
+| numata chihiro                    |   461 |
+| shindou                           |   465 |
+| tamagoro                          |   465 |
+| survival knife                    |   466 |
+| fujoujoshi                        |   466 |
+| syukurin                          |   467 |
+| leonat                            |   468 |
+| nakano sora                       |   469 |
+| momomo                            |   471 |
+| nanahoshi tento                   |   472 |
+| apoidea                           |   473 |
+| kokutou nikke                     |   475 |
+| gosaiji                           |   475 |
+| dancyo                            |   475 |
+| toku                              |   476 |
+| inari                             |   477 |
+| yumeki banana                     |   479 |
+| cutebravoo                        |   479 |
+| takahashi note                    |   480 |
+| torotaro                          |   480 |
+| inase shinya                      |   480 |
+| kuma                              |   481 |
+| ahobaka                           |   481 |
+| itami                             |   483 |
+| yupnir                            |   484 |
+| yamamoto zenzen                   |   486 |
+| piero                             |   487 |
+| tottotonero tarou.                |   488 |
+| dokurosan                         |   489 |
+| takurowo                          |   491 |
+| celia kaspar                      |   491 |
+| hinotsuki neko                    |   493 |
+| mmm                               |   496 |
+| ere 2 earo                        |   496 |
+| himenogi apo                      |   499 |
+| juna juna juice                   |   502 |
+| kamita                            |   503 |
+| rkzrok                            |   503 |
+| aoki nanase                       |   505 |
+| kazuma muramasa                   |   506 |
+| kito sakeru                       |   507 |
+| hanini                            |   508 |
+| marotix                           |   510 |
+| itou eight                        |   511 |
+| rororogi mogera                   |   519 |
+| taketori zaiku                    |   519 |
+| quzilax                           |   520 |
+| mangmoongming                     |   520 |
+| oshima aki                        |   521 |
+| smomo                             |   523 |
+| kanimura ebio                     |   524 |
+| eightman                          |   528 |
+| katsurai yoshiaki                 |   529 |
+| akagi rio                         |   533 |
+| fujisaka lyric                    |   541 |
+| saitou kayoco                     |   542 |
+| sekiya asami                      |   542 |
+| kiya shii                         |   542 |
+| airandou                          |   544 |
+| shiwasu no okina                  |   548 |
+| souryuu                           |   549 |
+| monaim                            |   550 |
+| kyouan                            |   552 |
+| nagi ichi                         |   553 |
+| fuji-han                          |   556 |
+| fujima takuya                     |   558 |
+| ninoko                            |   559 |
+| oryou                             |   561 |
+| kunaboto                          |   562 |
+| kazuhiro                          |   566 |
+| crimson                           |   566 |
+| mana                              |   569 |
+| momosawa                          |   573 |
+| butcha-u                          |   579 |
+| leopard                           |   580 |
+| mizuhara yuu                      |   582 |
+| miyashiro ryuutarou               |   583 |
+| oouso                             |   586 |
+| ashita                            |   590 |
+| milkychu                          |   591 |
+| devilukez                         |   591 |
+| mikami mika                       |   591 |
+| ginhaha                           |   591 |
+| mutou koucha                      |   592 |
+| ozihito                           |   595 |
+| yukimachi tounosuke               |   595 |
+| tsurui                            |   601 |
+| maeshima ryou                     |   609 |
+| kajimura kajima                   |   610 |
+| toro ochi                         |   612 |
+| komezawa                          |   616 |
+| jerrert                           |   616 |
+| cham22                            |   617 |
+| blvefo9                           |   618 |
+| mojarin                           |   620 |
+| satou kuuki                       |   625 |
+| gokubuto mayuge                   |   626 |
+| shindol                           |   634 |
+| kuronomiki                        |   641 |
+| milimon                           |   645 |
+| fan no hitori                     |   648 |
+| hojo takumi                       |   649 |
+| arumamai ayuka plus               |   650 |
+| konnyaku                          |   651 |
+| morikoke                          |   657 |
+| noise                             |   663 |
+| saikawa yusa                      |   664 |
+| aya shachou                       |   667 |
+| amazinggwen                       |   668 |
+| rod.wel                           |   672 |
+| kotoyoshi yumisuke                |   679 |
+| michiking                         |   679 |
+| tedain                            |   681 |
+| jm                                |   683 |
+| isemagu                           |   684 |
+| ma-kurou                          |   686 |
+| tawara hiryuu                     |   701 |
+| nakani                            |   702 |
+| mizuryu kei                       |   708 |
+| itou nanami                       |   714 |
+| motchie                           |   717 |
+| takeda hiromitsu                  |   718 |
+| inoue tommy                       |   730 |
+| toji                              |   731 |
+| asakai mocchinu                   |   731 |
+| metacora                          |   733 |
+| oyabe ryo                         |   746 |
+| oniilus                           |   746 |
+| hitotose rin                      |   762 |
+| fujiyama takashi                  |   765 |
+| kk                                |   768 |
+| mool                              |   773 |
+| ekakibit                          |   783 |
+| enoshima iki                      |   784 |
+| akkusu                            |   791 |
+| sabaku                            |   805 |
+| asahina                           |   806 |
+| velzhe                            |   814 |
+| shouji nigou                      |   823 |
+| kanroame                          |   826 |
+| kawahagitei                       |   828 |
+| creeeen                           |   834 |
+| greco roman                       |   838 |
+| meganei                           |   841 |
+| canape                            |   843 |
+| abubu                             |   849 |
+| ooyun                             |   850 |
+| obui                              |   856 |
+| taniguchi daisuke                 |   856 |
+| akazawa red                       |   861 |
+| kurosu gatari                     |   868 |
+| santa                             |   868 |
+| neromashin                        |   886 |
+| deadflow                          |   900 |
+| mizone                            |   904 |
+| mozu                              |   909 |
+| hellap                            |   915 |
+| keno yantarou                     |   938 |
+| meme50                            |   939 |
+| danimaru                          |   948 |
+| ki-51                             |   956 |
+| goya                              |   961 |
+| nyuu                              |   973 |
+| ookami uo                         |   980 |
+| nyoro nyorozou                    |   986 |
+| yoshiie                           |   999 |
+| asanagi                           |  1002 |
+| f4u                               |  1009 |
+| swsgr                             |  1010 |
+| yottan                            |  1018 |
+| sian                              |  1022 |
+| takatsu                           |  1032 |
+| nt00                              |  1039 |
+| kanzume                           |  1046 |
+| hirune                            |  1046 |
+| doktor malefic                    |  1046 |
+| kawaisaw                          |  1065 |
+| ikuhana niro                      |  1066 |
+| nukuo                             |  1070 |
+| ame arare                         |  1087 |
+| diisuke                           |  1110 |
+| nigiri usagi                      |  1112 |
+| thomchen114                       |  1139 |
+| arimura daikon                    |  1140 |
+| yamashita kurowo                  |  1144 |
+| hishigata tomaru                  |  1146 |
+| eba                               |  1170 |
+| lucky cat                         |  1206 |
+| koto                              |  1232 |
+| haitokukan                        |  1232 |
+| matsukura nemu                    |  1285 |
+| echigoya takeru                   |  1294 |
+| xxzero                            |  1341 |
+| kim toxic                         |  1344 |
+| shikiko                           |  1344 |
+| dining                            |  1353 |
+| mankai kaika                      |  1396 |
+| clubs 3                           |  1396 |
+| ankoman                           |  1402 |
+| minazuki mikka                    |  1454 |
+| chin                              |  1464 |
+| nakamura kuzuyu                   |  1475 |
+| shimaji                           |  1488 |
+| motsuaki                          |  1500 |
+| yone kinji                        |  1554 |
+| sumiyao                           |  1702 |
+| raidon                            |  1733 |
+| hamabata tomo                     |  1735 |
+| abbb                              |  1803 |
+| poyeop                            |  1825 |
+| terasu mc                         |  1977 |
+| ratatatat74                       |  2031 |
+| flanvia                           |  2071 |
+| date                              |  2117 |
+| wakamatsu                         |  2147 |
+| kemuri haku                       |  2291 |
+| yahiro pochi                      |  2310 |
+| pija                              |  2428 |
+| aiue oka                          |  2434 |
+| korotsuke                         |  2617 |
+| kidmo                             |  2752 |
+| ogadenmon                         |  3279 |
+| laliberte                         |  4044 |
+| sudoname                          |  4044 |
+| shouji haruko                     |  4223 |
+| N/A                               | 74024 |
++-----------------------------------+-------+
+
+# Aritst Tags List
+select Tag, Name, tt.Count from (
+select Tag, count(t.Tag) as Count from (
+select b.Tag from eharticles_artists_junction as a left join eharticles_tags_junction as b
+on a.Article=b.Article
+where a.Artist=(select Id from eharticles_artists where Name='michiking')
+) as t
+group by t.Tag
+order by Count desc
+) as tt
+left join eharticles_tags as b on tt.Tag=b.Id;
++-------+-------------------------------+-------+
+| Tag   | Name                          | Count |
++-------+-------------------------------+-------+
+|     1 | female:big breasts            |   343 |
+|    78 | male:shota                    |   302 |
+|    60 | male:sole male                |   256 |
+|     7 | female:nakadashi              |   198 |
+|    70 | female:stockings              |   194 |
+|    85 | female:sole female            |   168 |
+|   110 | female:femdom                 |   148 |
+|    28 | female:loli                   |   146 |
+|    16 | group                         |   141 |
+|    12 | incest                        |   140 |
+|   176 | female:sister                 |   133 |
+|    55 | female:schoolgirl uniform     |   127 |
+|    11 | ffm threesome                 |   111 |
+|    19 | female:paizuri                |   106 |
+|     2 | female:blowjob                |    94 |
+|     4 | female:defloration            |    91 |
+...
+
+# Get 5 most tags by Artists
+select GROUP_CONCAT(CONCAT(t.Name, '(', t.Count, ')')) from (
+select Tag, Name, t.Count from (
+select Tag, count(t.Tag) as Count from (
+select b.Tag from eharticles_artists_junction as a left join eharticles_tags_junction as b
+on a.Article=b.Article
+where a.Artist=(select Id from eharticles_artists where Name='shouji haruko')
+) as t
+group by t.Tag
+order by Count desc
+) as t
+left join eharticles_tags as b on t.Tag=b.Id
+order by t.Count desc limit 5
+) as t
+;
++------------------------------------------------------------------------------------------------+
+| GROUP_CONCAT(CONCAT(t.Name, '(', t.Count, ')'))                                                |
++------------------------------------------------------------------------------------------------+
+| female:big breasts(292),ffm threesome(202),female:sole female(152),female:loli(137),group(133) |
++------------------------------------------------------------------------------------------------+
+
+# List of artists works most viewed 100 by users with main tags
+select a.ArtistName, a.c as Count, 
+  SUBSTRING_INDEX(GROUP_CONCAT(CONCAT(b.Name, '(', a.cc, ')') ORDER BY a.cc DESC SEPARATOR ','), ',', 5) as MAIN_TAGS 
+  from (
+  select a.ArtistName, count(b.Tag) as cc, b.Tag, a.c from (
+    select * from (
+      select b.Name as ArtistName, b.Id, a.c from (
+        select  b.Artist, count(b.Artist) as c from viewtime as a
+        left join eharticles_artists_junction as b
+        on a.ArticleId=b.Article
+        group by b.Artist
+        order by c
+      ) as a left join eharticles_artists as b
+      on a.Artist=b.Id
+      where b.Id<>0
+      order by a.c desc limit 100
+    ) as a left join eharticles_artists_junction as b
+    on a.Id=b.Artist
+  ) as a left join eharticles_tags_junction as b
+  on a.Article=b.Article
+  group by a.ArtistName, b.Tag
+  order by cc desc
+) as a left join eharticles_tags as b on a.Tag=b.Id
+group by a.ArtistName
+order by a.c;
++-------------------+-------+--------------------------------------------------------------------------------------------------------------------------------+
+| ArtistName        | Count | MAIN_TAGS                                                                                                                      |
++-------------------+-------+--------------------------------------------------------------------------------------------------------------------------------+
+| metacora          |   737 | female:pantyhose(3),female:schoolgirl uniform(3),female:impregnation(2),female:ahegao(2),male:males only(2)                    |
+| oyabe ryo         |   746 | female:loli(12),male:sole male(7),anthology(5),female:sister(4),incest(4)                                                      |
+| oniilus           |   746 | female:loli(12),female:big breasts(8),male:sole male(8),female:sole female(5),mosaic censorship(5)                             |
+| hitotose rin      |   762 | full color(42),female:twintails(34),female:big breasts(32),female:sex toys(29),female:solo action(27)                          |
+| fujiyama takashi  |   765 | female:big breasts(60),female:paizuri(36),female:lactation(35),group(22),anthology(20)                                         |
+| kk                |   768 | female:blowjob(19),female:big breasts(18),uncensored(13),female:sole female(11),group(8)                                       |
+| mool              |   774 | female:sole female(7),mosaic censorship(7),female:big breasts(3),male:tall man(2),male:big penis(2)                            |
+| ekakibit          |   783 | male:sole male(121),full censorship(116),female:sole female(100),female:loli(91),female:nakadashi(44)                          |
+| enoshima iki      |   784 | female:big breasts(68),mosaic censorship(59),female:pregnant(47),female:milf(45),female:impregnation(35)                       |
+| akkusu            |   792 | female:sole female(14),female:sex toys(7),mosaic censorship(7),female:solo action(6),female:double penetration(6)              |
+| asahina           |   807 | female:big breasts(19),female:blowjob(13),female:paizuri(13),female:bbw(10),female:big ass(9)                                  |
+| velzhe            |   817 | female:anal(44),female:schoolgirl uniform(42),female:big breasts(39),female:gyaru(27),male:dilf(26)                            |
+| kanroame          |   826 | female:loli(155),female:sole female(80),male:sole male(66),female:nakadashi(65),female:dark skin(64)                           |
+| kawahagitei       |   828 | female:big breasts(148),female:inflation(134),mosaic censorship(130),male:big penis(124),female:nakadashi(123)                 |
+| creeeen           |   834 | full color(45),uncensored(32),female:sole female(27),female:rape(24),group(21)                                                 |
+| shouji nigou      |   834 | female:big breasts(106),female:sole female(92),male:sole male(87),full color(67),female:beauty mark(58)                        |
+| greco roman       |   838 | mosaic censorship(193),female:big breasts(124),group(92),female:anal(85),female:sole female(63)                                |
+| sabaku            |   841 | female:loli(73),female:sole female(40),mosaic censorship(37),male:sole male(34),female:twintails(31)                           |
+| meganei           |   842 | female:sole female(93),male:sole male(93),female:big breasts(71),female:nakadashi(55),female:schoolgirl uniform(53)            |
+| canape            |   843 | female:sole female(54),uncensored(53),female:nakadashi(42),full color(38),female:x-ray(25)                                     |
+| abubu             |   850 | male:shota(171),female:big breasts(162),female:loli(130),female:milf(108),female:sole female(77)                               |
+| ooyun             |   851 | full color(100),uncensored(69),female:sole female(54),male:sole male(54),female:blowjob(46)                                    |
+| taniguchi daisuke |   856 | mosaic censorship(34),female:netorare(31),female:big breasts(30),female:blowjob(24),full color(23)                             |
+| obui              |   858 | female:big breasts(346),group(216),female:ahegao(211),female:nipple fuck(192),female:anal(188)                                 |
+| akazawa red       |   861 | female:loli(230),female:stockings(140),female:big breasts(111),male:shota(108),group(106)                                      |
+| santa             |   868 | female:loli(101),female:stockings(85),male:sole male(85),female:mind control(66),female:sole female(66)                        |
+| kurosu gatari     |   870 | female:big breasts(235),female:blowjob(183),female:nakadashi(169),female:milf(153),group(149)                                  |
+| neromashin        |   886 | female:big breasts(318),female:ahegao(272),female:mind break(194),group(193),female:huge breasts(183)                          |
+| deadflow          |   900 | female:sole female(115),female:loli(102),female:pregnant(80),female:stockings(78),female:blowjob(73)                           |
+| mizone            |   904 | female:monster girl(261),male:sole male(213),female:nakadashi(192),female:furry(183),female:big breasts(161)                   |
+| mozu              |   909 | male:sole male(116),female:sole female(102),female:stockings(89),female:schoolgirl uniform(79),female:loli(65)                 |
+| hellap            |   915 | female:big breasts(56),female:loli(25),female:blowjob(22),female:muscle(21),female:dark skin(14)                               |
+| keno yantarou     |   938 | female:bondage(71),tankoubon(63),female:sex toys(50),female:piercing(45),group(45)                                             |
+| meme50            |   939 | female:big breasts(430),female:blowjob(223),female:nakadashi(199),group(197),female:anal(155)                                  |
+| goya              |   961 | female:big breasts(93),female:diaper(92),female:anal(80),female:femdom(80),female:urination(80)                                |
+| danimaru          |   963 | female:sole female(49),male:sole male(48),female:stockings(25),female:big breasts(21),female:nakadashi(18)                     |
+| ki-51             |   965 | female:blowjob(14),male:sole male(11),female:big breasts(11),female:ahegao(10),female:femdom(10)                               |
+| nyuu              |   974 | female:mind control(231),female:ahegao(206),male:bbm(205),female:rimjob(166),female:anal(154)                                  |
+| ookami uo         |   980 | female:loli(249),female:glasses(103),group(100),female:anal(92),anthology(92)                                                  |
+| nyoro nyorozou    |   995 | female:big breasts(65),male:sole male(53),female:sole female(50),multi-work series(49),female:rape(49)                         |
+| yoshiie           |   999 | female:loli(78),male:shota(54),female:anal(54),female:sole female(52),male:gender bender(52)                                   |
+| asanagi           |  1004 | female:ahegao(450),female:loli(390),female:mind break(390),female:big breasts(369),female:rape(304)                            |
+| f4u               |  1009 | female:glasses(62),group(53),female:schoolgirl uniform(52),female:loli(52),female:big breasts(36)                              |
+| swsgr             |  1010 | female:nakadashi(22),female:sole female(21),male:sole male(15),female:blowjob(14),female:loli(12)                              |
+| yottan            |  1018 | female:big breasts(38),female:sole female(27),male:sole male(24),female:milf(14),female:nakadashi(14)                          |
+| sian              |  1023 | female:big breasts(221),female:ahegao(131),group(120),female:sole female(86),female:anal(86)                                   |
+| takatsu           |  1032 | male:shota(464),female:big breasts(418),female:milf(308),group(275),female:glasses(256)                                        |
+| nt00              |  1039 | female:sole female(137),female:big breasts(133),female:netorare(128),mosaic censorship(93),male:condom(87)                     |
+| doktor malefic    |  1046 | female:big breasts(46),female:blowjob(35),female:sole female(33),female:sweating(29),group(25)                                 |
+| hirune            |  1046 | female:big breasts(47),female:blowjob(35),female:sole female(33),female:sweating(30),group(25)                                 |
+| kanzume           |  1048 | female:big breasts(186),female:ahegao(147),group(141),female:hairy armpits(110),female:hairy(94)                               |
+| ikuhana niro      |  1066 | male:sole male(83),female:sole female(81),male:glasses(42),full censorship(27),male:condom(26)                                 |
+| kawaisaw          |  1071 | female:big breasts(130),female:hairy(83),female:milf(81),female:impregnation(81),female:sole female(80)                        |
+| nukuo             |  1074 | female:big breasts(13),female:paizuri(8),female:blowjob(7),female:nakadashi(7),female:sole female(6)                           |
+| ame arare         |  1087 | female:big breasts(72),female:sole female(53),female:nakadashi(45),female:netorare(40),multi-work series(36)                   |
+| diisuke           |  1113 | female:big breasts(201),male:sole male(112),female:paizuri(99),female:impregnation(86),female:sole female(84)                  |
+| nigiri usagi      |  1118 | female:sole female(22),female:nakadashi(22),male:sole male(16),female:blowjob(15),female:loli(13)                              |
+| thomchen114       |  1139 | female:sole female(39),female:big breasts(27),male:sole male(26),male:condom(24),female:netorare(22)                           |
+| arimura daikon    |  1140 | female:sole female(40),female:big breasts(30),male:sole male(26),male:condom(24),female:netorare(22)                           |
+| yamashita kurowo  |  1144 | female:loli(85),female:anal(59),group(39),female:sole female(31),incest(26)                                                    |
+| hishigata tomaru  |  1146 | female:big breasts(37),female:nakadashi(22),female:sole female(20),female:stockings(20),group(20)                              |
+| eba               |  1170 | female:big breasts(341),female:glasses(169),anthology(155),female:schoolgirl uniform(154),female:nakadashi(151)                |
+| lucky cat         |  1209 | mosaic censorship(16),female:sole female(13),female:big breasts(12),full color(9),male:sole male(8)                            |
+| koto              |  1236 | female:big breasts(116),mosaic censorship(103),female:big ass(90),female:ahegao(89),female:schoolgirl uniform(87)              |
+| matsukura nemu    |  1285 | female:schoolgirl uniform(10),female:big breasts(10),mosaic censorship(7),female:sole female(6),female:sister(5)               |
+| haitokukan        |  1289 | female:sole female(110),female:nakadashi(87),male:sole male(74),female:rape(70),female:big breasts(69)                         |
+| echigoya takeru   |  1297 | male:gender bender(55),female:big breasts(49),male:sole male(47),female:nakadashi(44),female:sole female(40)                   |
+| xxzero            |  1341 | female:bestiality(106),female:loli(73),female:blowjob(72),female:nakadashi(68),female:ahegao(65)                               |
+| kim toxic         |  1345 | female:sole female(13),female:nakadashi(9),female:x-ray(8),female:blowjob(8),female:big breasts(7)                             |
+| shikiko           |  1345 | female:sole female(13),female:nakadashi(9),female:blowjob(9),female:x-ray(8),female:big breasts(7)                             |
+| dining            |  1356 | female:femdom(171),female:scat(105),female:yuri(98),female:humiliation(95),female:urination(89)                                |
+| clubs 3           |  1396 | female:big breasts(46),female:sole female(37),male:shota(35),female:stockings(27),female:loli(27)                              |
+| mankai kaika      |  1396 | female:sole female(38),female:loli(27),female:mind control(24),female:filming(22),female:masked face(20)                       |
+| ankoman           |  1407 | female:big breasts(232),group(201),female:sole female(173),female:nakadashi(162),female:stockings(136)                         |
+| minazuki mikka    |  1454 | full color(71),mosaic censorship(63),female:netorare(45),female:milf(45),multi-work series(34)                                 |
+| chin              |  1465 | female:big breasts(360),female:stockings(272),female:sole female(199),female:ahegao(192),female:nakadashi(178)                 |
+| nakamura kuzuyu   |  1475 | female:loli(74),female:sole female(53),male:sole male(47),female:schoolgirl uniform(37),incest(24)                             |
+| shimaji           |  1494 | male:yaoi(348),male:shota(344),male:anal(338),male:males only(301),male:crossdressing(287)                                     |
+| motsuaki          |  1503 | female:stockings(101),female:ahegao(88),female:x-ray(87),female:nakadashi(83),female:big breasts(73)                           |
+| yone kinji        |  1556 | female:loli(97),full color(74),mosaic censorship(60),female:sole female(45),male:sole male(39)                                 |
+| sumiyao           |  1702 | female:sole female(119),female:nakadashi(95),female:loli(80),male:sole male(74),female:impregnation(64)                        |
+| raidon            |  1733 | female:big breasts(207),group(136),female:loli(126),female:schoolgirl uniform(98),female:x-ray(96)                             |
+| hamabata tomo     |  1740 | female:sole female(30),female:big breasts(24),female:blowjob(15),male:shota(15),male:low shotacon(13)                          |
+| abbb              |  1805 | female:big breasts(82),female:sole female(43),uncensored(41),female:nakadashi(31),female:stockings(24)                         |
+| poyeop            |  1834 | female:sole female(33),female:big breasts(24),female:blowjob(17),male:low shotacon(13),male:shota(13)                          |
+| terasu mc         |  1978 | female:netorare(259),female:big breasts(151),female:sole female(124),male:dark skin(104),full color(101)                       |
+| ratatatat74       |  2032 | uncensored(134),female:big breasts(126),female:netorare(90),female:collar(87),female:rape(61)                                  |
+| flanvia           |  2071 | female:sole female(50),female:ahegao(43),female:nakadashi(33),female:big breasts(33),female:anal(33)                           |
+| date              |  2117 | female:big breasts(244),female:possession(242),male:gender bender(239),female:mind control(233),female:schoolgirl uniform(224) |
+| wakamatsu         |  2154 | female:sole female(153),male:sole male(147),full color(125),mosaic censorship(114),female:big breasts(71)                      |
+| kemuri haku       |  2292 | male:shota(59),female:sole female(41),mosaic censorship(36),female:schoolgirl uniform(32),group(32)                            |
+| yahiro pochi      |  2311 | female:schoolgirl uniform(211),female:sole female(208),male:sole male(207),female:big breasts(175),group(130)                  |
+| pija              |  2432 | female:stockings(253),female:big breasts(234),group(222),female:sole female(209),female:ahegao(209)                            |
+| aiue oka          |  2440 | female:mind control(276),female:big breasts(255),male:bbm(238),male:glasses(230),female:nakadashi(207)                         |
+| korotsuke         |  2618 | female:big breasts(221),female:nakadashi(197),female:ahegao(192),female:x-ray(173),female:impregnation(158)                    |
+| kidmo             |  2760 | female:blowjob(101),uncensored(99),female:sole female(98),female:anal(85),female:nakadashi(75)                                 |
+| ogadenmon         |  3281 | female:sole female(87),male:sole male(81),male:shota(58),female:stockings(50),female:nakadashi(40)                             |
+| laliberte         |  4047 | female:sole female(110),full color(95),uncensored(74),female:big breasts(72),female:netorare(65)                               |
+| sudoname          |  4047 | female:sole female(112),full color(95),uncensored(76),female:big breasts(72),female:netorare(65)                               |
+| shouji haruko     |  4227 | female:big breasts(292),ffm threesome(202),female:sole female(152),female:loli(137),group(133)                                 |
++-------------------+-------+--------------------------------------------------------------------------------------------------------------------------------+
 ```
 
 ## ElasticSearch
