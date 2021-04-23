@@ -96,7 +96,7 @@ function _artists(res, query) {
 
   const pool = a_database();
   const qr = pool.query(
-      'select * from (' + sql_union.join(' union ') +
+      'select t.Artist from (' + sql_union.join(' union ') +
           ') as t order by t.Article desc',
       values, function(error, results, fields) {
         if (error != null) {
@@ -104,7 +104,7 @@ function _artists(res, query) {
           logger.error(error);
           res.status(500).type('json').send({msg: 'internal server error'});
         } else {
-          res.status(200).type('json').send({msg: 'success', result: results});
+          res.status(200).type('json').send({msg: 'success', result: results.map(e => e.Artist)});
         }
       });
 }
