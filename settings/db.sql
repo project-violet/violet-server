@@ -246,6 +246,82 @@ CREATE TABLE `article_tag_junction` (
 
 /*---------------------------------------------------
 
+			comment junction tables
+
+---------------------------------------------------*/
+
+CREATE TABLE `comment_article_junction` (
+	`Comment` INT(11) NOT NULL,
+	`Target` INT(11) NOT NULL,
+	PRIMARY KEY (`Comment`, `Target`),
+	CONSTRAINT `comment_articleComment` FOREIGN KEY (`Comment`) REFERENCES `violet`.`comment` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	CONSTRAINT `comment_articleJunction` FOREIGN KEY (`Target`) REFERENCES `violet`.`comment` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	INDEX `comment_article_junction_index` (`Comment`) USING BTREE,
+	INDEX `comment_article_junction_index_vol` (`Target`) USING BTREE
+);
+
+CREATE TABLE `comment_eharticle_junction` (
+	`Comment` INT(11) NOT NULL,
+	`Target` INT(11) NOT NULL,
+	PRIMARY KEY (`Comment`, `Target`),
+	CONSTRAINT `comment_eharticleComment` FOREIGN KEY (`Comment`) REFERENCES `violet`.`comment` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	CONSTRAINT `comment_eharticleJunction` FOREIGN KEY (`Target`) REFERENCES `violet`.`eharticles` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	INDEX `comment_eharticle_junction_index` (`Comment`) USING BTREE,
+	INDEX `comment_eharticle_junction_index_vol` (`Target`) USING BTREE
+);
+
+CREATE TABLE `comment_artist_junction` (
+	`Comment` INT(11) NOT NULL,
+	`Target` INT(11) NOT NULL,
+	PRIMARY KEY (`Comment`, `Target`),
+	CONSTRAINT `comment_artistComment` FOREIGN KEY (`Comment`) REFERENCES `violet`.`comment` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	CONSTRAINT `comment_artistJunction` FOREIGN KEY (`Target`) REFERENCES `violet`.`eharticles_artists` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	INDEX `comment_artist_junction_index` (`Comment`) USING BTREE,
+	INDEX `comment_artist_junction_index_vol` (`Target`) USING BTREE
+);
+
+CREATE TABLE `comment_group_junction` (
+	`Comment` INT(11) NOT NULL,
+	`Target` INT(11) NOT NULL,
+	PRIMARY KEY (`Comment`, `Target`),
+	CONSTRAINT `comment_groupComment` FOREIGN KEY (`Comment`) REFERENCES `violet`.`comment` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	CONSTRAINT `comment_groupJunction` FOREIGN KEY (`Target`) REFERENCES `violet`.`eharticles_groups` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	INDEX `comment_group_junction_index` (`Comment`) USING BTREE,
+	INDEX `comment_group_junction_index_vol` (`Target`) USING BTREE
+);
+
+CREATE TABLE `comment_character_junction` (
+	`Comment` INT(11) NOT NULL,
+	`Target` INT(11) NOT NULL,
+	PRIMARY KEY (`Comment`, `Target`),
+	CONSTRAINT `comment_characterComment` FOREIGN KEY (`Comment`) REFERENCES `violet`.`comment` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	CONSTRAINT `comment_characterJunction` FOREIGN KEY (`Target`) REFERENCES `violet`.`eharticles_characters` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	INDEX `comment_character_junction_index` (`Comment`) USING BTREE,
+	INDEX `comment_character_junction_index_vol` (`Target`) USING BTREE
+);
+
+CREATE TABLE `comment_series_junction` (
+	`Comment` INT(11) NOT NULL,
+	`Target` INT(11) NOT NULL,
+	PRIMARY KEY (`Comment`, `Target`),
+	CONSTRAINT `comment_seriesComment` FOREIGN KEY (`Comment`) REFERENCES `violet`.`comment` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	CONSTRAINT `comment_seriesJunction` FOREIGN KEY (`Target`) REFERENCES `violet`.`eharticles_series` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	INDEX `comment_series_junction_index` (`Comment`) USING BTREE,
+	INDEX `comment_series_junction_index_vol` (`Target`) USING BTREE
+);
+
+CREATE TABLE `comment_tag_junction` (
+	`Comment` INT(11) NOT NULL,
+	`Target` INT(11) NOT NULL,
+	PRIMARY KEY (`Comment`, `Target`),
+	CONSTRAINT `comment_tagComment` FOREIGN KEY (`Comment`) REFERENCES `violet`.`comment` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	CONSTRAINT `comment_tagJunction` FOREIGN KEY (`Target`) REFERENCES `violet`.`eharticles_tags` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	INDEX `comment_tag_junction_index` (`Comment`) USING BTREE,
+	INDEX `comment_tag_junction_index_vol` (`Target`) USING BTREE
+);
+
+/*---------------------------------------------------
+
 			eharticles junction tables
 
 ---------------------------------------------------*/
