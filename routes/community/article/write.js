@@ -33,8 +33,113 @@ const etcSchema = Joi.object({
   Tags: Joi.array().items(Joi.string()),
 });
 
-async function _insertArticle(body) {
+function _insertArticleEtc(conn, id, etc) {
+  if (!('Articles' in etc))
+    conn.query(
+        'INSERT INTO article_article_junction (Article, Target) VALUES ?' +
+            ' ON DUPLICATE KEY UPDATE Article=VALUES(Article), Target=VALUES(Target)',
+        [etc['Articles'].map(e => [id, e])], function(error, results, fields) {
+          logger.error('write-main-etc', error);
+        });
+  if (!('EHArticles'))
+    conn.query(
+        'INSERT INTO article_eharticle_junction (Article, Target) VALUES ?' +
+            ' ON DUPLICATE KEY UPDATE Article=VALUES(Article), Target=VALUES(Target)',
+        [etc['EHArticles'].map(e => [id, e])],
+        function(error, results, fields) {
+          logger.error('write-main-etc', error);
+        });
+  if (!('Artists'))
+    conn.query(
+        'INSERT INTO article_artist_junction (Article, Target) VALUES ' +
+            etc['Artists']
+                .map(
+                    e => '(' + id +
+                        ',(SELECT Id FROM eharticles_artists WHERE Name=?))')
+                .join(',') +
+            ' ON DUPLICATE KEY UPDATE Article=VALUES(Article), Target=VALUES(Target)',
+        etc['Artists'], function(error, results, fields) {
+          logger.error('write-main-etc', error);
+        });
+  if (!('Groups'))
+    conn.query(
+        'INSERT INTO article_group_junction (Article, Target) VALUES ' +
+            etc['Groups']
+                .map(
+                    e => '(' + id +
+                        ',(SELECT Id FROM eharticles_groups WHERE Name=?))')
+                .join(',') +
+            ' ON DUPLICATE KEY UPDATE Article=VALUES(Article), Target=VALUES(Target)',
+        etc['Groups'], function(error, results, fields) {
+          logger.error('write-main-etc', error);
+        });
+  if (!('Series'))
+    conn.query(
+        'INSERT INTO article_series_junction (Article, Target) VALUES ' +
+            etc['Series']
+                .map(
+                    e => '(' + id +
+                        ',(SELECT Id FROM eharticles_series WHERE Name=?))')
+                .join(',') +
+            ' ON DUPLICATE KEY UPDATE Article=VALUES(Article), Target=VALUES(Target)',
+        etc['Series'], function(error, results, fields) {
+          logger.error('write-main-etc', error);
+        });
+  if (!('Characters'))
+    conn.query(
+        'INSERT INTO article_character_junction (Article, Target) VALUES ' +
+            etc['Characters']
+                .map(
+                    e => '(' + id +
+                        ',(SELECT Id FROM eharticles_characters WHERE Name=?))')
+                .join(',') +
+            ' ON DUPLICATE KEY UPDATE Article=VALUES(Article), Target=VALUES(Target)',
+        etc['Characters'], function(error, results, fields) {
+          logger.error('write-main-etc', error);
+        });
+  if (!('Tags'))
+    conn.query(
+        'INSERT INTO article_tag_junction (Article, Target) VALUES ' +
+            etc['Tags']
+                .map(
+                    e => '(' + id +
+                        ',(SELECT Id FROM eharticles_tags WHERE Name=?))')
+                .join(',') +
+            ' ON DUPLICATE KEY UPDATE Article=VALUES(Article), Target=VALUES(Target)',
+        etc['Tags'], function(error, results, fields) {
+          logger.error('write-main-etc', error);
+        });
+}
+
+function _insertArticle(body) {
   const pool = a_database();
+  pool.getConnection(function(err, conn) {
+    if (!err) {
+      conn.beginTransaction(function(err) {
+        if (err) {
+          logger.error('write-main-transaction', err);
+          return;
+        }
+        conn.query(
+            'INSERT INTO article SET ? ',
+            {TimeStamp: CURRENT_TIMESTAMP, ...body},
+            function(err, results, fields) {
+              if (err) {
+                conn.rollback();
+                logger.error('write-main-query', err);
+                return;
+              }
+
+              _insertArticleEtc(conn, results.insertId, body.etc);
+              conn.commit();
+            });
+      });
+    } else {
+      logger.error('write-main-connection', err);
+    }
+
+    conn.release();
+  });
   pool.query(
       'INSERT INTO article SET ?', {
         TimeStamp: CURRENT_TIMESTAMP,

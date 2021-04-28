@@ -95,4 +95,4 @@ function _botLoop() {
   }
 }
 
-setInterval(_botLoop, 1000 * 10);
+// setInterval(_botLoop, 1000 * 10);
