@@ -98,6 +98,7 @@ CREATE TABLE `comment` (
 	`User` INT(11) NOT NULL,
 	`TimeStamp` TIMESTAMP NULL DEFAULT NULL,
 	`Body` VARCHAR(500) NULL DEFAULT '' COLLATE 'utf8_general_ci',
+	`Etc` VARCHAR(5000) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
 	`Parent` INT(11) DEFAULT NULL,
 	PRIMARY KEY (`Id`) USING BTREE,
 	INDEX `ArticleId` (`ArticleId`) USING BTREE,
@@ -109,6 +110,11 @@ CREATE TABLE `comment` (
 COLLATE='utf8_general_ci'
 ENGINE=InnoDB
 ;
+
+/* insert free article */
+INSERT INTO board(Id, ShortName, Name, Description) VALUES (3, '-- free --', '-- free --', 'Board for Free Article');
+INSERT INTO user(Pid, Id, Password, UserAppId, NickName, Etc, Permission) VALUES (1, 'free', 'youcannotloginthis', 'xx', 'xx', 'xx', 0);
+INSERT INTO article(Id, User, Board) VALUES (1, 1, 3);
 
 CREATE TABLE `loginrecord` (
 	`Id` INT(11) NOT NULL AUTO_INCREMENT,
