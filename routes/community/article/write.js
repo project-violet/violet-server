@@ -171,7 +171,7 @@ module.exports = async function article(req, res, next) {
 
   try {
     await articleSchema.validateAsync(req.body);
-    await etcSchema.validateAsync(body.Etc);
+    await etcSchema.validateAsync(JSON.parse(req.body.Etc));
 
     if (!await _checkSession(req.body)) {
       res.status(200).type('json').send({msg: 'session not found'});
