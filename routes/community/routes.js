@@ -65,4 +65,8 @@ const u_info = require('./user/info');
 router.get('/user/info', u_info);
 router.post('/user/info', p405);
 
+const eh = require('./eh/routes');
+
+router.use('/eh', eh);
+
 module.exports = router;
