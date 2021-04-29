@@ -3,7 +3,7 @@
 
 const express = require('express');
 const router = express.Router();
-const p = require('../../pages/status');
+const p = require('../../../pages/status');
 
 function p405(req, res, next) {
   res.status(405).type('html').send(p.p405);
