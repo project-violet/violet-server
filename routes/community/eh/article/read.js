@@ -66,7 +66,7 @@ function _lookupArticleEtc(res, etc) {
   }
 }
 
-module.exports = function read(req, res, next) {
+module.exports = async function read(req, res, next) {
   if (!r_auth.wauth(req)) {
     res.status(403).type('html').send(p.p403);
     return;
