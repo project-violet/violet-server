@@ -173,6 +173,9 @@ module.exports = async function comment(req, res, next) {
       return;
     }
 
+    if (req.body.Parent == 0)
+      req.body.Parent = null;
+
     _insertComment(_sessionToUser(req.body));
     res.status(200).type('json').send({msg: 'success'});
   } catch (e) {
