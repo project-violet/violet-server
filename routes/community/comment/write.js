@@ -8,6 +8,8 @@ const a_database = require('../../../api/database');
 const m_session = require('../../../memory/session');
 const p = require('../../../pages/status');
 
+const push = require('../../../service/push/community_comment_push');
+
 const logger = require('../../../etc/logger');
 
 const CURRENT_TIMESTAMP = {
@@ -145,6 +147,7 @@ function _insertComment(body) {
       'UPDATE article SET Comments=Comments+1 WHERE ArticleId=' +
           body.ArticleId,
       function(error, results, fields) {});
+  push.newComment(body);
 }
 
 async function _checkSession(body) {
@@ -154,8 +157,8 @@ async function _checkSession(body) {
 async function _sessionToUser(body) {
   let session = body['Session'];
   delete body['Session'];
-  session['User'] = await m_session.sessionToUser(session);
-  return session;
+  body['User'] = await m_session.sessionToUser(session);
+  return body;
 }
 
 module.exports = async function comment(req, res, next) {

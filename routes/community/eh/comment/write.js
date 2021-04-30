@@ -154,8 +154,8 @@ async function _checkSession(body) {
 async function _sessionToUser(body) {
   let session = body['Session'];
   delete body['Session'];
-  session['User'] = await m_session.sessionToUser(session);
-  return session;
+  body['User'] = await m_session.sessionToUser(session);
+  return body;
 }
 
 module.exports = async function comment(req, res, next) {
