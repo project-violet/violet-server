@@ -23,8 +23,8 @@ const r_upload = require('./routes/upload');
 const r_view = require('./routes/view');
 const r_view_close = require('./routes/view_close');
 
-const t_1144 = require('./routes/test1144');
-const t_1145 = require('./routes/test1145');
+// const t_1144 = require('./routes/test1144');
+// const t_1145 = require('./routes/test1145');
 
 const p = require('./pages/status');
 
@@ -76,8 +76,7 @@ app.get('/view_close', function(req, res, next) {
   res.status(405).type('html').send(p.p405);
 });
 
-app.use('/1144', t_1144);
-app.use('/1145', t_1145);
+// app.use('/1144', t_1144);
 
 app.get('/', function(req, res) {
   res.redirect('/api-docs');
