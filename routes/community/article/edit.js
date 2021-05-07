@@ -68,7 +68,10 @@ async function _checkValidRequestAndSessionToUser(body) {
     var user = await m_session.sessionToUser(session);
     body['User'] = user;
 
-    if (info.User != user) return null;
+    if (info.User != user) {
+      res.status(200).type('json').send({msg: 'cannot'});
+      return null;
+    }
 
     return body;
   } catch (err) {
@@ -94,7 +97,10 @@ module.exports = async function edit(req, res, next) {
       return;
     }
 
-    _editArticle(await _checkValidRequestAndSessionToUser(req.body));
+    var rsess = await _checkValidRequestAndSessionToUser(res, req.body);
+    if (rsess == null) return;
+
+    _editArticle(rsess);
     res.status(200).type('json').send({msg: 'success'});
   } catch (e) {
     res.status(400).type('json').send({msg: 'bad request'});
