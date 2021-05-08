@@ -14,6 +14,7 @@ const detail = require('./detail');
 const ehash = require('./ehash');
 const hybrid = require('./hybrid');
 const artists = require('./artists');
+const counts = require('./counts');
 
 router.get('/main', main);
 router.post('/main', p405);
@@ -25,5 +26,7 @@ router.get('/hybrid', hybrid);
 router.post('/hybrid', p405);
 router.post('/artists', artists);
 router.get('/artists', p405);
+router.get('/counts', counts);
+router.post('/counts', p405);
 
 module.exports = router;

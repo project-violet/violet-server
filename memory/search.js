@@ -51,7 +51,7 @@ function _loadTagMap() {
   console.log(Object.keys(tagCountMap).length);
 }
 
-_loadTagMap();
+// _loadTagMap();
 
 class _treeNode {
   constructor(contents, parent, op) {
@@ -402,7 +402,7 @@ function _optimizeTree(node) {
 
     WHERE IN vs INNER JOIN
  */
-function _innerNodeToSQL(node, or = false, detail = false) {
+function _innerNodeToSQL(node, or = false, detail = false, counts = false) {
   function _createRandomString() {
     var result = [];
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' +
@@ -501,15 +501,16 @@ function _innerNodeToSQL(node, or = false, detail = false) {
   const front = detail ?
       'select eh.Id, eh.Title, eh.EHash, eh.Type, eh.Language, eh.Uploader, eh.Published, eh.Files, ' +
           'eh.Class, eh.ExistOnHitomi from ' :
-      'select eh.Id from ';
-  const back = ' group by eh.Id order by Id desc limit 30';
+      counts ? 'select count(*) as c from (select eh.Id from ' : 'select eh.Id from ';
+  const back =
+      counts ? ' group by eh.Id) as a' : ' group by eh.Id order by Id desc limit 30';
   return [front + sql + back, innerQValues.concat(outerQValues)];
 }
 
-function _searchToSQL(rawSearch, detail = false) {
+function _searchToSQL(rawSearch, detail = false, counts = false) {
   var tree = _makeTree(rawSearch);
   _optimizeTree(tree);
-  return _innerNodeToSQL(tree, false, detail);
+  return _innerNodeToSQL(tree, false, detail, counts);
 }
 
 function _injectValues(sql, values) {
@@ -574,9 +575,14 @@ function _getHybridQuery(search, offset) {
   ];
 }
 
+function _getCountQuery(search, offset) {
+  return _searchToSQL(search, false, true);
+}
+
 module.exports = {
   searchToSQL: _searchToSQL,
   injectValues: _injectValues,
   getDetailQuery: _getDetailQuery,
   getHybridQuery: _getHybridQuery,
+  getCountQuery: _getCountQuery,
 }
