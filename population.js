@@ -16,13 +16,14 @@ const fs = require('fs');
 async function _buildPopulation() {
   const conn = a_syncdatabase();
   const data = conn.query(
-      'select Id from viewtime where ViewSeconds >= 24 group by Id order by ViewSeconds desc');
+      `select ArticleId, count(*) as C from viewtotal 
+      group by ArticleId order by C desc`);
   const dataPath = path.resolve(
       __dirname, 'population.json');
 
   console.log(data.length);
 
-  fs.writeFile(dataPath, JSON.stringify(data.map(x => x['Id'])), function(err) {
+  fs.writeFile(dataPath, JSON.stringify(data.map(x => x['ArticleId'])), function(err) {
     console.log(err);
   });
 }
