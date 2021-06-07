@@ -25,6 +25,7 @@ async function _buildPopulation() {
 
   fs.writeFile(dataPath, JSON.stringify(data.map(x => x['ArticleId'])), function(err) {
     console.log(err);
+    process.exit();
   });
 }
 
