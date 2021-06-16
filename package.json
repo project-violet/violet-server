@@ -30,6 +30,7 @@
     "http-errors": "^1.8.0",
     "ioredis": "^4.17.3",
     "joi": "^17.2.1",
+    "jsonwebtoken": "^8.5.1",
     "multer": "^1.4.2",
     "mysql": "^2.18.1",
     "mysql2": "^2.2.5",
@@ -43,8 +44,8 @@
     "util": "^0.12.3",
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.0",
+    "xmlhttprequest-ssl": ">=1.6.2",
     "yamljs": "^0.3.0",
-    "yarn": "^1.22.10",
-    "xmlhttprequest-ssl": ">=1.6.2"
+    "yarn": "^1.22.10"
   }
 }

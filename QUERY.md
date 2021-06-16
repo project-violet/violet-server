@@ -1906,6 +1906,146 @@ order by a.c;
 | sudoname          |  4047 | female:sole female(112),full color(95),uncensored(76),female:big breasts(72),female:netorare(65)                               |
 | shouji haruko     |  4227 | female:big breasts(292),ffm threesome(202),female:sole female(152),female:loli(137),group(133)                                 |
 +-------------------+-------+--------------------------------------------------------------------------------------------------------------------------------+
+
+# Character Ranking with Series
+with search_query as 
+(
+  select c.Id
+  from
+    eharticles_characters as a
+    right join eharticles_characters_junction as b on a.Id=b.Character
+    right join eharticles as c on c.Id=b.Article
+  -- where c.Language="korean"
+  order by b.Article desc
+)
+select a.CharacterName, a.c as Count, 
+  SUBSTRING_INDEX(GROUP_CONCAT(CONCAT(b.Name, '(', a.cc, ')') ORDER BY a.cc DESC SEPARATOR ','), ',', 5) as MAIN_TAGS 
+  from (
+  select a.CharacterName, count(b.Series) as cc, b.Series, a.c from (
+    select * from (
+      select b.Name as CharacterName, b.Id, a.c from (
+        select a.Character, count(a.Character) as c
+        from search_query as sq
+        left join eharticles_characters_junction as a on sq.Id=a.Article 
+        group by a.Character 
+        order by c
+      ) as a left join eharticles_characters as b
+      on a.Character=b.Id
+      where b.Id<>0
+      order by a.c desc limit 100
+    ) as a left join eharticles_characters_junction as b
+    on a.Id=b.Character
+  ) as a left join eharticles_series_junction as b
+  on a.Article=b.Article
+  group by a.CharacterName, b.Series
+  order by cc desc
+) as a left join eharticles_series as b on a.Series=b.Id
+group by a.CharacterName
+order by a.c desc;
++-----------------------+-------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CharacterName         | Count | MAIN_TAGS                                                                                                                                                                |
++-----------------------+-------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| teitoku               | 29442 | kantai collection(11627),azur lane(145),fate grand order(14),warship girls(13),the idolmaster(9)                                                                         |
+| reimu hakurei         | 26928 | touhou project(5829),vocaloid(68),kantai collection(57),fate grand order(43),puella magi madoka magica(39)                                                               |
+| marisa kirisame       | 23728 | touhou project(4863),vocaloid(49),fate grand order(43),the idolmaster(40),kantai collection(36)                                                                          |
+| sakuya izayoi         | 20131 | touhou project(4309),vocaloid(25),kantai collection(18),jojos bizarre adventure(15),puella magi madoka magica(11)                                                        |
+| tifa lockhart         | 18817 | final fantasy vii(2471),final fantasy(430),overwatch(258),pokemon(219),nier automata(212)                                                                                |
+| remilia scarlet       | 18527 | touhou project(3527),vocaloid(23),kantai collection(12),pretty cure(11),sewayaki kitsune no senko-san(9)                                                                 |
+| patchouli knowledge   | 18289 | touhou project(3748),kantai collection(57),fate grand order(40),vocaloid(40),puella magi madoka magica(32)                                                               |
+| twilight sparkle      | 16287 | my little pony friendship is magic(2110),equestria girls(234),pokemon(80),zootopia(47),sonic the hedgehog(29)                                                            |
+| gudao                 | 16012 | fate grand order(6413),fate kaleid liner prisma illya(34),azur lane(22),kiddy grade(20),sword art online(18)                                                             |
+| chun-li               | 15276 | street fighter(2198),king of fighters(459),darkstalkers(299),dead or alive(193),overwatch(114)                                                                           |
+| fluttershy            | 15273 | my little pony friendship is magic(1868),equestria girls(167),pokemon(97),zootopia(44),star fox(29)                                                                      |
+| rarity                | 15264 | my little pony friendship is magic(1732),equestria girls(229),pokemon(86),gravity falls(37),star fox(37)                                                                 |
+| rainbow dash          | 15160 | my little pony friendship is magic(1759),equestria girls(221),pokemon(59),zootopia(44),star fox(20)                                                                      |
+| pinkie pie            | 15131 | my little pony friendship is magic(1689),equestria girls(214),pokemon(80),zootopia(40),sonic the hedgehog(25)                                                            |
+| flandre scarlet       | 14725 | touhou project(2950),vocaloid(51),kantai collection(40),fate grand order(36),puella magi madoka magica(31)                                                               |
+| applejack             | 14496 | my little pony friendship is magic(1651),equestria girls(195),pokemon(56),zootopia(44),star fox(19)                                                                      |
+| hinata hyuga          | 14383 | naruto(2734),boruto(346),street fighter(144),my hero academia(141),bleach(121)                                                                                           |
+| alice margatroid      | 13969 | touhou project(3000),pokemon(15),kantai collection(10),vocaloid(7),puella magi madoka magica(7)                                                                          |
+| sanae kochiya         | 13827 | touhou project(2995),pokemon(13),vocaloid(12),yotsubato(11),kantai collection(10)                                                                                        |
+| yukari yakumo         | 13566 | touhou project(2728),kantai collection(14),pokemon(11),vocaloid(8),love live(7)                                                                                          |
+| asuka langley soryu   | 13332 | neon genesis evangelion(3404),sailor moon(82),street fighter(73),fushigi no umi no nadia(54),final fantasy vii(45)                                                       |
+| tsunade               | 13171 | naruto(2002),bleach(174),pokemon(163),one piece(159),my hero academia(157)                                                                                               |
+| sakura haruno         | 13013 | naruto(2413),boruto(354),bleach(122),one piece(115),street fighter(87)                                                                                                   |
+| samus aran            | 12740 | metroid(953),pokemon(290),the legend of zelda(237),overwatch(233),super mario brothers(223)                                                                              |
+| youmu konpaku         | 12710 | touhou project(2202),vocaloid(45),fate grand order(36),kantai collection(36),puella magi madoka magica(32)                                                               |
+| atago                 | 12229 | kantai collection(1413),azur lane(892),fate grand order(151),league of legends(41),pokemon(40)                                                                           |
+| hong meiling          | 12120 | touhou project(2178),vocaloid(15),the idolmaster(8),street fighter(4),pretty cure(3)                                                                                     |
+| android 18            | 11956 | dragon ball z(1446),dragon ball(496),dragon ball super(362),pokemon(120),naruto(106)                                                                                     |
+| mai shiranui          | 11872 | king of fighters(1731),street fighter(497),dead or alive(364),fatal fury(197),darkstalkers(186)                                                                          |
+| raven                 | 11736 | teen titans(1041),pokemon(203),the legend of zelda(117),my hero academia(110),ben 10(97)                                                                                 |
+| nami                  | 11488 | one piece(2559),naruto(157),bleach(115),pokemon(86),league of legends(78)                                                                                                |
+| rei ayanami           | 11327 | neon genesis evangelion(2764),sailor moon(114),street fighter(73),darkstalkers(48),kantai collection(46)                                                                 |
+| producer              | 11289 | the idolmaster(4496),the idolmaster sidem(10),pokemon(10),resident evil(8),kantai collection(5)                                                                          |
+| reisen udongein inaba | 11128 | touhou project(1998),kantai collection(8),pokemon(7),vocaloid(7),fate grand order(6)                                                                                     |
+| aya shameimaru        | 11115 | touhou project(2241),vocaloid(7),fate grand order(4),ghostbusters(3),the idolmaster(3)                                                                                   |
+| 2b                    | 11078 | nier automata(1261),overwatch(367),pokemon(160),resident evil(152),league of legends(151)                                                                                |
+| wonder woman          | 10939 | wonder woman(433),justice league(396),batman(177),x-men(154),overwatch(101)                                                                                              |
+| kasumi                | 10775 | dead or alive(1715),kantai collection(283),king of fighters(164),street fighter(154),darkstalkers(82)                                                                    |
+| harley quinn          | 10341 | batman(479),justice league(200),overwatch(146),street fighter(102),teen titans(100)                                                                                      |
+| bulma briefs          | 10286 | dragon ball z(1038),dragon ball(834),dragon ball super(377),dragon ball gt(103),pokemon(85)                                                                              |
+| naruto uzumaki        | 10232 | naruto(2530),boruto(294),street fighter(73),bleach(61),my hero academia(50)                                                                                              |
+| d.va                  | 10099 | overwatch(1247),league of legends(269),nier automata(211),pokemon(126),resident evil(86)                                                                                 |
+| princess celestia     |  9993 | my little pony friendship is magic(1062),equestria girls(115),pokemon(40),zootopia(33),star fox(23)                                                                      |
+| princess luna         |  9847 | my little pony friendship is magic(997),equestria girls(140),pokemon(31),zootopia(20),my hero academia(11)                                                               |
+| cammy white           |  9343 | street fighter(1023),king of fighters(222),darkstalkers(196),dead or alive(98),overwatch(89)                                                                             |
+| satori komeiji        |  9320 | touhou project(2004),vocaloid(38),kantai collection(34),fate grand order(32),the idolmaster(30)                                                                          |
+| miku hatsune          |  9170 | vocaloid(2044),touhou project(163),fate grand order(106),pokemon(105),kantai collection(101)                                                                             |
+| mercy                 |  9150 | overwatch(983),league of legends(206),nier automata(195),pokemon(100),street fighter(93)                                                                                 |
+| cirno                 |  8966 | touhou project(1377),vocaloid(25),kantai collection(13),pokemon(8),puella magi madoka magica(7)                                                                          |
+| nico yazawa           |  8852 | love live(2503),love live sunshine(29),cocoro-navi(10),kantai collection(10),fate grand order(9)                                                                         |
+| princess peach        |  8670 | super mario brothers(973),the legend of zelda(286),pokemon(225),metroid(115),overwatch(82)                                                                               |
+| maki nishikino        |  8657 | love live(2375),love live sunshine(72),love live nijigasaki high school idol club(21),kantai collection(12),cocoro-navi(9)                                               |
+| shielder              |  8592 | fate grand order(2302),azur lane(57),genshin impact(54),persona 5(41),arknights(40)                                                                                      |
+| yuyuko saigyouji      |  8415 | touhou project(1451),sword art online(7),fate grand order(7),kantai collection(7),pokemon(6)                                                                             |
+| misty                 |  8180 | pokemon(1205),the legend of zelda(46),naruto(45),ben 10(42),my hero academia(41)                                                                                         |
+| kaga                  |  8165 | kantai collection(1766),azur lane(221),fate grand order(47),girls frontline(22),uma musume pretty derby(19)                                                              |
+| princess zelda        |  8138 | the legend of zelda(981),super mario brothers(205),pokemon(183),overwatch(134),metroid(108)                                                                              |
+| koishi komeiji        |  8124 | touhou project(1622),vocaloid(38),kantai collection(32),fate grand order(28),puella magi madoka magica(27)                                                               |
+| ahri                  |  8100 | league of legends(1182),overwatch(269),nier automata(92),pokemon(89),fate grand order(68)                                                                                |
+| saber                 |  7877 | fate stay night(1328),fate grand order(328),fate zero(195),fate hollow ataraxia(148),tsukihime(41)                                                                       |
+| suwako moriya         |  7871 | touhou project(1330),vocaloid(39),the idolmaster(28),kantai collection(28),puella magi madoka magica(28)                                                                 |
+| widowmaker            |  7852 | overwatch(791),league of legends(130),nier automata(119),street fighter(76),pokemon(75)                                                                                  |
+| starfire              |  7785 | teen titans(709),pokemon(140),street fighter(79),the legend of zelda(70),my hero academia(61)                                                                            |
+| tracer                |  7768 | overwatch(733),nier automata(160),naruto(104),street fighter(102),rwby(95)                                                                                               |
+| shinji ikari          |  7738 | neon genesis evangelion(2360),street fighter(27),sailor moon(26),martian successor nadesico(17),magic knight rayearth(16)                                                |
+| nico robin            |  7718 | one piece(1529),naruto(128),bleach(96),pokemon(73),my hero academia(70)                                                                                                  |
+| shimakaze             |  7713 | kantai collection(1921),fate grand order(44),puella magi madoka magica(41),kemono friends(29),touhou project(29)                                                         |
+| ayane                 |  7711 | dead or alive(1330),king of fighters(117),street fighter(114),soulcalibur(58),darkstalkers(45)                                                                           |
+| morrigan aensland     |  7654 | darkstalkers(932),street fighter(323),king of fighters(181),dead or alive(91),samurai spirits(76)                                                                        |
+| nozomi tojo           |  7528 | love live(1862),love live sunshine(50),fate grand order(24),kantai collection(22),love live nijigasaki high school idol club(21)                                         |
+| fujiwara no mokou     |  7455 | touhou project(1296),vocaloid(11),jojos bizarre adventure(4),pretty cure(2),fate grand order(2)                                                                          |
+| koakuma               |  7427 | touhou project(1297),original(5),rwby(5),kantai collection(5),genshin impact(4)                                                                                          |
+| power girl            |  7372 | justice league(183),x-men(122),superman(109),overwatch(91),batman(91)                                                                                                    |
+| asuna yuuki           |  7371 | sword art online(1817),kantai collection(87),genshin impact(64),senki zesshou symphogear(58),fate grand order(58)                                                        |
+| eli ayase             |  7295 | love live(1948),love live sunshine(36),the idolmaster(17),kantai collection(11),love live nijigasaki high school idol club(10)                                           |
+| eirin yagokoro        |  7255 | touhou project(1071),jojos bizarre adventure(4),darkstalkers(4),vocaloid(4),one punch man(2)                                                                             |
+| may                   |  7252 | pokemon(951),guilty gear(111),digimon(71),darkstalkers(64),rwby(63)                                                                                                      |
+| supergirl             |  7243 | justice league(234),superman(207),x-men(98),batman(93),wonder woman(60)                                                                                                  |
+| rin tosaka            |  7237 | fate stay night(1660),fate grand order(147),fate hollow ataraxia(128),fate zero(85),azur lane(32)                                                                        |
+| sailor mercury        |  7233 | sailor moon(1578),neon genesis evangelion(48),tenchi muyo(32),street fighter(29),ranma 12(21)                                                                            |
+| chi chi               |  7203 | dragon ball z(786),dragon ball(445),dragon ball super(261),dragon ball gt(71),pokemon(58)                                                                                |
+| ran yakumo            |  7065 | touhou project(1329),kantai collection(12),hololive(7),x-men(7),gundam seed(6)                                                                                           |
+| sailor moon           |  6853 | sailor moon(1300),neon genesis evangelion(39),final fantasy vii(35),tenchi muyo(31),metroid(28)                                                                          |
+| keine kamishirasawa   |  6843 | touhou project(1051),kantai collection(28),the idolmaster(27),puella magi madoka magica(27),vocaloid(27)                                                                 |
+| catwoman              |  6802 | batman(228),justice league(151),x-men(61),teen titans(51),spider-man(51)                                                                                                 |
+| kotori minami         |  6798 | love live(1518),love live sunshine(58),kantai collection(14),love live nijigasaki high school idol club(13),re zero kara hajimeru isekai seikatsu(12)                    |
+| suika ibuki           |  6796 | touhou project(872),vocaloid(37),fate grand order(29),kantai collection(29),the idolmaster(29)                                                                           |
+| sailor jupiter        |  6792 | sailor moon(1349),neon genesis evangelion(39),street fighter(29),final fantasy vii(28),final fantasy(26)                                                                 |
+| takao                 |  6778 | kantai collection(983),azur lane(512),arpeggio of blue steel(59),fate grand order(58),d-frag(46)                                                                         |
+| videl                 |  6685 | dragon ball z(763),dragon ball(289),dragon ball super(173),dragon ball gt(100),naruto(56)                                                                                |
+| poison ivy            |  6666 | batman(241),justice league(174),wonder woman(61),teen titans(58),x-men(52)                                                                                               |
+| gwen tennyson         |  6478 | ben 10(767),teen titans(102),pokemon(94),gravity falls(70),avatar the last airbender(61)                                                                                 |
+| umi sonoda            |  6467 | love live(1496),love live sunshine(43),love live nijigasaki high school idol club(17),kono subarashii sekai ni syukufuku o(17),re zero kara hajimeru isekai seikatsu(16) |
+| rin kaenbyou          |  6373 | touhou project(982),kantai collection(29),vocaloid(29),the idolmaster(27),puella magi madoka magica(27)                                                                  |
+| link                  |  6291 | the legend of zelda(1199),super mario brothers(90),pokemon(76),overwatch(48),my hero academia(44)                                                                        |
+| kaguya houraisan      |  6252 | touhou project(933),kantai collection(5),pretty cure(4),darkstalkers(4),tokyo ghoul(4)                                                                                   |
+| fate testarossa       |  6179 | mahou shoujo lyrical nanoha(2245),puella magi madoka magica(23),touhou project(22),pretty cure(14),sword art online(13)                                                  |
+| momiji inubashiri     |  6175 | touhou project(1213),the idolmaster(28),kantai collection(27),higurashi no naku koro ni(27),ro-kyu-bu(26)                                                                |
+| sailor mars           |  6139 | sailor moon(1230),tengen toppa gurren lagann(32),final fantasy vii(30),neon genesis evangelion(28),the legend of korra(27)                                               |
+| rouge the bat         |  6034 | sonic the hedgehog(910),pokemon(146),the legend of zelda(94),megaman(81),my little pony friendship is magic(52)                                                          |
++-----------------------+-------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 ```
 
 ## ElasticSearch
