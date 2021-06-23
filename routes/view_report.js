@@ -3,6 +3,7 @@
 
 const r_auth = require('../auth/auth');
 const a_database = require('../api/database');
+const logger = require('../etc/logger');
 
 const Joi = require('joi');
 
@@ -18,7 +19,7 @@ const reportSchema = Joi.object({
 });
 
 // This function is triggered when the user reads a specific article.
-module.exports = async function view_close(req, res, next) {
+module.exports = async function view_report(req, res, next) {
   if (!r_auth.auth(req)) {
     res.status(403).type('json').send({msg: 'forbidden'});
     return;
@@ -30,8 +31,8 @@ module.exports = async function view_close(req, res, next) {
     pool.query(
         'INSERT INTO viewreport SET ?', {
           ArticleId: req.body.id,
-          StartsTime: req.body.startsTime,
-          EndsTime: req.body.endsTime,
+          StartsTime: { toSqlString: function() { return 'FROM_UNIXTIME(' + (req.body.startsTime / 1000.0) + ')'; } },
+          EndsTime: { toSqlString: function() { return 'FROM_UNIXTIME(' + (req.body.endsTime / 1000.0) + ')'; } },
           LastPage: req.body.lastPage,
           ValidSeconds: req.body.lastPage,
           Pages: req.body.pages,
