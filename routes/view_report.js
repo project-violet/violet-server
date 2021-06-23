@@ -9,7 +9,7 @@ const Joi = require('joi');
 const reportSchema = Joi.object({
   user: Joi.string().max(500).required(),
   id: Joi.number().required(),
-  startsTime: Joinumber().required(),
+  startsTime: Joi.number().required(),
   endsTime: Joi.number().required(),
   pages: Joi.number().required(),
   lastPage: Joi.number().required(),

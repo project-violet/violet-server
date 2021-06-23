@@ -59,7 +59,7 @@ app.use(express.urlencoded({limit: '5mb', extended: false}));
 // Limit Request
 const limiter = rateLimit({
   windowMs: 1000 * 60,
-  max: 5 * 6 * 3,
+  max: 5 * 6 * 3 * 100,
 });
 app.use(limiter);
 
