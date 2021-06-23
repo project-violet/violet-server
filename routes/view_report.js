@@ -38,6 +38,7 @@ module.exports = async function view_report(req, res, next) {
           Pages: req.body.pages,
           MsPerPages: req.body.msPerPages,
           UserAppId: req.body.user,
+          TimeStamp: { toSqlString: function() { return 'CURRENT_TIMESTAMP()'; } },
         },
         function(error, results, fields) {
           if (error != null) {
