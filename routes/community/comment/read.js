@@ -22,6 +22,9 @@ function _lookupComment(res, no) {
           res.status(200).type('json').send({msg: 'success', result: results});
         }
       });
+  pool.query(
+      'UPDATE article SET View=View+1 WHERE ArticleId=' + no,
+      function(error, results, fields) {});
 }
 
 module.exports = function comment(req, res, next) {

@@ -9,12 +9,12 @@ const a_database = require('../../../../api/database');
 const logger = require('../../../../etc/logger');
 
 const writeSchema = Joi.object({
-  UserAppId: Joi.string().length(100).required(),
-  Body: Joi.string().length(100).required(),
-  ArtistName: Joi.string().length(100).required(),
+  UserAppId: Joi.string().max(150).required(),
+  Body: Joi.string().max(500).required(),
+  ArtistName: Joi.string().max(100).required(),
 });
 
-module.exports = function read(req, res, next) {
+module.exports = async function read(req, res, next) {
   if (!r_auth.wauth(req)) {
     res.status(403).type('json').send({msg: 'forbidden'});
     return;

@@ -12,7 +12,9 @@ function p405(req, res, next) {
 const a_read = require('./artistcomment/read');
 const a_write = require('./artistcomment/write');
 
-router.get('/article/read', a_read);
-router.post('/article/read', p405);
-router.post('/article/write', a_write);
-router.get('/article/write', p405);
+router.get('/artistcomment/read', a_read);
+router.post('/artistcomment/read', p405);
+router.post('/artistcomment/write', a_write);
+router.get('/artistcomment/write', p405);
+
+module.exports = router;
