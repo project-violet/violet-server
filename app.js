@@ -22,6 +22,7 @@ const r_top = require('./routes/top');
 const r_upload = require('./routes/upload');
 const r_view = require('./routes/view');
 const r_view_close = require('./routes/view_close');
+const r_view_report = require('./routes/view_report');
 
 // const t_1144 = require('./routes/test1144');
 // const t_1145 = require('./routes/test1145');
@@ -58,7 +59,7 @@ app.use(express.urlencoded({limit: '5mb', extended: false}));
 // Limit Request
 const limiter = rateLimit({
   windowMs: 1000 * 60,
-  max: 5 * 6 * 3,
+  max: 5 * 6 * 3 * 100,
 });
 app.use(limiter);
 
@@ -73,6 +74,10 @@ app.get('/view', function(req, res, next) {
 });
 app.post('/view_close', r_view_close);
 app.get('/view_close', function(req, res, next) {
+  res.status(405).type('html').send(p.p405);
+});
+app.post('/view_report', r_view_report);
+app.get('/view_report', function(req, res, next) {
   res.status(405).type('html').send(p.p405);
 });
 

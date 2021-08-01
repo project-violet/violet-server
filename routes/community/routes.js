@@ -72,4 +72,8 @@ const eh = require('./eh/routes');
 
 router.use('/eh', eh);
 
+const anon = require('./anon/routes');
+
+router.use('/anon', anon);
+
 module.exports = router;
