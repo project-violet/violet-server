@@ -17,28 +17,29 @@ const recentSchema = Joi.object({
 function _lookupComment(res, query) {
   const pool = a_database();
   pool.query(
-      'SELECT Id, ArticleId, ViewSeconds FROM viewtime WHERE ViewSeconds >= ' +
+      'SELECT Id, ArticleId, ViewSeconds, UserAppId FROM viewtime WHERE ViewSeconds >= ' +
           query.limit + ' AND Id >= ' + query.offset +
           ' ORDER BY Id DESC LIMIT ' + query.count,
       function(error, results, fields) {
         if (error != null) {
-          logger.error('lookup-record-recent');
+          logger.error('lookup-record-recent-u');
           logger.error(error);
           res.status(500).type('json').send({msg: 'internal server error'});
         } else {
           res.status(200).type('json').send({
             msg: 'success',
-            result: results.map(e => [e.Id, e.ArticleId, e.ViewSeconds])
+            result: results.map(
+                e => [e.Id, e.ArticleId, e.ViewSeconds, e.UserAppId])
           });
         }
       });
 }
 
 module.exports = async function read(req, res, next) {
-  //   if (!r_auth.wauth(req)) {
-  //     res.status(403).type('json').send({msg: 'forbidden'});
-  //     return;
-  //   }
+  if (!r_auth.wauth(req)) {
+    res.status(403).type('json').send({msg: 'forbidden'});
+    return;
+  }
 
   try {
     await recentSchema.validateAsync(req.query);
