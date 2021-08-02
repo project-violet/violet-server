@@ -9,7 +9,7 @@ const a_database = require('../../../../api/database');
 const logger = require('../../../../etc/logger');
 
 const recentSchema = Joi.object({
-  offset: Joi.number().min(0).validate(0),
+  offset: Joi.number().min(0),
   count: Joi.number().min(0).max(100).required(),
 });
 
