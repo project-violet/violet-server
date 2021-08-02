@@ -17,8 +17,8 @@ const recentSchema = Joi.object({
 function _lookupComment(res, query) {
   const pool = a_database();
   pool.query(
-      'SELECT Id, ArticleId, ViewSeconds FROM viewtime WHERE ViewSeconds >= ' + query.limit +
-       ' AND Id >= ' + query.offset +
+      'SELECT Id, ArticleId, ViewSeconds FROM viewtime WHERE ViewSeconds >= ' +
+          query.limit + ' AND Id >= ' + query.offset +
           ' ORDER BY Id DESC LIMIT ' + query.count,
       function(error, results, fields) {
         if (error != null) {
@@ -26,7 +26,10 @@ function _lookupComment(res, query) {
           logger.error(error);
           res.status(500).type('json').send({msg: 'internal server error'});
         } else {
-          res.status(200).type('json').send({msg: 'success', result: results});
+          res.status(200).type('json').send({
+            msg: 'success',
+            result: results.map(e => [e.Id, e.ArticleId, e.ViewSeconds])
+          });
         }
       });
 }
