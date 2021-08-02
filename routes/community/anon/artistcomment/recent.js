@@ -16,7 +16,8 @@ const recentSchema = Joi.object({
 function _lookupComment(res, query) {
   const pool = a_database();
   pool.query(
-      'SELECT TimeStamp, Body, UserAppId FROM artistcomment ORDER BY Id DESC LIMIT ' + query.count + ' OFFSET ' + query.offset,
+      'SELECT TimeStamp, Body, UserAppId, ArtistName FROM artistcomment ORDER BY Id DESC LIMIT ' +
+          query.count + ' OFFSET ' + query.offset,
       function(error, results, fields) {
         if (error != null) {
           logger.error('lookup-artist-comment-recent');
@@ -29,17 +30,16 @@ function _lookupComment(res, query) {
 }
 
 module.exports = async function read(req, res, next) {
-//   if (!r_auth.wauth(req)) {
-//     res.status(403).type('json').send({msg: 'forbidden'});
-//     return;
-//   }
+  //   if (!r_auth.wauth(req)) {
+  //     res.status(403).type('json').send({msg: 'forbidden'});
+  //     return;
+  //   }
 
   try {
     await recentSchema.validateAsync(req.query);
 
-    if (req.query.offset == undefined)
-        req.query.offset = 0;
-        
+    if (req.query.offset == undefined) req.query.offset = 0;
+
     _lookupComment(res, req.query);
   } catch (e) {
     res.status(400).type('json').send({msg: 'bad request'});
