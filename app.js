@@ -69,7 +69,7 @@ app.use('/search', r_search);
 app.use('/query', r_query);
 app.use('/top', r_top);
 app.use('/record', r_record);
-app.post('/upload', r_upload);
+// app.post('/upload', r_upload);
 app.post('/view', r_view);
 app.get('/view', function(req, res, next) {
   res.status(405).type('html').send(p.p405);
