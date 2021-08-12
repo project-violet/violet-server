@@ -24,7 +24,7 @@ module.exports = async function top_recent(req, res, next) {
   const pool = a_database();
   const qr = pool.query(
       'select count(*) as C, ArticleId from (select ArticleId from viewtime where ViewSeconds >= 24 order by Id desc limit ' +
-          s + ') as a group by ArticleId order by C desc, ArticleId desc',
+          s + ') as a group by ArticleId order by C desc, ArticleId desc limit 1000',
       function(error, results, fields) {
         if (error != null) {
           logger.error('top-recent');
