@@ -14,12 +14,15 @@ const expressDefend = require('express-defend');
 const blacklist = require('express-blacklist');
 const rateLimit = require('express-rate-limit');
 
+const r_cur_ts = require('./routes/cur_ts');
 const r_community = require('./routes/community/routes');
 const r_search = require('./routes/search/routes');
 const r_record = require('./routes/record/routes');
 const r_index = require('./routes/index');
 const r_query = require('./routes/query');
 const r_top = require('./routes/top');
+const r_top_ts = require('./routes/top_ts');
+const r_top_recent = require('./routes/top_recent');
 const r_upload = require('./routes/upload');
 const r_view = require('./routes/view');
 const r_view_close = require('./routes/view_close');
@@ -64,10 +67,13 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
+app.use('/cur_ts', r_cur_ts);
 app.use('/community', r_community);
 app.use('/search', r_search);
 app.use('/query', r_query);
 app.use('/top', r_top);
+app.use('/top_ts', r_top_ts);
+app.use('/top_recent', r_top_recent);
 app.use('/record', r_record);
 // app.post('/upload', r_upload);
 app.post('/view', r_view);
