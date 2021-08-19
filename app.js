@@ -16,6 +16,7 @@ const rateLimit = require('express-rate-limit');
 
 const r_cur_ts = require('./routes/cur_ts');
 const r_community = require('./routes/community/routes');
+const r_excomment = require('./routes/excomment/routes');
 const r_search = require('./routes/search/routes');
 const r_record = require('./routes/record/routes');
 const r_index = require('./routes/index');
@@ -69,6 +70,7 @@ app.use(limiter);
 
 app.use('/cur_ts', r_cur_ts);
 app.use('/community', r_community);
+app.use('/excomment', r_excomment);
 app.use('/search', r_search);
 app.use('/query', r_query);
 app.use('/top', r_top);
