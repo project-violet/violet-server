@@ -21,7 +21,7 @@ function _find(what) {
         });
     });
   });
-  results.sort((x, y) => y.id - x.id)
+  results.sort((x, y) => y.id - x.id);
   return results;
 }
 
@@ -38,7 +38,7 @@ function _findByAuthor(author) {
         });
     });
   });
-  results.sort((x, y) => y.id - x.id)
+  results.sort((x, y) => y.id - x.id);
   return results;
 }
 

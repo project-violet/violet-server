@@ -6,10 +6,10 @@ const m_excomments = require('../../memory/excomments');
 const p = require('../../pages/status');
 
 module.exports = async function find(req, res, next) {
-  if (!r_auth.wauth(req)) {
-    res.status(403).type('json').send({msg: 'forbidden'});
-    return;
-  }
+  // if (!r_auth.wauth(req)) {
+  //   res.status(403).type('json').send({msg: 'forbidden'});
+  //   return;
+  // }
 
   const q = req.query.q;
 
@@ -22,7 +22,9 @@ module.exports = async function find(req, res, next) {
   if (result == null)
     res.status(400).type('json').send({msg: 'bad request'});
   else {
-    result.slice(0, Math.min(result.length, 1500));
-    res.type('json').send({'msg': 'success', 'result': result});
+    res.type('json').send({
+      'msg': 'success',
+      'result': result.slice(0, Math.min(result.length, 1500))
+    });
   }
 };
