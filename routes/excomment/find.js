@@ -1,6 +1,7 @@
 // This source code is a part of Project Violet.
 // Copyright (C) 2020-2021. violet-team. Licensed under the Apache-2.0 License.
 
+const r_auth = require('../../auth/auth');
 const m_excomments = require('../../memory/excomments');
 const p = require('../../pages/status');
 
