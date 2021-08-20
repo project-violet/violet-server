@@ -6,10 +6,10 @@ const m_excomments = require('../../memory/excomments');
 const p = require('../../pages/status');
 
 module.exports = async function find(req, res, next) {
-  // if (!r_auth.wauth(req)) {
-  //   res.status(403).type('json').send({msg: 'forbidden'});
-  //   return;
-  // }
+  if (!r_auth.wauth(req)) {
+    res.status(403).type('json').send({msg: 'forbidden'});
+    return;
+  }
 
   const q = req.query.q;
 
