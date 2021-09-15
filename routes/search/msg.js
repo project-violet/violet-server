@@ -14,7 +14,7 @@ module.exports = async function (req, res, next) {
     "http://127.0.0.1:8864" + req.path.substr(4),
     (error, response, body) => {
       try {
-        res.status(400).type("json").send(body);
+        res.status(200).type("json").send(body);
       } catch (e) {
         res.status(500).type("json").send({ msg: "internal server error" });
       }
