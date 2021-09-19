@@ -4,8 +4,8 @@
 const fs = require('fs');
 
 // id, time, author, body
-const jsonFile = fs.readFileSync('excomment-zip.json', 'utf8');
-const exComments = JSON.parse(jsonFile);
+// const jsonFile = fs.readFileSync('excomment-zip.json', 'utf8');
+// const exComments = JSON.parse(jsonFile);
 
 function _find(what) {
   var results = [];
