@@ -59,6 +59,7 @@ module.exports = async function read(req, res, next) {
 
     if (!checkValid(req.body.UserAppId)) {
       res.status(400).type("json").send({ msg: "too many requests" });
+      return;
     }
 
     push(req.body.UserAppId);
