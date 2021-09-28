@@ -136,6 +136,7 @@ CREATE TABLE `artistcomment` (
 	`Body` VARCHAR(500) NULL DEFAULT '' COLLATE 'utf8_general_ci',
 	`UserAppId` CHAR(50) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
 	`ArtistName` CHAR(100) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
+	`Parent` INT(11),
 	PRIMARY KEY (`Id`) USING BTREE,
 	FULLTEXT INDEX `UserAppId` (`UserAppId`),
 	FULLTEXT INDEX `ArtistName` (`ArtistName`)
@@ -202,6 +203,20 @@ CREATE TABLE `permission` (
 	PRIMARY KEY (`User`) USING BTREE,
 	INDEX `permission_User_Index` (`User`) USING BTREE,
 	CONSTRAINT `permission_UserForeign` FOREIGN KEY (`User`) REFERENCES `violet`.`user` (`Pid`) ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+;
+
+CREATE TABLE `excomment` (
+	`Id` INT(11) NOT NULL AUTO_INCREMENT,
+	`ArticleId` INT(11) NOT NULL,
+	`User` VARCHAR(256) NOT NULL,
+	`TimeStamp` TIMESTAMP NULL DEFAULT NULL,
+	`Body` MEDIUMTEXT NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
+	PRIMARY KEY (`Id`) USING BTREE,
+	INDEX `excomment_ArticleId` (`ArticleId`) USING BTREE,
+	INDEX `excomment_User` (`User`) USING BTREE
 )
 COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB

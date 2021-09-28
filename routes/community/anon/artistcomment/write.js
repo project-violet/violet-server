@@ -12,6 +12,7 @@ const writeSchema = Joi.object({
   UserAppId: Joi.string().max(150).required(),
   Body: Joi.string().max(500).required(),
   ArtistName: Joi.string().max(100).required(),
+  Parent: Joi.number().min(0).integer(),
 });
 
 // {userAppId, dateTime}
