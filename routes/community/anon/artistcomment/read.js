@@ -15,7 +15,7 @@ const readSchema = Joi.object({
 function _lookupComment(res, name) {
   const pool = a_database();
   pool.query(
-      'SELECT TimeStamp, Body, UserAppId, Parent FROM artistcomment WHERE ArtistName=? ORDER BY Id DESC LIMIT 100',
+      'SELECT Id, TimeStamp, Body, UserAppId, Parent FROM artistcomment WHERE ArtistName=? ORDER BY Id DESC LIMIT 100',
       [name], function(error, results, fields) {
         if (error != null) {
           logger.error('lookup-artist-comment');
