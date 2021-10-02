@@ -16,7 +16,7 @@ const recentSchema = Joi.object({
 function _lookupComment(res, query) {
   const pool = a_database();
   pool.query(
-      'SELECT TimeStamp, Body, UserAppId, ArtistName FROM artistcomment ORDER BY Id DESC LIMIT ' +
+      'SELECT TimeStamp, Body, UserAppId, ArtistName FROM artistcomment WHERE ArtistName<>"global_general" ORDER BY Id DESC LIMIT ' +
           query.count + ' OFFSET ' + query.offset,
       function(error, results, fields) {
         if (error != null) {
