@@ -5,6 +5,7 @@
 const request = require("request-promise");
 const config = require("config");
 
+const logger = require('../../etc/logger');
 const r_auth = require("../../auth/auth");
 
 const msgHost0 = config.get("message.host0") || "http://127.0.0.1:8864";
@@ -18,6 +19,7 @@ module.exports = async function (req, res, next) {
 
   try {
     var urls = [msgHost0 + req.path.substr(4), msgHost1 + req.path.substr(4)];
+    logger.info('search: ' + req.path.substr(4));
     const promises = urls.map((url) => request(url));
     Promise.all(promises).then((data) => {
       var p0 = JSON.parse(data[0]);
