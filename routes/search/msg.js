@@ -33,7 +33,7 @@ module.exports = async function (req, res, next) {
         return parseInt(b.MatchScore) - parseInt(a.MatchScore);
       });
 
-      res.status(200).type("json").send(body);
+      res.status(200).type("json").send(p0);
     });
   } catch (e) {
     res.status(500).type("json").send({ msg: "internal server error" });
