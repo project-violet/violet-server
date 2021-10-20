@@ -35,7 +35,7 @@ module.exports = async function (req, res, next) {
           return parseInt(b.MatchScore) - parseInt(a.MatchScore);
         });
 
-        res.status(200).type("json").send(p0.slice(0, 16));
+        res.status(200).type("json").send(p0.slice(0, parseInt((p0.length + p1.length) / 2)));
       } else {
         res
           .status(200)
