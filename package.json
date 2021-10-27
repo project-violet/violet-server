@@ -20,6 +20,7 @@
   "dependencies": {
     "@elastic/elasticsearch": "^7.12.0",
     "add": "^2.0.6",
+    "aws-sdk": "^2.1015.0",
     "config": "^3.3.1",
     "crypto": "^1.0.1",
     "express": "^4.17.1",
