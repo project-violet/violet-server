@@ -57,8 +57,8 @@ app.use(expressDefend.protect({
     blacklist.addAddress(ipAddress);
   },
 }));
-app.use(express.json({limit: '5mb'}));
-app.use(express.urlencoded({limit: '5mb', extended: false}));
+app.use(express.json({limit: '10mb'}));
+app.use(express.urlencoded({limit: '10mb', extended: false}));
 
 
 // Limit Request
@@ -77,7 +77,7 @@ app.use('/top', r_top);
 app.use('/top_ts', r_top_ts);
 app.use('/top_recent', r_top_recent);
 app.use('/record', r_record);
-// app.post('/upload', r_upload);
+app.post('/upload', r_upload);
 app.post('/view', r_view);
 app.get('/view', function(req, res, next) {
   res.status(405).type('html').send(p.p405);

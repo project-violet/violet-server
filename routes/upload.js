@@ -1,10 +1,12 @@
 // This source code is a part of Project Violet.
 // Copyright (C) 2021. violet-team. Licensed under the Apache-2.0 License.
 
-const logger = require('../etc/logger');
+const config = require("config");
+const logger = require("../etc/logger");
 const r_auth = require("../auth/auth");
-const path = require('path');
-const fs = require('fs');
+const aws_s3 = require("../api/aws-s3");
+
+const bucket_name = config.get("upload.bookmark.bucket");
 
 module.exports = async function upload(req, res, next) {
   if (!r_auth.auth(req)) {
@@ -19,16 +21,24 @@ module.exports = async function upload(req, res, next) {
 
   let user = req.body["user"];
   let data = req.body["data"];
-  const dataPath = path.resolve(__dirname, 'data', user + '.json');
 
-  logger.info('upload-append %s', user);
+  logger.info("upload-append %s", user);
 
-  fs.writeFile(dataPath, data, function(err) {
+  var param = {
+    Bucket: bucket_name,
+    Key: "bookmark-" + user,
+    ACL: "public-read",
+    Body: data,
+    ContentType: "text/json",
+  };
+
+  aws_s3.upload(param, function (err, data) {
     if (err) {
-      logger.error('fail-upload %s', user);
+      logger.error("upload-bookmark-s3: %s", user);
       logger.error(err);
+      res.status(500).type("json").send({ msg: "internal server error" });
+      return;
     }
+    res.status(200).type("json").send({ msg: "success" });
   });
-
-  res.status(200).type("json").send({ msg: "success" });
 };
