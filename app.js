@@ -57,8 +57,8 @@ app.use(expressDefend.protect({
     blacklist.addAddress(ipAddress);
   },
 }));
-app.use(express.json({limit: '10mb'}));
-app.use(express.urlencoded({limit: '10mb', extended: false}));
+app.use(express.json({limit: '30mb'}));
+app.use(express.urlencoded({limit: '30mb', extended: false}));
 
 
 // Limit Request
