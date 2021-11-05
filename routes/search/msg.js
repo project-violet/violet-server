@@ -27,7 +27,7 @@ module.exports = async function (req, res, next) {
       if (q != "/rank") {
         var p0 = JSON.parse(data[0]);
         var p1 = JSON.parse(data[1]);
-        var p2 = JSON.parse(data[1]);
+        var p2 = JSON.parse(data[2]);
 
         p1.forEach(function (row) {
           p0.push(row);
