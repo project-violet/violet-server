@@ -46,8 +46,8 @@ app.disable('x-powered-by');
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.use(express.json({limit: '500mb'}));
-app.use(express.urlencoded({limit: '500mb', extended: false}));
+app.use(express.json({limit: '50mb'}));
+app.use(express.urlencoded({limit: '50mb', extended: false}));
 
 // Ban ip address
 app.use(blacklist.blockRequests('blacklist.txt'));
