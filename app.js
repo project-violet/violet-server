@@ -26,6 +26,7 @@ const r_top_ts = require('./routes/top_ts');
 const r_top_recent = require('./routes/top_recent');
 const r_upload = require('./routes/upload');
 const r_restore = require('./routes/restore');
+const r_bookmarks = require('./routes/bookmarks');
 const r_view = require('./routes/view');
 const r_view_close = require('./routes/view_close');
 const r_view_report = require('./routes/view_report');
@@ -77,6 +78,7 @@ app.use('/top_recent', r_top_recent);
 app.use('/record', r_record);
 app.post('/upload', r_upload);
 app.get('/restore', r_restore);
+app.get('/bookmarks', r_bookmarks);
 app.post('/view', r_view);
 app.get('/view', function(req, res, next) {
   res.status(405).type('html').send(p.p405);
