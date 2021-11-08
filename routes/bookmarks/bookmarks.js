@@ -2,9 +2,9 @@
 // Copyright (C) 2021. violet-team. Licensed under the Apache-2.0 License.
 
 const config = require("config");
-const logger = require("../etc/logger");
-const r_auth = require("../auth/auth");
-const aws_s3 = require("../api/aws-s3");
+const logger = require("../../etc/logger");
+const r_auth = require("../../auth/auth");
+const aws_s3 = require("../../api/aws-s3");
 
 const bucket_name = config.get("upload.bookmark.bucket");
 
