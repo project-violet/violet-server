@@ -9,10 +9,10 @@ const aws_s3 = require("../../api/aws-s3");
 const bucket_name = config.get("upload.bookmark.bucket");
 
 module.exports = async function versions(req, res, next) {
-  //   if (!r_auth.auth(req)) {
-  //     res.status(403).type("json").send({ msg: "forbidden" });
-  //     return;
-  //   }
+  // if (!r_auth.auth(req)) {
+  //   res.status(403).type("json").send({ msg: "forbidden" });
+  //   return;
+  // }
 
   if (req.query["user"] == null) {
     res.status(400).type("json").send({ msg: "bad request" });
@@ -41,7 +41,7 @@ module.exports = async function versions(req, res, next) {
       .send({
         msg: "success",
         result: data.Versions.map((x) => {
-          return { vid: x.VersionId, latest: x.IsLatest, dt: x.LastModified };
+          return { vid: x.VersionId, latest: x.IsLatest, dt: x.LastModified, size: x.Size };
         }),
       });
   });
