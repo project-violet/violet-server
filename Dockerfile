@@ -14,4 +14,4 @@ ADD . /server
 RUN npm install
 RUN npm install pm2 -g
 EXPOSE 7788
-CMD ["pm2", "start", "server.js"]
+CMD ["pm2-runtime", "start", "server.js"]
