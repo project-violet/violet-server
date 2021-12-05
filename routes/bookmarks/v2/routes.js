@@ -3,7 +3,7 @@
 
 const express = require('express');
 const router = express.Router();
-const p = require('../../pages/status');
+const p = require('../../../pages/status');
 
 function p405(req, res, next) {
   res.status(405).type('html').send(p.p405);
@@ -26,9 +26,5 @@ router.post('/restore', p405);
 router.post('/restore_v', p405);
 router.post('/versions', p405);
 router.get('/upload', p405);
-
-const v2 = require('./v2/routes');
-
-router.use('/v2', v2);
 
 module.exports = router;
