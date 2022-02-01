@@ -5,6 +5,7 @@ const config = require("config");
 const logger = require("../../../etc/logger");
 const r_auth = require("../../../auth/auth");
 const aws_s3 = require("../../../api/aws-s3");
+const aws_s3_new = require("../../../api/aws-s3-new");
 
 const bucket_name = config.get("upload.bookmark.bucket2");
 
@@ -40,5 +41,12 @@ module.exports = async function upload(req, res, next) {
       return;
     }
     res.status(200).type("json").send({ msg: "success" });
+  });
+  
+  aws_s3_new.upload(param, function (err, data) {
+    if (err) {
+      logger.error("upload-bookmark-s3-new: %s", user);
+      logger.error(err);
+    }
   });
 };
