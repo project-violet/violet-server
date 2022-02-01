@@ -5,9 +5,9 @@ const config = require("config");
 const AWS = require("aws-sdk");
 
 const s3 = new AWS.S3({
-  accessKeyId: config.get("aws-new.accessKeyId"),
-  secretAccessKey: config.get("aws-new.secretAccessKey"),
-  region: config.get("aws-new.region"),
+  accessKeyId: config.get("awsnew.accessKeyId"),
+  secretAccessKey: config.get("awsnew.secretAccessKey"),
+  region: config.get("awsnew.region"),
 });
 
 module.exports = s3;
