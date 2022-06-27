@@ -43,7 +43,16 @@ module.exports = async function upload(req, res, next) {
     res.status(200).type("json").send({ msg: "success" });
   });
   
-  aws_s3_new.upload(param, function (err, data) {
+  var param2 = {
+    Bucket: "user-bookmark-storage",
+    Key: "bookmark-" + user,
+    ACL: "public-read",
+    Body: data,
+    ContentType: "text/json",
+  };
+
+
+  aws_s3_new.upload(param2, function (err, data) {
     if (err) {
       logger.error("upload-bookmark-s3-new: %s", user);
       logger.error(err);

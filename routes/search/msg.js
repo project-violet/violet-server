@@ -20,11 +20,12 @@ module.exports = async function (req, res, next) {
 
   try {
     var q = req.path.substr(4);
-    var urls = [msgHost0 + q, msgHost1 + q, msgHost2 + q];
+//    var urls = [msgHost0 + q, msgHost1 + q, msgHost2 + q];
+    var urls = [msgHost0 + q];
     logger.info("search: " + q);
     const promises = urls.map((url) => request(url));
     Promise.all(promises).then((data) => {
-      if (q != "/rank") {
+/*      if (q != "/rank") {
         var p0 = JSON.parse(data[0]);
         var p1 = JSON.parse(data[1]);
         var p2 = JSON.parse(data[2]);
@@ -47,7 +48,8 @@ module.exports = async function (req, res, next) {
           .status(200)
           .type("txt")
           .send(data[0] + "\n" + data[1]);
-      }
+      }*/
+	res.status(200).type("json").send(data[0]);
     });
   } catch (e) {
     res.status(500).type("json").send({ msg: "internal server error" });
