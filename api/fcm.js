@@ -5,7 +5,7 @@ const admin = require("firebase-admin");
 
 const serviceAccount = require("../config/real-violet-app-firebase-adminsdk-qbg26-886db4cd69.json");
 
-const logger = require('../../../etc/logger');
+const logger = require('../etc/logger');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),

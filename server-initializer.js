@@ -24,9 +24,9 @@ function sleep(ms) {
 async function _cacheViewTime() {
   const conn = a_syncdatabase();
 
-  for (var i = 6; i < 30; i++) {
+  for (var i = 23; i < 100; i++) {
     const data = conn.query(
-      `SELECT TimeStamp, ArticleId FROM viewtime WHERE ViewSeconds>=24 
+      `SELECT TimeStamp, ArticleId, UserAppId FROM viewtime WHERE ViewSeconds>=24 
           order by Id limit 500000 offset ` + (i * 500000).toString()
     );
     const dataPath = path.resolve(
@@ -40,7 +40,7 @@ async function _cacheViewTime() {
     fs.writeFileSync(
       dataPath,
       JSON.stringify(
-        data.map((x) => "(" + x["ArticleId"] + "," + x["TimeStamp"] + ")")
+        data.map((x) => "(" + x["ArticleId"] + "," + x["TimeStamp"] + "," + x["UserAppId"] + ")")
       ),
       function (err) {
         console.log(err);
@@ -128,5 +128,5 @@ async function init() {
   });
 }
 
-init();
-// _cacheViewTime();
+// init();
+_cacheViewTime();

@@ -24,5 +24,10 @@ async function test_hybrid() {
   }}, null, null);
 }
 
+const h = require('../memory/search');
+
+
+console.log(h.getHybridQuery('(lang:korean or lang:n/a) artist:michiking female:big_breasts'))
+
 // test_search().then();
 test_hybrid().then();

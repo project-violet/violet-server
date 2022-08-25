@@ -483,3 +483,4 @@ config/production.json
 export.cmd
 config/config.json
 config/real-violet-app-firebase-adminsdk-qbg26-886db4cd69.json
+config/s3.json
