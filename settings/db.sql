@@ -8,7 +8,7 @@ CREATE TABLE `viewtotal` (
 	`UserAppId` CHAR(50) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
 	PRIMARY KEY (`Id`) USING BTREE,
 	INDEX `AritcleId` (`ArticleId`) USING BTREE,
-	FULLTEXT INDEX `UserAppId` (`UserAppId`)
+	INDEX `UserAppId` (`UserAppId`) USING BTREE
 )
 COLLATE='utf8_general_ci'
 ENGINE=InnoDB
@@ -22,7 +22,7 @@ CREATE TABLE `viewtime` (
 	`UserAppId` CHAR(50) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
 	PRIMARY KEY (`Id`) USING BTREE,
 	INDEX `AritcleId` (`ArticleId`) USING BTREE,
-	FULLTEXT INDEX `UserAppId` (`UserAppId`)
+	INDEX `UserAppId` (`UserAppId`) USING BTREE
 )
 COLLATE='utf8_general_ci'
 ENGINE=InnoDB
@@ -41,7 +41,7 @@ CREATE TABLE `viewreport` (
 	`UserAppId` VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
 	PRIMARY KEY (`Id`) USING BTREE,
 	INDEX `AritcleId` (`ArticleId`) USING BTREE,
-	FULLTEXT INDEX `UserAppId` (`UserAppId`)
+	INDEX `UserAppId` (`UserAppId`) USING BTREE
 )
 COLLATE='utf8_general_ci'
 ENGINE=InnoDB
@@ -57,7 +57,7 @@ CREATE TABLE `user` (
 	/* 0: normal, 1: manager, 2: admin */
 	`Permission` INT(11) NOT NULL,
 	PRIMARY KEY (`Pid`) USING BTREE,
-	FULLTEXT INDEX `Id` (`Id`)
+	INDEX `Id` (`Id`) USING BTREE
 )
 COLLATE='utf8_general_ci'
 ENGINE=InnoDB
@@ -69,7 +69,7 @@ CREATE TABLE `board` (
 	`Name` VARCHAR(50) NOT NULL COLLATE 'utf8_general_ci',
 	`Description` VARCHAR(500) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
 	PRIMARY KEY (`Id`) USING BTREE,
-	FULLTEXT INDEX `ShortName` (`ShortName`)
+	INDEX `ShortName` (`ShortName`) USING BTREE
 )
 COLLATE='utf8_general_ci'
 ENGINE=InnoDB
@@ -121,7 +121,7 @@ CREATE TABLE `comment` (
 	`Parent` INT(11) DEFAULT NULL,
 	PRIMARY KEY (`Id`) USING BTREE,
 	INDEX `ArticleId` (`ArticleId`) USING BTREE,
-    UNIQUE KEY `comment_id_UNIQUE` (`Id`),
+    	UNIQUE KEY `comment_id_UNIQUE` (`Id`),
 	CONSTRAINT `ArticleId` FOREIGN KEY (`ArticleId`) REFERENCES `violet`.`article` (`Id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
 	CONSTRAINT `UserId` FOREIGN KEY (`User`) REFERENCES `violet`.`user` (`Pid`) ON UPDATE RESTRICT ON DELETE RESTRICT,
   	CONSTRAINT `SelfKey` FOREIGN KEY (`Parent`) REFERENCES `comment` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -138,7 +138,7 @@ CREATE TABLE `artistcomment` (
 	`ArtistName` CHAR(100) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
 	`Parent` INT(11),
 	PRIMARY KEY (`Id`) USING BTREE,
-	FULLTEXT INDEX `UserAppId` (`UserAppId`),
+	INDEX `UserAppId` (`UserAppId`) USING BTREE,
 	FULLTEXT INDEX `ArtistName` (`ArtistName`)
 )
 COLLATE='utf8_general_ci'
