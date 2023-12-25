@@ -12,20 +12,27 @@ const msgHost0 = config.get("message.host0") || "http://127.0.0.1:8864";
 const msgHost1 = config.get("message.host1") || "http://127.0.0.1:8864";
 const msgHost2 = config.get("message.host2") || "http://127.0.0.1:8864";
 
+const fs = require('fs');
+
 module.exports = async function (req, res, next) {
-  //   if (!r_auth.wauth(req)) {
-  //     res.status(403).type("html").send(p.p403);
-  //     return;
-  //   }
+ if (!r_auth.wauth(req)) {
+   res.status(403).type("html").send(p.p403);
+   return;
+ }
 
   try {
     var q = req.path.substr(4);
-//    var urls = [msgHost0 + q, msgHost1 + q, msgHost2 + q];
-    var urls = [msgHost0 + q];
+
+    var ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress ;
+    fs.appendFile('messages.txt', (new Date()).toISOString() + ' - ' + ip + ') ' + decodeURIComponent(q) + '\n', (err) => {});
+
+    var urls = [msgHost0 + q, msgHost1 + q, msgHost2 + q];
+//    var urls = [msgHost0 + q];
     logger.info("search: " + q);
+    logger.info(urls);
     const promises = urls.map((url) => request(url));
     Promise.all(promises).then((data) => {
-/*      if (q != "/rank") {
+      if (q != "/rank") {
         var p0 = JSON.parse(data[0]);
         var p1 = JSON.parse(data[1]);
         var p2 = JSON.parse(data[2]);
@@ -48,7 +55,7 @@ module.exports = async function (req, res, next) {
           .status(200)
           .type("txt")
           .send(data[0] + "\n" + data[1]);
-      }*/
+      }
 	res.status(200).type("json").send(data[0]);
     });
   } catch (e) {

@@ -24,7 +24,7 @@ function sleep(ms) {
 async function _cacheViewTime() {
   const conn = a_syncdatabase();
 
-  for (var i = 23; i < 100; i++) {
+  for (var i = 0; i < 100; i++) {
     const data = conn.query(
       `SELECT TimeStamp, ArticleId, UserAppId FROM viewtime WHERE ViewSeconds>=24 
           order by Id limit 500000 offset ` + (i * 500000).toString()
@@ -72,7 +72,7 @@ async function init() {
 
     const w = fs.openSync("test.txt", "a");
 
-    for (var j = 0; j < 16; j++) {
+    for (var j = 0; j < 39; j++) {
       // var data = conn.query(
       //   "SELECT ArticleId, TimeStamp, ViewSeconds FROM viewtime ORDER BY Id DESC LIMIT " +
       //     load_per.toString() +
@@ -128,5 +128,5 @@ async function init() {
   });
 }
 
-// init();
-_cacheViewTime();
+init();
+// _cacheViewTime();
